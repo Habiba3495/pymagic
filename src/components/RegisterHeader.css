@@ -1,0 +1,10 @@
+.Rheader {
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px 20px;
+    background-color: transparent;
+  }
+  
+  .logo {
+    height: 50px; /* حجم مناسب للوجو */
+  }

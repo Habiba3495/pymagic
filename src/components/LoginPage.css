@@ -1,0 +1,8 @@
+.login-page {
+    background-image: url("../components/images/login_bg.svg"); /* استبدل بالمسار الصحيح */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll; /* هذا يجعل الخلفية تتحرك مع الصفحة */
+    z-index: -1; 
+  }

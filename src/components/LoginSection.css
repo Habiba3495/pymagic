@@ -1,0 +1,42 @@
+.Login-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh; /* يأخذ معظم الشاشة */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-container {
+    background-color: #4e2678;
+    padding: 30px;
+    border-radius: 10px;
+    color: #ffb400;
+    width: 350px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-top: 100px;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    margin-right: 30px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 15px;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  button {
+    background-color: #ffb400;
+    color: black;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 30px;
+  }

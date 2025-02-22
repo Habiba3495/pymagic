@@ -1,0 +1,70 @@
+.hero {
+    background: url("../components/images/herosection_bg.svg") no-repeat center center/cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+
+  }
+  
+
+.overlay {
+
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center; /* النص في المنتصف */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 15%; /* إزاحة طفيفة لليمين */
+}
+
+  /* لون العنوان الرئيسي */
+.overlay h1 {
+    color: #fff; /* الأبيض */
+    font-family: "Poppins", sans-serif; /* لو عايزة خط معين */
+    font-size: 3rem; /* حجم الخط */
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5); /* تأثير ظل */
+}
+
+/* لون النص العادي */
+.overlay p {
+    color: white; /* اللون الأصفر */
+    font-size: 1.2rem;
+    margin-top: 10px;
+    text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+}
+  
+  .hero-buttons {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column; /* يجعل الأزرار تحت بعض */
+    align-items: center; /* يجعلهم في المنتصف */
+    gap: 10px; /* مسافة بين الأزرار */
+  }
+  
+ 
+  .btn {
+    width: 250px; /* توحيد العرض */
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+}
+
+  
+  .btn.primary {
+    background: #FFC145;
+    color: #4b0082;
+  }
+  
+  .btn.secondary {
+    background: #5B287C;
+    border: 2px solid #FFC145;
+    color: #FFC145;
+  }
+      

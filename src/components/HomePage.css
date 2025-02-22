@@ -1,0 +1,7 @@
+.home-page {
+    background-image: url("../components/images/register_bg.svg"); /* استبدل بالمسار الصحيح */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+  }

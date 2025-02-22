@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+/*
+import React from "react";
+import HomePage from "./components/HomePage";
+
+function App() {
+  return <HomePage />;
+}
+
+export default App;
+*/
+/*
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./components/HomePage";
+import RegisterPage from "./components/RegisterPage"; // ✅ تأكد من المسار الصحيح
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/register" element={<RegisterPage />} />
+      </Routes>
+    </Router>
   );
 }
+
+export default App;
+*/
+
+
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./components/HomePage";
+import RegisterPage from "./components/RegisterPage"; // تأكد من وجود هذا الملف
+import LoginPage from "./components/LoginPage";
+
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/Login" element={<LoginPage />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;

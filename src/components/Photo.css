@@ -1,0 +1,15 @@
+.image-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 0;
+    background: url("../components/images/photo_back.svg") no-repeat center center/cover;
+  }
+  
+  .magic-image {
+    max-width: 80%;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+  }
+  
