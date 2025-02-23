@@ -1,7 +1,10 @@
 import React from "react";
 import "./LoginSection.css";
+import { useNavigate } from "react-router-dom";
 
 const LoginSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="Login-section">
       <div className="Lform-container">
@@ -12,7 +15,7 @@ const LoginSection = () => {
           <label>Password</label>
           <input type="password" placeholder="Password" />
 
-          <button type="submit">Log In</button>
+          <button type="submit" onClick={() => navigate("/lessons")}>Log In</button>
         </form>
       </div>
     </section>

@@ -29,10 +29,11 @@ export default App;
 
 
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import HomePage from "./components/HomePage";
 import RegisterPage from "./components/RegisterPage"; // تأكد من وجود هذا الملف
 import LoginPage from "./components/LoginPage";
+import LessonsPage from "./components/Lessonspage";
 
 const App = () => {
   return (
@@ -41,6 +42,7 @@ const App = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/Login" element={<LoginPage />} />
+        <Route path="/lessons" element={<LessonsPage />} />
       </Routes>
     </Router>
   );
