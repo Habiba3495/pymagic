@@ -1,9 +1,10 @@
-.home-page {
+.Rhome-page {
     background-image: url("../components/images/register_bg.svg"); /* استبدل بالمسار الصحيح */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: scroll; /* هذا يجعل الخلفية تتحرك مع الصفحة */
-    z-index: -1; 
+    width: 100%;
+    height: 140vh;
   }
   

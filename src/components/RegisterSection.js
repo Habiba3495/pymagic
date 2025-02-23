@@ -5,7 +5,7 @@ const RegisterSection = () => {
   return (
     <section className="register-section">
       <h2>Join us at the Academy of Mystic Code and arts</h2>
-      <div className="form-container">
+      <div className="Rform-container">
         <form>
           <label>Name</label>
           <input type="text" placeholder="Name" />
@@ -21,6 +21,9 @@ const RegisterSection = () => {
 
           <label>Password</label>
           <input type="password" placeholder="Password" />
+
+          <label>Confirm Password</label>
+          <input type="password" placeholder="Confirm Password" />
 
           <button type="submit">Register</button>
         </form>

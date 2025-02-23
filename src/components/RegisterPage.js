@@ -5,7 +5,7 @@ import "./RegisterPage.css";
 
 const RegisterPage = () => {
   return (
-    <div className="home-page">
+    <div className="Rhome-page">
       <RegisterHeader />
       <RegisterSection />
     </div>

@@ -4,7 +4,7 @@ import "./LoginSection.css";
 const LoginSection = () => {
   return (
     <section className="Login-section">
-      <div className="form-container">
+      <div className="Lform-container">
         <form>
           <label>User Name</label>
           <input type="text" placeholder="Name" />
