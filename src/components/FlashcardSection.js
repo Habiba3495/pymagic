@@ -1,46 +1,46 @@
 
 
 
-import React, { useState } from "react";
-import Lsidebar from "./Lsidebar"; 
-import "./FlashcardSection.css"; 
-import cardBack from "./images/Flashcard_black.svg";  // صورة البطاقة المغلقة
-import cardFront from "./images/Flashcard_color.svg"; // صورة البطاقة المفتوحة
+// import React, { useState } from "react";
+// import Lsidebar from "./Lsidebar"; 
+// import "./FlashcardSection.css"; 
+// import cardBack from "./images/Flashcard_black.svg";  // صورة البطاقة المغلقة
+// import cardFront from "./images/Flashcard_color.svg"; // صورة البطاقة المفتوحة
 
-const FlashCardSection = () => {
-    const [flippedCards, setFlippedCards] = useState(Array(12).fill(false));
+// const FlashCardSection = () => {
+//     const [flippedCards, setFlippedCards] = useState(Array(12).fill(false));
 
-    const handleCardClick = (index) => {
-        setFlippedCards((prev) => {
-            const newFlipped = [...prev];
-            newFlipped[index] = !newFlipped[index]; // تغيير حالة البطاقة
-            return newFlipped;
-        });
-    };
+//     const handleCardClick = (index) => {
+//         setFlippedCards((prev) => {
+//             const newFlipped = [...prev];
+//             newFlipped[index] = !newFlipped[index]; // تغيير حالة البطاقة
+//             return newFlipped;
+//         });
+//     };
 
-    return (
-        <div className="page-container">
-            <Lsidebar />  {/* الشريط الجانبي */}
+//     return (
+//         <div className="page-container">
+//             <Lsidebar />  {/* الشريط الجانبي */}
 
-            <div className="content">
-                <div className="fheader">Flash Cards</div>
-                <div className="cards-container">
-                    {flippedCards.map((isFlipped, index) => (
-                        <img
-                            key={index}
-                            src={isFlipped ? cardFront : cardBack}
-                            alt="Flash Card"
-                            className={`flashcard ${isFlipped ? "flipped" : ""}`}
-                            onClick={() => handleCardClick(index)}
-                        />
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-};
+//             <div className="content">
+//                 <div className="fheader">Flash Cards</div>
+//                 <div className="cards-container">
+//                     {flippedCards.map((isFlipped, index) => (
+//                         <img
+//                             key={index}
+//                             src={isFlipped ? cardFront : cardBack}
+//                             alt="Flash Card"
+//                             className={`flashcard ${isFlipped ? "flipped" : ""}`}
+//                             onClick={() => handleCardClick(index)}
+//                         />
+//                     ))}
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
 
-export default FlashCardSection;
+// export default FlashCardSection;
 
 
 // import React, { useState, useEffect } from "react";
@@ -95,3 +95,79 @@ export default FlashCardSection;
 // };
 
 // export default FlashCardSection;
+
+
+import React, { useState, useEffect } from "react";
+import Lsidebar from "./Lsidebar"; 
+import "./FlashcardSection.css"; 
+import cardBack from "./images/Flashcard_black.svg";  
+import cardFront from "./images/Flashcard_color.svg";  
+
+const FlashCardSection = () => {
+    const [flashcards, setFlashcards] = useState([]);
+    const [flippedCards, setFlippedCards] = useState(Array(12).fill(false));
+    const [selectedCard, setSelectedCard] = useState(null);
+    const [modalOpen, setModalOpen] = useState(false);
+
+    // جلب البيانات من الـ API
+    useEffect(() => {
+        fetch("https://api.example.com/flashcards")  // ضع رابط API الصحيح هنا
+            .then((response) => response.json())
+            .then((data) => {
+                if (Array.isArray(data) && data.length > 0) {
+                    setFlashcards(data);
+                } else {
+                    setFlashcards(new Array(12).fill({ title: "Lesson", description: "No data available." }));
+                }
+            })
+            .catch(() => {
+                setFlashcards(new Array(12).fill({ title: "Lesson", description: "No data available." }));
+            });
+    }, []);
+
+    // عند الضغط على أي كارد، يتم قلبه وفتح النافذة
+    const handleCardClick = (index) => {
+        setFlippedCards((prev) => {
+            const newFlipped = [...prev];
+            newFlipped[index] = true; // جعل البطاقة مفتوحة
+            return newFlipped;
+        });
+
+        setSelectedCard(index);
+        setModalOpen(true);
+    };
+
+    return (
+        <div className="page-container">
+            <Lsidebar />
+
+            <div className="content">
+                <div className="fheader">Flash Cards</div>
+                <div className="cards-container">
+                    {flashcards.map((_, index) => (
+                        <img
+                            key={index}
+                            src={flippedCards[index] ? cardFront : cardBack} 
+                            alt="Flash Card"
+                            className={`flashcard ${flippedCards[index] ? "flipped" : ""}`}
+                            onClick={() => handleCardClick(index)}
+                        />
+                    ))}
+                </div>
+            </div>
+
+            {/* ✅ النافذة المنبثقة بتصميم مطابق للصورة */}
+            {modalOpen && selectedCard !== null && (
+                <div className="modal-overlay">
+                    <div className="modal-window">
+                        <button className="close-button" onClick={() => setModalOpen(false)}>✖️</button>
+                        <h2 className="modal-title"> {flashcards[selectedCard].title} </h2>
+                        <p className="modal-text"> {flashcards[selectedCard].description} </p>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default FlashCardSection;

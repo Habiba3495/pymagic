@@ -1,16 +1,54 @@
-/* .Fpagecontainer{
+ 
+
+/* .page-container {
     display: flex;
     background-color: #F3E8FF;
     min-height: 100vh;
 }
-  
-.h{
-    padding: 40px;
+
+
+.content {
+    flex: 1; 
     display: flex;
+    flex-direction: column;
     align-items: center;
+    padding: 20px;
+}
+
+
+.fheader {
+    width: 80%;
+    background-color: #7e22ce;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    justify-items: center;
+}
+
+
+.flashcard {
+    width: 80px;
+    height: 120px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+
+.flashcard.flipped {
+    transform: rotateY(180deg);
 } */
 
-/* جعل الشريط الجانبي وقسم الفلاش كاردز جنبًا إلى جنب */
 .page-container {
     display: flex;
     background-color: #F3E8FF;
@@ -49,8 +87,8 @@
 
 /* تصميم الفلاش كارد */
 .flashcard {
-    width: 80px;
-    height: 120px;
+    width: 100px;
+    height: 140px;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
 }
@@ -59,4 +97,50 @@
 .flashcard.flipped {
     transform: rotateY(180deg);
 }
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modal-window {
+    background: #5E2B97; /* الموف */
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 50%;
+    max-width: 400px;
+    position: relative;
+    text-align: center;
+    border: 4px solid #FDC82E; /* الأصفر */
+}
 
+/* ✅ زر الإغلاق الأحمر */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+}
+
+/* ✅ عنوان النافذة */
+.modal-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* ✅ نص المحتوى */
+.modal-text {
+    font-size: 16px;
+    line-height: 1.5;
+}
