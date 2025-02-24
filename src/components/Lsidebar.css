@@ -1,0 +1,137 @@
+/* 
+*/
+
+
+
+/* .sidebar{
+    width: 20%;
+    height: 100vh;
+    background-color: #E9D5FF;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.Ltitle {
+    margin-bottom: 20px;
+}
+
+.logoo {
+    display: block;
+    width: 150px;
+    height: auto;
+    margin: 20px auto;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+}
+
+.menu li {
+    margin: 10px 0;
+}
+
+.menu li {
+
+    padding: 10px 0;
+    color: #5B21B6;
+    cursor: pointer;
+}
+
+.menu li.active {
+    font-weight: bold;
+}
+
+.menu-button {
+    display: flex;
+    align-items: center;
+    border: none;
+    background: none;
+    padding: 10px;
+    font-size: 16px;
+    color: purple;
+    font-weight: normal;
+    cursor: pointer;
+    transition: font-weight 0.3s ease;
+}
+
+.menu-button:hover,
+
+.menu-button.active {
+    font-weight: bold;
+}
+
+.menu-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    transition: opacity 0.3s ease;
+} */
+
+
+
+.sidebar {
+    width: 15%;
+    height: 100vh;
+    background-color: #E9D5FF;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.Ltitle {
+    margin-bottom: 20px;
+}
+
+.logoo {
+    display: block;
+    width: 150px;
+    height: auto;
+    margin: 20px auto;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+}
+
+.menu li {
+    margin: 10px 0;
+}
+
+.menu-button {
+    display: flex;
+    align-items: center;
+    border: none;
+    background: none;
+    padding: 10px;
+    font-size: 18px;
+    color: purple;
+    font-weight: normal;
+    cursor: pointer;
+    transition: font-weight 0.3s ease, color 0.3s ease;
+}
+
+
+.menu-button.active {
+    font-weight: bold;
+    color: #5B21B6;
+}
+
+.menu-button.active .menu-icon {
+    opacity: 1;
+}
+
+.menu-button .menu-icon {
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+
+.menu-icon {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+    transition: opacity 0.3s ease;
+}

@@ -1,0 +1,11 @@
+.Gpagecontainer{
+    display: flex;
+    background-color: #F3E8FF;
+    min-height: 100vh;
+}
+  
+.G{
+    padding: 40px;
+    display: flex;
+    align-items: center;
+}

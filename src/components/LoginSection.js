@@ -15,7 +15,7 @@ const LoginSection = () => {
           <label>Password</label>
           <input type="password" placeholder="Password" />
 
-          <button type="submit" onClick={() => navigate("/lessons")}>Log In</button>
+          <button type="submit" onClick={() => navigate("/Lessons")}>Log In</button>
         </form>
       </div>
     </section>

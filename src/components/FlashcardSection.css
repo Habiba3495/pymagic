@@ -1,0 +1,62 @@
+/* .Fpagecontainer{
+    display: flex;
+    background-color: #F3E8FF;
+    min-height: 100vh;
+}
+  
+.h{
+    padding: 40px;
+    display: flex;
+    align-items: center;
+} */
+
+/* جعل الشريط الجانبي وقسم الفلاش كاردز جنبًا إلى جنب */
+.page-container {
+    display: flex;
+    background-color: #F3E8FF;
+    min-height: 100vh;
+}
+
+/* تصميم القسم الأساسي */
+.content {
+    flex: 1; /* يأخذ باقي المساحة بجانب الـ Sidebar */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+/* العنوان */
+.fheader {
+    width: 80%;
+    background-color: #7e22ce;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+/* تصميم الشبكة التي تحتوي على الكروت */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    justify-items: center;
+}
+
+/* تصميم الفلاش كارد */
+.flashcard {
+    width: 80px;
+    height: 120px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* تأثير القلب عند النقر */
+.flashcard.flipped {
+    transform: rotateY(180deg);
+}
+

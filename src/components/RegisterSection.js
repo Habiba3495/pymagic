@@ -1,7 +1,9 @@
 import React from "react";
 import "./RegisterSection.css";
+import { useNavigate } from "react-router-dom";
 
 const RegisterSection = () => {
+  const navigate = useNavigate();
   return (
     <section className="register-section">
       <h2>Join us at the Academy of Mystic Code and arts</h2>
@@ -25,7 +27,7 @@ const RegisterSection = () => {
           <label>Confirm Password</label>
           <input type="password" placeholder="Confirm Password" />
 
-          <button type="submit">Register</button>
+          <button type="submit" onClick={() => navigate("/Login")}>Register</button>
         </form>
       </div>
     </section>
