@@ -1,11 +1,39 @@
-.Gpagecontainer{
+.Gpagecontainer {
     display: flex;
-    background-color: #F3E8FF;
-    min-height: 100vh;
+    height: 100vh;
+    width: 100vw;
+    background-color: black; /* لون احتياطي */
+    overflow: hidden; /* يمنع السكرول عشان الصورة تبقى كاملة */
 }
-  
-.G{
-    padding: 40px;
+
+/* الخلفية تحتوي على صورة الباب */
+.game-background {
+    flex: 1;
     display: flex;
+    justify-content: center;
     align-items: center;
+    background-image: url('./images/gameu.svg'); /* تأكد من المسار */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* زر Start Game */
+.start-game-btn {
+    position: absolute;
+    top: 50%; /* رفع الزر للأعلى */
+    left: 57%;
+    transform: translateX(-50%);
+    font-size: 28px;
+    font-weight: bold;
+    color: #54216d;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease-in-out;
+}
+
+.start-game-btn:hover {
+    transform: translateX(-50%) scale(1.1);
 }
