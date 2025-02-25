@@ -1,4 +1,4 @@
-.page-container {
+/* .page-container {
     display: flex;
     background-color: #F3E8FF;
     min-height: 100vh;
@@ -23,20 +23,236 @@
 
 .lesson-unit.purple { background-color: #6B21A8; }
 .lesson-unit.yellow { background-color: #FBBF24; }
-.lesson-unit.teal { background-color: #0D9488; opacity: 0.8; }
+.lesson-unit.teal { background-color: #0D9488; opacity: 0.8; } */
 
-/* .progress-icon {
+/* .page-container {
+    display: flex;
+    background-color: #F3E8FF;
+    min-height: 100vh;
+}
+
+.content {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lesson-unit {
+    width: 75%;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    margin: 20px 0;
+    position: relative;
+}
+
+.lessons-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.lesson-circle {
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    background-color: #ccc;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     font-size: 20px;
-    font-weight: bold;
     color: white;
-    margin: 10px 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.lesson-circle.viewed {
+    background-color: inherit; 
 } */
 
-/* .progress-icon.purple { background-color: #6B21A8; }
-.progress-icon.yellow { background-color: #FBBF24; } */
+
+/* .page-container {
+    display: flex;
+    background-color: #F3E8FF;
+    min-height: 100vh;
+}
+
+.content {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lesson-unit {
+    width: 75%;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    margin: 20px 0;
+    position: relative;
+}
+
+.lessons-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.lesson-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color:red; 
+    border: 2px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #6B21A8;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+
+.lesson-circle.viewed {
+    background-color: inherit !important; 
+    color: white !important; 
+    border: 2px solid white !important; 
+}
+
+
+.lesson-circle:hover {
+    background-color: lightgray;
+    border: 2px solid gray;
+} */
+
+
+/* .page-container {
+    display: flex;
+    background-color: #F3E8FF;
+    min-height: 100vh;
+}
+
+.content {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lesson-unit {
+    width: 75%;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    margin: 20px 0;
+    position: relative;
+}
+
+.lessons-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.lesson-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: white; 
+    border: 2px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.lesson-circle.viewed {
+    background-color: var(--unit-color) !important; 
+    color: white !important;
+    border: 2px solid white !important; 
+}
+
+
+.lesson-circle:hover {
+    background-color: lightgray;
+    border: 2px solid gray;
+} */
+
+
+.page-container {
+    display: flex;
+    background-color: #F3E8FF;
+    min-height: 100vh;
+}
+
+.content {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lesson-unit {
+    width: 75%;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    margin: 15px 0;
+    position: relative; /* ✅ لضبط الخلفية فقط على العنوان */
+    padding-bottom: 20px; /* ✅ لإعطاء مسافة مناسبة بين العنوان والدروس */
+}
+
+.lessons-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px; /* ✅ رفع الدروس لأعلى خارج الوحدة */
+    position: relative; /* ✅ حتى لا تتأثر بخلفية الوحدة */
+}
+
+.lesson-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: white; /* افتراضيًا */
+    border: 2px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* عند مشاهدة الفيديو، تتغير ألوان الدائرة */
+.lesson-circle.viewed {
+    background-color: var(--unit-color) !important; /* يصبح نفس لون الـ Unit */
+    color: white !important; /* النص يصبح أبيض */
+    border: 2px solid white !important; /* تحديد لون الحدود */
+}
+
+/* تأثير عند تمرير الماوس */
+.lesson-circle:hover {
+    background-color: lightgray;
+    border: 2px solid gray;
+}
