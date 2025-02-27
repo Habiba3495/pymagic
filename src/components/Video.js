@@ -109,37 +109,31 @@ import Exit from "./images/Exit iconsvg.svg";
 const Video = () => {
   const { unitId, lessonId } = useParams();
   const navigate = useNavigate();
-  const [videoUrl, setVideoUrl] = useState("");
-  const [unitColor, setUnitColor] = useState("#6B21A8"); // اللون الافتراضي
+  const [lessonData, setLessonData] = useState(null); // Store full lesson data
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [unitColor] = useState("#6B21A8"); // Default purple color
 
   useEffect(() => {
-    const fetchVideo = async () => {
+    const fetchLessonData = async () => {
       try {
-        const response = await fetch(`https://api.example.com/lesson-video/${unitId}/${lessonId}`);
-        const data = await response.json();
-        setVideoUrl(data.videoUrl);
-      } catch (error) {
-        console.error("Error fetching video, using dummy URL:", error);
-        setVideoUrl("https://www.w3schools.com/html/mov_bbb.mp4");
-      }
-    };
-
-    const fetchUnitColor = async () => {
-      try {
-        const response = await fetch("https://api.example.com/lessons");
-        const data = await response.json();
-        const unit = data.units.find(u => u.id === parseInt(unitId));
-        if (unit) {
-          setUnitColor(unit.color);
+        const response = await fetch(`http://localhost:5000/api/lessons/${lessonId}`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch lesson data: ${response.status} ${response.statusText}`);
         }
+        const data = await response.json();
+        console.log("API Response:", data); // Log the full response to verify
+        setLessonData(data.lesson); // Access the nested 'lesson' object
       } catch (error) {
-        console.error("Error fetching unit color, using default:", error);
+        console.error("Fetch error:", error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchVideo();
-    fetchUnitColor();
-  }, [unitId, lessonId]);
+    fetchLessonData();
+  }, [lessonId]);
 
   return (
     <div className="lesson-container">
@@ -147,18 +141,22 @@ const Video = () => {
         <img src={Exit} alt="Back" className="back-icon" />
       </button>
 
-      <div className="lesson-content">
-        <h1 className="lesson-header" style={{ backgroundColor: unitColor }}>
-          Unit {unitId} - Lesson {lessonId}
-        </h1>
+      <div className="vlesson-content">
+      <h1 className="lesson-header" style={{ backgroundColor: unitColor }}>
+        Unit {unitId} - {lessonData?.title || `Lesson ${lessonId}`}
+      </h1>
         <div className="video-container">
-          {videoUrl ? (
+          {loading ? (
+            <p>Loading video...</p>
+          ) : error ? (
+            <p>Error: {error}</p>
+          ) : lessonData?.video_url ? ( // Use video_url from the lesson object
             <video controls>
-              <source src={videoUrl} type="video/mp4" />
+              <source src={`http://localhost:5000${lessonData.video_url}`} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           ) : (
-            <p>Loading video...</p>
+            <p>No video available.</p>
           )}
         </div>
         <button className="quiz-button" onClick={() => navigate(`/quiz/${unitId}/${lessonId}`)}>

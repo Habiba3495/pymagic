@@ -1,6 +1,6 @@
 .lesson-container {
     background-color: #f2ddff;
-    background-image: url("./images/video_bg.svg"); /* ضع صورة الخلفية */
+    background-image: url("./images/video_bg.svg"); 
     background-size: cover;
     background-position: center;
     height: 100vh;
@@ -9,12 +9,11 @@
     align-items: center;
 }
 
-.lesson-content {
-    background: white;
+.vlesson-content {
+    background: #f2ddff;
     padding: 20px;
     border-radius: 10px;
     text-align: center;
-    width: 50%;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -27,11 +26,17 @@
 
 .video-container {
     margin: 20px 0;
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: transparent; /* Remove black background if desired */
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 video {
     width: 100%;
     border-radius: 10px;
+    height: auto;
 }
 
 .quiz-button {
