@@ -73,10 +73,12 @@
 
 .sidebar {
     width: 15%;
+    height: 100vh;
     background-color: #E9D5FF;
     padding: 20px;
     display: flex;
     flex-direction: column;
+    position: fixed;
 }
 
 .Ltitle {

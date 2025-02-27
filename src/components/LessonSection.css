@@ -7,7 +7,8 @@
     flex: 1;
     padding: 30px;
     background: #f2ddff;
-
+    margin-left: 15%; /* نفس عرض الـ sidebar */
+    padding: 20px;
     
 }
 
