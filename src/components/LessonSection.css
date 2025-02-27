@@ -39,7 +39,7 @@
     align-items: center;
     justify-content: center;
     background-color: #ffffff;
-    color: #007BFF;
+    color: #5B287C;
     font-weight: bold;
     text-decoration: none;
     border-radius: 50%;
@@ -51,4 +51,22 @@
 
 .lesson-button:hover {
     transform: scale(1.1);
+}
+
+/*  */
+.next-section-button {
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #6B21A8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+
+.next-section-button:hover {
+    background-color: #7C3AED;
 }

@@ -465,12 +465,13 @@ const LessonPage = () => {
   const [lessonData, setLessonData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [sectionId, setSectionId] = useState(1); // State to track the current section ID
 
   useEffect(() => {
-    // Fetch data from the API
+    // Fetch data from the API based on the current sectionId
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/sections/1"); //1->section id 
+        const response = await fetch(`http://localhost:5000/sections/${sectionId}`); // Use sectionId state
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -484,7 +485,11 @@ const LessonPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [sectionId]); // Re-fetch data when sectionId changes
+
+  const handleNextSection = () => {
+    setSectionId((prevSectionId) => prevSectionId + 1); // Increment sectionId
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -511,7 +516,7 @@ const LessonPage = () => {
                 <h3 className="unit-title">{unit.name}</h3>
               </div>
               <div className="lesson-list">
-                {unit.lessons.map((lesson , index) => {
+                {unit.lessons.map((lesson, index) => {
                   globalIndex++; // Increment the global index
                   if (globalIndex % 5 === 1) {
                     isLeft = !isLeft;
@@ -520,8 +525,7 @@ const LessonPage = () => {
                   const marginLeft = (globalIndex % 5 === 2 || globalIndex % 5 === 4) ? "50px" : (globalIndex % 5 === 3 ? "100px" : "0px");
                   const marginRight = (globalIndex % 5 === 2 || globalIndex % 5 === 4) ? "50px" : (globalIndex % 5 === 3 ? "100px" : "0px");
                   let margin = isLeft ? { marginLeft } : { marginRight };
-                  
-                  // let globalIndex = index +1;
+
                   let quiz_margin = null;
                   if (index === unit.lessons.length - 1) {
                     globalIndex++;
@@ -533,24 +537,25 @@ const LessonPage = () => {
                   }
                   return (
                     <React.Fragment key={lesson.id}>
-                    <Link
-                      to={`/lesson/${unit.id}/${lesson.id}`} // Updated link format
-                      className="lesson-button"
-                      style={margin}
-                    >
-                      {lesson.id}
-                    </Link>
-                
+                      <Link
+                        to={`/lesson/${unit.id}/${lesson.id}`} // Updated link format
+                        className="lesson-button"
+                        style={margin}
+                      >
+                        {lesson.id}
+                      </Link>
+
                       {/* Add quiz link if this is the last lesson in the unit */}
                       {index === unit.lessons.length - 1 && (
                         <>
                           <Link
                             to={`/quiz/${unit.id}/${lesson.id}`}
                             className="lesson-button"
-                            style={ quiz_margin}
+                            style={quiz_margin}
                           >
                             Quiz
                           </Link>
+                          
                         </>
                       )}
                     </React.Fragment>
@@ -560,18 +565,14 @@ const LessonPage = () => {
             </div>
           ));
         })()}
-      </div>
 
+        {/* Add the "Next Section" button after the lessons */}
+        <button onClick={handleNextSection} className="next-section-button">
+          Next Section
+        </button>
+      </div>
     </div>
   );
 };
 
 export default LessonPage;
-
-
-
-
-
-
-
-
