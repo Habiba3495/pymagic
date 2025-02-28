@@ -169,7 +169,7 @@
 
 
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom"; // استيراد useParams
 import "./Quiz.css";
 import ExitIcon from "./images/Exit iconsvg.svg";
 import WizardIcon from "./images/Correct Potion.svg";
@@ -180,6 +180,7 @@ import HintIcon from "./images/Hint icon.svg";
 
 const Quiz = () => {
     const navigate = useNavigate();
+    const { lessonId } = useParams(); // استخراج معرّف الدرس من الرابط
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedOption, setSelectedOption] = useState(null);
@@ -191,7 +192,7 @@ const Quiz = () => {
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/quiz/lesson/1');
+                const response = await fetch(`http://localhost:5000/api/quiz/lesson/${lessonId}`);
                 if (!response.ok) {
                     throw new Error("Failed to fetch questions");
                 }
@@ -220,7 +221,7 @@ const Quiz = () => {
         };
 
         fetchQuestions();
-    }, []);
+    }, [lessonId]); // إعادة جلب الأسئلة عند تغيير lessonId
 
     const handleOptionClick = (option) => {
         setSelectedOption(option);
@@ -240,7 +241,7 @@ const Quiz = () => {
                     },
                     body: JSON.stringify({
                         user_id: 1,
-                        lesson_id: 1,
+                        lesson_id: lessonId, // استخدام lessonId ديناميكيًا
                         answers: [{
                             question_id: questions[currentQuestionIndex].id,
                             selected_answer: selectedOption
@@ -287,7 +288,7 @@ const Quiz = () => {
             </button>
 
             <div className="quiz-box">
-                <h1 className="quiz-header">Quiz 1: What is programming</h1>
+                <h1 className="quiz-header">Quiz {lessonId}: What is programming</h1> {/* عرض معرّف الدرس */}
                 <p className="quiz-question">{currentQuestion.question}</p>
 
                 <div className="quiz-options">
