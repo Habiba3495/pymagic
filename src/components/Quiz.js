@@ -352,7 +352,7 @@ const Quiz = () => {
                     </>
                 )}
 
-                {hint && <p className="hint-text">{hint}</p>}
+                {hint && <p className="hint-text"><p>Hint:</p>{hint}</p>}
             </div>
         </div>
     );

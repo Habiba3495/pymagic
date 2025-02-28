@@ -8,4 +8,7 @@
     padding: 40px;
     display: flex;
     align-items: center;
+    margin-left: 15%; /* نفس عرض الـ sidebar */
+    width: 85%; /* تأكدي من أن العرض يأخذ باقي الصفحة */
+    /* padding: 20px; يعطي مساحة داخلية جميلة */
 }

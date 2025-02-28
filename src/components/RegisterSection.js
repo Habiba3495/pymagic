@@ -6,7 +6,7 @@ const RegisterSection = () => {
   const navigate = useNavigate();
   return (
     <section className="register-section">
-      <h2>Join us at the Academy of Mystic Code and arts</h2>
+      <h2 className="Rh2">Join us at the Academy of Mystic Code and arts</h2>
       <div className="Rform-container">
         <form>
           <label>Name</label>
@@ -27,7 +27,7 @@ const RegisterSection = () => {
           <label>Confirm Password</label>
           <input type="password" placeholder="Confirm Password" />
 
-          <button type="submit" onClick={() => navigate("/Login")}>Register</button>
+          <button className="Rbutton" type="submit" onClick={() => navigate("/Login")}>Register</button>
         </form>
       </div>
     </section>

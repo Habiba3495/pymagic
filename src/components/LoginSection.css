@@ -31,12 +31,13 @@
     border-radius: 5px;
   }
   
-  button {
+  .Lbutton {
     background-color: #ffb400;
-    color: black;
+    color: #6B21A8;
     padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin-left: 30px;
+    font-weight: bold;
   }

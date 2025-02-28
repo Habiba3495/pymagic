@@ -4,6 +4,7 @@
     width: 100vw;
     background-color: black; /* لون احتياطي */
     overflow: hidden; /* يمنع السكرول عشان الصورة تبقى كاملة */
+    
 }
 
 /* الخلفية تحتوي على صورة الباب */
@@ -16,6 +17,9 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    margin-left: 15%; /* نفس عرض الـ sidebar */
+    width: 85%; /* تأكدي من أن العرض يأخذ باقي الصفحة */
+    padding: 20px; /* يعطي مساحة داخلية جميلة */
 }
 
 /* زر Start Game */

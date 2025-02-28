@@ -1,18 +1,14 @@
-.lesson-container-div {
+/* .lesson-container-div {
     display: flex;
-    background-color: #F9F9F9;
 }
 
-.lesson-content {
-    flex: 1;
-    padding: 30px;
+.l-content {
     background: #f2ddff;
-    margin-left: 15%; /* نفس عرض الـ sidebar */
+    margin-left: 15%; 
+    width: calc(100% - 15%); 
     padding: 20px;
-    
 }
 
-/* Unit Container - Colored Background */
 .unit-container {
     color: white;
     padding: 15px;
@@ -25,12 +21,11 @@
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 20px;
-
 }
 .lesson-list {
     margin-top: 10px;
     display: flex;
-    flex-direction: column; /* Ensures each lesson appears on a new line */
+    flex-direction: column; 
     align-items: center;
     gap: 10px;
 }
@@ -54,7 +49,7 @@
     transform: scale(1.1);
 }
 
-/*  */
+
 .next-section-button {
     bottom: 20px;
     right: 20px;
@@ -70,4 +65,96 @@
 
 .next-section-button:hover {
     background-color: #7C3AED;
+} */
+
+.lesson-container-div {
+    display: flex;
+}
+
+.l-content {
+    background: #f2ddff;
+    margin-left: 15%; /* نفس عرض الـ sidebar */
+    width: calc(100% - 15%); /* تأكد من أن العرض يأخذ باقي الصفحة */
+    padding: 20px;
+}
+
+/* Unit Container - Colored Background */
+.unit-container {
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.unit-header {
+    background-color: #5B287C;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    margin-left: 45px;
+    text-align: center; /* يجعل النص في المنتصف */
+    display: flex;
+    justify-content: center; /* يوسّط العنوان أفقيًا */
+    align-items: center; /* يوسّط العنوان عموديًا */
+}
+
+
+.lesson-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column; /* Ensures each lesson appears on a new line */
+    align-items: center;
+    gap: 10px;
+}
+
+.lesson-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    color: #5B287C;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, background-color 0.3s, color 0.3s;
+}
+
+.lesson-button:hover {
+    transform: scale(1.1);
+}
+
+/* تغيير لون الدرس النشط */
+.active-lesson {
+    background-color: #5A189A !important; /* موف غامق */
+    color: white !important;
+}
+
+/* زر القسم التالي */
+.next-section-button {
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #6B21A8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.next-section-button:hover {
+    background-color: #7C3AED;
+}
+
+.active-lesson {
+    background-color: #5A189A !important;
+    color: white !important;
+}
+
+.watched-lesson {
+    background-color: #D1C4E9 !important;
+    color: #4A148C !important;
 }
