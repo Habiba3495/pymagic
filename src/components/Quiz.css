@@ -40,7 +40,7 @@
 }
 
 .option-button {
-  background: white;
+  background-color: white;
   border: 2px solid #bdb6c3;
   border-radius: 6px;
   padding: 12px;
@@ -50,6 +50,13 @@
   color: black;
   
 }
+
+/* .option-button {
+  border: 2px solid transparent;
+  padding: 10px;
+  margin: 5px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+} */
 
 .option-button:hover {
   background: #e9d5ff;
@@ -68,7 +75,7 @@
 }
 
 .check-answer-button:active {
-  background: #a49ba9;
+  background: #62108f;
 }
 
 .exit-button {
@@ -148,4 +155,46 @@
   color: #6B21A8;
   font-weight: bold;
   text-align: left;
+}
+ 
+
+/* 
+.option-button.correct {
+  background: 
+  color: white;
+  border-color: #4CAF50;
+}
+
+/*
+.option-button.wrong {
+  background: #FF4C4C !important; 
+  color: white;
+  border-color: #FF4C4C;
+} */
+
+.option-button.selected {
+  background-color: #62108f !important; /* موف غامق */
+  color: white;
+  border-color: #4a0c6b;
+}
+ 
+.option-button-correct {
+  background-color: green !important;
+  color: white;
+}
+
+.option-button-wrong {
+  background-color: red !important;
+  color: white;
+}
+
+.option-button.correct {
+  background-color: #28a745 !important; /* أخضر عند الإجابة الصحيحة */
+  border-color: #1e7e34;
+  color: white;
+}
+
+.option-button.wrong {
+  background-color: #dc3545 !important; /* أحمر عند الإجابة الخاطئة */
+  border-color: #c82333;
 }
