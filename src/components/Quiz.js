@@ -406,7 +406,9 @@ const Quiz = () => {
 
                 const data = await response.json();
                 if (data.success) {
-                    navigate("/quiz-complete");
+                    navigate("/quiz-complete", {
+                        state: { quizData: data }, // Pass the entire response data
+                    });
                 } else {
                     console.error("Error submitting quiz:", data.message);
                 }

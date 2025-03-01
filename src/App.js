@@ -42,6 +42,9 @@ import Profile from "./components/ProfileSection";
 import Game from "./components/GameSection";
 import Video from "./components/Video"; // 📌 إضافة صفحة الفيديو
 import Quiz from "./components/Quiz";  // 📌 إضافة صفحة الاختبار (يجب إنشاؤها)
+import QuizComplete from "./components/QuizComplete"; // Import the QuizComplete component
+import ReviewPage from "./components/ReviewPage";
+
 
 const App = () => {
   return (
@@ -57,6 +60,8 @@ const App = () => {
         <Route path="/Game" element={<Game />} />
         <Route path="/lesson/:unitId/:lessonId" element={<Video />} /> {/* 📌 مسار الفيديو */}
         <Route path="/quiz/:unitId/:lessonId" element={<Quiz />} />   📌 مسار الاختبار
+        <Route path="/quiz-complete" element={<QuizComplete />} /> {/* Add this route */}
+        <Route path="/review" element={<ReviewPage />} />
       </Routes>
     </Router>
   );
