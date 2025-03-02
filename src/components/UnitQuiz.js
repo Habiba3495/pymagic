@@ -20,7 +20,7 @@ const UnitQuiz = () => {
     const [hint, setHint] = useState("");
     const [motivationMessage, setMotivationMessage] = useState("");
     const [answers, setAnswers] = useState([]);
-    
+
     const userId = 1; //// Replace with actual user authentication
 
     useEffect(() => {
@@ -41,6 +41,20 @@ const UnitQuiz = () => {
                         options: ["A machine", "A book", "A food", "A drink"],
                         correct_answer: "A machine",
                         hint: "It processes data."
+                    },
+                    {
+                        id: 1,
+                        question: "What is Python?",
+                        options: ["A snake", "A programming language", "A type of coffee", "A car brand"],
+                        correct_answer: "A programming language",
+                        hint: "It's widely used in software development."
+                    },
+                    {
+                        id: 2,
+                        question: "What does HTML stand for?",
+                        options: ["Hyper Text Markup Language", "High Tech Machine Learning", "Home Tool Machine Language", "Hyperlink and Text Management Language"],
+                        correct_answer: "Hyper Text Markup Language",
+                        hint: "It's used to structure web pages."
                     }
                 ]);
             }
