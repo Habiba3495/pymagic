@@ -198,3 +198,8 @@
   background-color: #dc3545 !important; /* أحمر عند الإجابة الخاطئة */
   border-color: #c82333;
 }
+.next-button{
+  background-color: #62108f;
+  color: white;
+  border-radius: 10px;
+}
