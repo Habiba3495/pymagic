@@ -44,7 +44,9 @@ import Video from "./components/Video"; // 📌 إضافة صفحة الفيدي
 import Quiz from "./components/Quiz";  // 📌 إضافة صفحة الاختبار (يجب إنشاؤها)
 import QuizComplete from "./components/QuizComplete"; // Import the QuizComplete component
 import ReviewPage from "./components/ReviewPage";
-
+import UnitQuiz from "./components/UnitQuiz";
+import UnitQuizComplete from "./components/UnitQuizComplete";
+import ProgressReport from "./components/ProgressReport";
 
 const App = () => {
   return (
@@ -61,7 +63,10 @@ const App = () => {
         <Route path="/lesson/:unitId/:lessonId" element={<Video />} /> {/* 📌 مسار الفيديو */}
         <Route path="/quiz/:unitId/:lessonId" element={<Quiz />} />   📌 مسار الاختبار
         <Route path="/quiz-complete" element={<QuizComplete />} /> {/* Add this route */}
-        <Route path="/review" element={<ReviewPage />} />
+        <Route path="/unit-quiz/:unitId" element={<UnitQuiz />} /> {/* Ensure this matches */}
+        <Route path="/unit-quiz-complete" element={<UnitQuizComplete />} />
+        <Route path="/quiz-review" element={<ReviewPage />} />
+        <Route path="/progress-report/:user_id" element={<ProgressReport />} />
       </Routes>
     </Router>
   );

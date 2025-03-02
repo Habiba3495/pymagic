@@ -323,6 +323,7 @@ const Quiz = () => {
     const [hint, setHint] = useState("");
     const [motivationMessage, setMotivationMessage] = useState("");
     const [answers, setAnswers] = useState([]); // تخزين الإجابات مؤقتًا
+    const userId = 1; // Define userId with a default value or fetch it dynamically
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -381,6 +382,44 @@ const Quiz = () => {
         }
     };
 
+    // const handleNextQuestion = async () => {
+    //     if (currentQuestionIndex < questions.length - 1) {
+    //         setCurrentQuestionIndex(currentQuestionIndex + 1);
+    //         setSelectedOption(null);
+    //         setIsAnswered(false);
+    //         setIsCorrect(null);
+    //         setHint("");
+    //         setMotivationMessage("");
+    //     } else {
+    //         // إرسال جميع الإجابات عند الانتهاء من الاختبار
+    //         try {
+    //             const response = await fetch('http://localhost:5000/api/quiz/submit', {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                 },
+    //                 body: JSON.stringify({
+    //                     user_id: 1, // change to dynamic user ID
+    //                     lesson_id: lessonId, 
+    //                     answers: answers,
+    //                 }),
+    //             });
+
+    //             const data = await response.json();
+    //             if (data.success) {
+    //                 navigate("/quiz-complete", {
+    //                     state: { quizData: data }, // Pass the entire response data
+    //                 });
+    //             } else {
+    //                 console.error("Error submitting quiz:", data.message);
+    //             }
+    //         } catch (error) {
+    //             console.error("Error submitting quiz:", error);
+    //         }
+    //     }
+    // };
+
+
     const handleNextQuestion = async () => {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -390,24 +429,29 @@ const Quiz = () => {
             setHint("");
             setMotivationMessage("");
         } else {
-            // إرسال جميع الإجابات عند الانتهاء من الاختبار
+            if (!userId) {
+                navigate("/login");
+                return;
+            }
             try {
+                console.log("Submitting quiz with answers:", answers); // Debug log
                 const response = await fetch('http://localhost:5000/api/quiz/submit', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        user_id: 1, // change to dynamic user ID
-                        lesson_id: lessonId, 
+                        user_id: userId,
+                        lesson_id: lessonId,
                         answers: answers,
                     }),
                 });
-
+    
                 const data = await response.json();
+                console.log("Quiz submission response:", data); // Debug log
                 if (data.success) {
                     navigate("/quiz-complete", {
-                        state: { quizData: data }, // Pass the entire response data
+                        state: { quizData: data },
                     });
                 } else {
                     console.error("Error submitting quiz:", data.message);

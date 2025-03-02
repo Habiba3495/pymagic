@@ -516,7 +516,7 @@ const LessonSection = () => {
 
                       {index === unit.lessons.length - 1 && (
                         <Link
-                          to={`/quiz/${unit.id}/${lesson.id}`}
+                          to={`/unit-quiz/${unit.id}`}
                           className="lesson-button"
                           style={quiz_margin}
                         >
