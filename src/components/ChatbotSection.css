@@ -1,12 +1,13 @@
+/* ChatbotSection.css */
 .chatbot-wrapper {
   display: flex;
   height: 100vh;
-  background-color: #f3e5f5; /* اللون القديم */
+  background-color: #f3e5f5; /* Light purple background for magic feel */
 }
 
 .sidebar-container {
   width: 15%;
-  background-color: #6a1b9a;
+  background-color: #6a1b9a; /* Purple for wizard theme */
   height: 100vh;
   position: fixed;
   left: 0;
@@ -49,6 +50,7 @@
   font-weight: bold;
   text-align: center;
   width: 100%;
+  font-family: 'Comic Sans MS', cursive; /* Fun, kid-friendly font */
 }
 
 .chat-messages {
@@ -79,6 +81,16 @@
   padding: 10px;
   border-radius: 10px;
   max-width: 70%;
+  position: relative;
+}
+
+.message-text::after {
+  content: "✨";
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  font-size: 12px;
+  color: #ffeb3b; /* Yellow sparkles */
 }
 
 .user .message-text {
@@ -92,7 +104,7 @@
   margin: 0 10px;
 }
 
-/* ✅ تعديل input-container ليكون مفصولًا تمامًا عن الشات */
+/* Input container styling */
 .input-container {
   position: absolute;
   bottom: 20px;
@@ -118,6 +130,7 @@ input {
   border: none;
   outline: none;
   font-size: 16px;
+  font-family: 'Comic Sans MS', cursive;
 }
 
 button {
@@ -128,13 +141,14 @@ button {
   cursor: pointer;
   margin-left: 10px;
 }
+
 .send-button img {
-  width: 40px;  /* تصغير العرض */
-  height: 30px; /* تصغير الطول */
+  width: 40px;
+  height: 30px;
 }
+
 input::placeholder {
-  font-size: 20px; /* تغيير الحجم */
-  position: absolute;
+  font-size: 16px;
+  font-family: 'Comic Sans MS', cursive;
+  color: #6a1b9a;
 }
-
-

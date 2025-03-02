@@ -382,43 +382,6 @@ const Quiz = () => {
         }
     };
 
-    // const handleNextQuestion = async () => {
-    //     if (currentQuestionIndex < questions.length - 1) {
-    //         setCurrentQuestionIndex(currentQuestionIndex + 1);
-    //         setSelectedOption(null);
-    //         setIsAnswered(false);
-    //         setIsCorrect(null);
-    //         setHint("");
-    //         setMotivationMessage("");
-    //     } else {
-    //         // إرسال جميع الإجابات عند الانتهاء من الاختبار
-    //         try {
-    //             const response = await fetch('http://localhost:5000/api/quiz/submit', {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                 },
-    //                 body: JSON.stringify({
-    //                     user_id: 1, // change to dynamic user ID
-    //                     lesson_id: lessonId, 
-    //                     answers: answers,
-    //                 }),
-    //             });
-
-    //             const data = await response.json();
-    //             if (data.success) {
-    //                 navigate("/quiz-complete", {
-    //                     state: { quizData: data }, // Pass the entire response data
-    //                 });
-    //             } else {
-    //                 console.error("Error submitting quiz:", data.message);
-    //             }
-    //         } catch (error) {
-    //             console.error("Error submitting quiz:", error);
-    //         }
-    //     }
-    // };
-
 
     const handleNextQuestion = async () => {
         if (currentQuestionIndex < questions.length - 1) {
