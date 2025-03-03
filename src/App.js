@@ -40,8 +40,8 @@ import Flashcards from "./components/FlashcardSection";
 import Chatbot from "./components/ChatbotSection";
 import Profile from "./components/ProfileSection";
 import Game from "./components/GameSection";
-import Video from "./components/Video"; // 📌 إضافة صفحة الفيديو
-import Quiz from "./components/Quiz";  // 📌 إضافة صفحة الاختبار (يجب إنشاؤها)
+import Video from "./components/Video"; 
+import Quiz from "./components/Quiz"; 
 import QuizComplete from "./components/QuizComplete"; // Import the QuizComplete component
 import ReviewPage from "./components/ReviewPage";
 import UnitQuiz from "./components/UnitQuiz";
@@ -60,8 +60,8 @@ const App = () => {
         <Route path="/Chatbot" element={<Chatbot />} />
         <Route path="/Profile" element={<Profile />} />
         <Route path="/Game" element={<Game />} />
-        <Route path="/lesson/:unitId/:lessonId" element={<Video />} /> {/* 📌 مسار الفيديو */}
-        <Route path="/quiz/:unitId/:lessonId" element={<Quiz />} />   📌 مسار الاختبار
+        <Route path="/lesson/:unitId/:lessonId" element={<Video />} /> 
+        <Route path="/quiz/:unitId/:lessonId" element={<Quiz />} /> 
         <Route path="/quiz-complete" element={<QuizComplete />} /> {/* Add this route */}
         <Route path="/unit-quiz/:unitId" element={<UnitQuiz />} /> {/* Ensure this matches */}
         <Route path="/unit-quiz-complete" element={<UnitQuizComplete />} />

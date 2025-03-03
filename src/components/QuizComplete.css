@@ -1,0 +1,182 @@
+/* .quiz-complete-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    background: rgba(78, 52, 126, 0.799); 
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    color: #FFD700;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s ease-in-out;
+}
+
+.quiz-complete-container h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.quiz-complete-container p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.quiz-complete-container button {
+    background: #FFD700;
+    color: #4E347E;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.quiz-complete-container button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(255, 215, 0, 0.6);
+}
+
+.quizcomplete {
+    background: url("../components/images/Score\ bg.svg") no-repeat center center fixed;
+    font-family: 'Poppins', sans-serif;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;  
+    width: 100%;
+    height: 140vh;
+}
+
+.book{
+    width: 150px;
+    height: 150px;
+} */
+
+.quizcomplete {
+    background: url("../components/images/Score\ bg.svg") no-repeat center center fixed;
+    font-family: 'Poppins', sans-serif;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;  
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quiz-complete-container {
+    position: relative;
+    width: 450px;
+    background: rgba(78, 52, 126, 0.85); /* لون موف شفاف */
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    color: #FFD700; /* لون ذهبي للنص */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s ease-in-out;
+}
+
+/* أيقونة الكتاب */
+.book {
+    width: 170px;
+    height: 170px;
+    display: block;
+    margin: 0 auto 15px auto; 
+}
+
+/* العنوان */
+.quiz-complete-container h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+/* مظهر النصوص */
+.quiz-complete-container p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+/* حاوية الـ Score */
+.score-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column
+
+}
+
+.score-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 5px solid #FFD700;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    font-weight: bold;
+    color: #FFD700;
+    margin-right: 10px;
+}
+
+.score-icon {
+    width: 50px;
+}
+
+/* حاوية النقاط المكتسبة */
+.points-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column
+}
+
+.points-icon {
+    width: 60px;
+    height: 77px;
+    margin-right: 10px;
+}
+
+.points-text {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* الأزرار */
+.buttons-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.quiz-complete-container button {
+    background: #FFD700;
+    color: #4E347E;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-size: 16px;
+    width: 48%;
+}
+
+/* .quiz-complete-container button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(255, 215, 0, 0.6);
+} */
+.score-points{
+    display: flex; /* يجعل العناصر بجانب بعض */
+    justify-content: center; /* توسيط العناصر أفقيًا */
+    align-items: center; /* توسيط العناصر عموديًا */
+    gap: 80px;
+}
+.motivation-text{
+    font-weight: bold;
+}
