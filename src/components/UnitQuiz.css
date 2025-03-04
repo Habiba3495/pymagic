@@ -1,0 +1,208 @@
+.unit-quiz-container {
+    background-color: #f3e8ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  .unit-quiz-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+  }
+  
+  .unit-quiz-header {
+    background-color: #6B21A8;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  .unit-quiz-question {
+    font-size: 18px;
+    margin: 15px 0;
+    font-weight: bold;
+  }
+  
+  .unit-quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: #6B21A8;
+  }
+  
+  .unit-option-button {
+    background-color: white;
+    border: 2px solid #bdb6c3;
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    color: black;
+  }
+  
+  .unit-option-button:hover {
+    background: #e9d5ff;
+  }
+  
+  .unit-check-answer-button {
+    background: #bdb6c3;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+  
+  .unit-check-answer-button:active {
+    background: #62108f;
+  }
+  
+  .unit-check-answer-button.selected {
+    background-color: #62108f !important;
+    color: white;
+  }
+  
+  .unit-exit-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .unit-exit-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .unit-exit-button:hover .unit-exit-icon {
+    opacity: 0.7;
+  }
+  
+  .unit-quiz-footer {
+    display: flex;
+    align-items: center;
+    gap: 300px;
+    justify-content: center;
+    margin-top: 40px;
+  }
+  
+  .unit-extra-icon {
+    width: 50px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .unit-extra-icon:hover {
+    transform: scale(1.1);
+  }
+  
+  .unit-hint-text {
+    margin-top: 15px;
+    font-size: 16px;
+    color: #6B21A8;
+    font-weight: bold;
+    text-align: left;
+  }
+  
+  .unit-option-button.selected {
+    background-color: #62108f !important;
+    color: white;
+    border-color: #4a0c6b;
+  }
+  
+  .unit-option-button.correct {
+    background-color: #28a745 !important;
+    border-color: #1e7e34;
+    color: white;
+  }
+  
+  .unit-option-button.wrong {
+    background-color: #dc3545 !important;
+    border-color: #c82333;
+  }
+  
+  .unit-result-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .unit-icon {
+    width: 50px;
+    height: auto;
+  }
+  
+  .unit-message {
+    font-size: 18px;
+    font-weight: bold;
+    color: #6B21A8;
+  }
+  
+  .unit-correct-message {
+    font-size: 18px;
+    font-weight: bold;
+    color: green;
+  }
+  
+  .unit-wrong-message {
+    font-size: 18px;
+    font-weight: bold;
+    color: red;
+  }
+  
+  .unit-next-button {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    background-color: #ffb400;
+    color: #6B21A8;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+  
+  .unitquizcontainer{
+    display: flex;
+    align-items: center; /* توسيط العناصر عاموديًا */
+    justify-content: center; /* جعلهم في المنتصف أفقيًا */
+    gap: 15px; /* تحديد مسافة بين العناصر */
+    margin-top: 20px; /* هامش علوي */
+
+  }
+
+  .success-message,
+.error-message {
+    display: flex;
+    align-items: center; /* لمحاذاة العناصر عمودياً */
+    justify-content: center; /* لو عايزة كل حاجة في المنتصف */
+    gap: 15px; /* مسافة بين العناصر */
+    flex-wrap: wrap; /* عشان لو الشاشة صغيرة، ينزلوا لسطر جديد */
+}
+
+.extra-icon {
+    width: 50px; /* حجم الصورة الإضافية */
+    height: auto;
+}
+
+.extra-text {
+    font-size: 18px;
+    font-weight: bold;
+    color: #6B21A8; /* لون النص */
+}

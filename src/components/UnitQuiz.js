@@ -1,7 +1,7 @@
 // src/components/UnitQuiz.js
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import "./Quiz.css";
+import "./UnitQuiz.css";
 import ExitIcon from "./images/Exit iconsvg.svg";
 import WizardIcon from "./images/Correct Potion.svg";
 import CorrectAnswerIcon from "./images/Correct check.svg";
@@ -76,8 +76,7 @@ const UnitQuiz = () => {
                 is_correct: isCorrectAnswer
             };
             setAnswers([...answers, newAnswer]);
-            setMotivationMessage(isCorrectAnswer ? "Great job!" : "Try again!");
-        }
+            setMotivationMessage(isCorrectAnswer ? "Correct! Well done!" : "Incorrect. Try again!");        }
     };
 
     const handleNextQuestion = async () => {
@@ -150,22 +149,22 @@ const UnitQuiz = () => {
                         </button>
                     </div>
                 ) : (
+                    <div className="unitquizcontainer">
                     <div className={isCorrect ? "success-message" : "error-message"}>
-                        <img src={isCorrect ? WizardIcon : WrongIcon} alt={isCorrect ? "Correct" : "Wrong"} />
-                        <p>{motivationMessage}</p>
-                        <div className={isCorrect ? "correct-answer-box" : "wrong-answer-box"}>
-                            <img src={isCorrect ? CorrectAnswerIcon : WrongAnswerIcon} alt={isCorrect ? "Correct" : "Wrong"} />
-                            <p>{isCorrect ? "Correct answer" : "Wrong answer"}</p>
-                        </div>
-                        <button className="next-button" onClick={handleNextQuestion}>
-                            {currentQuestionIndex === questions.length - 1 ? "Submit" : "Next"}
-                        </button>
+                    <img src={isCorrect ? WizardIcon : WrongIcon} alt={isCorrect ? "Correct" : "Wrong"} />
+                    <p>{motivationMessage}</p>
+
+                    <img src={isCorrect ? CorrectAnswerIcon : WrongAnswerIcon} alt="Extra Icon" className="extra-icon" />
+                    <p className="extra-text">{isCorrect ? "Correct answer" : "Wrong answer"}</p>
+                    <button className="next-button" onClick={handleNextQuestion}>
+                    {currentQuestionIndex === questions.length - 1 ? "Submit" : "Next"}
+                    </button>
+                    </div>
                     </div>
                 )}
-                {hint && <p className="hint-text"><p>Hint:</p>{hint}</p>}
+                {hint && <p className="hint-text"><strong>Hint:</strong> {hint}</p>}
             </div>
         </div>
-    );
-};
+)}
 
 export default UnitQuiz;

@@ -1,63 +1,108 @@
-.progress-report-container {
-  background-color: #e6d6f5; /* Light purple background */
-  padding: 20px;
-  min-height: 100vh;
+.progress-report-bg {
+  background-color: #f2ddff; /* موف فاتح */
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  padding: 20px;
+  position: relative;
 }
 
-.progress-report-header {
-  background-color: #7b2cbf; /* Dark purple header */
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-  padding: 10px 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+/* زر الرجوع */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.back-icon {
+  width: 40px;  /* حجم الأيقونة */
+  height: 40px;
+}
+.back-button:hover .back-icon {
+  opacity: 0.7; /* تأثير عند التمرير */
+}
+
+/* الصندوق الأبيض في المنتصف */
+.progress-report-container {
+  background: white;
   width: 80%;
+  max-width: 900px;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
+/* هيدر العنوان */
+.progress-report-header {
+  background: #5c2685; /* بنفسجي غامق */
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/* الشبكة التي تحتوي على الكروت */
 .progress-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
-  width: 80%;
+  justify-content: center;
 }
 
+/* تصميم الكارت */
 .progress-card {
-  background-color: #9b59b6; /* Purple card background */
+  background: #f2ddff; /* بنفسجي فاتح */
+  padding: 15px;
   border-radius: 10px;
-  padding: 20px;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.2s;
-  color: white;
+  transition: 0.3s;
 }
 
 .progress-card:hover {
-  transform: scale(1.05);
+  transform: translateY(-5px);
 }
 
+/* الدائرة التي تعرض النتيجة */
 .pscore-circle {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  border: 5px solid #FFD700;
-  display: flex;
-  align-items: center;
-  justify-content: center; 
-  font-weight: bold;
-  color: #FFD700;
-  margin-right: 10px;
-}
-
-.lesson-info, .points-earned {
-  font-size: 16px;
-  margin: 5px 0;
-}
-
-.points-earned span {
+  background: #4b1665; /* بنفسجي غامق */
+  color: #ffcc5c;
   font-size: 20px;
+  font-weight: bold;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  margin: 10px auto;
+  border: 5px solid #ffcc5c; /* إطار أصفر */
+}
+
+/* معلومات الدرس */
+.lesson-info {
+  font-size: 16px;
+  font-weight: bold;
+  color: #4b1665; /* بنفسجي غامق */
+  margin-top: 10px;
+}
+
+/* النقاط المكتسبة */
+.points-earned {
+  font-size: 14px;
+  color: #4b1665;
+  font-weight: bold;
+}
+
+.points{
+  width: 20px;  /* حجم الأيقونة */
+  height: 20px;
 }

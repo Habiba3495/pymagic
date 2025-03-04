@@ -1,73 +1,111 @@
 .quiz-review-container {
-    background-color: #e6e6fa; /* Light purple background */
-    padding: 20px;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* background-image: url('/path/to/python-snake-icon.png'), url('/path/to/star-icon.png'); Add paths to your icons */
-    background-repeat: repeat, repeat;
-    background-size: 50px, 30px;
-  }
+  background-image: url("../components/images/video_bg.svg"); /* تأكدي أن المسار صحيح */
+  background-color: #f2ddff;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* اجعل الخلفية ثابتة عند التمرير */
   
-  .quiz-review-container h1 {
-    color: #4b0082; /* Dark purple for title */
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
+  width: 100%; /* أو أي عرض ثابت يناسبك */
+  max-width: 100%; /* حتى لا يتجاوز عرض الشاشة */
   
-  .quiz-box {
-    background-color: white;
-    border-radius: 10px;
-    padding: 20px;
-    width: 80%;
-    max-width: 600px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border: 2px solid #9370DB; /* Purple border */
-  }
+  min-height: 100vh; /* ليغطي الشاشة بالكامل في البداية */
+  height: auto; /* للسماح بالتمرير عند الحاجة */
   
-  .question-box {
-    margin-bottom: 20px;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* يبدأ المحتوى من الأعلى */
   
-  .question-text {
-    font-weight: bold;
-    color: #4b0082;
-  }
-  
-  .options-container {
-    margin-top: 10px;
-  }
-  
-  .option {
-    padding: 8px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .option.user-answer {
-    color: #FF6B6C; /* Yellow for user answer */
-  }
-  
-  .option.correct-answer {
-    color: #009082;  }
-  
-  .buttons-container {
-    margin-top: 20px;
-    display: flex;
-    gap: 10px;
-  }
-  
-  .rbutton {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #9370DB; /* Purple buttons */
-    color: white;
-    cursor: pointer;
-  }
-  
-  .rbutton:hover {
-    background-color: #7b68ee; /* Darker purple on hover */
-  }
+  padding: 30px;
+  overflow-y: auto; /* تفعيل التمرير العمودي عند الحاجة */
+}
+
+.quiz-review-container h1 {
+  color: #5B287C; /* Dark purple for title */
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.quiz-box-review {
+  background-color: #5B287C;
+  border-radius: 10px;
+  padding: 20px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border: 2px solid #9370DB; /* Purple border */
+  align-items: center;
+}
+.Reviewheader{
+  background-color: #f2ddff;
+  padding: 15px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.question-box {
+  margin-bottom: 20px;
+  background-color: white;
+  border-radius: 3px;
+  align-items: center;
+  padding: 2px;
+  padding-left: 25px;
+  padding-bottom: 10px;
+}
+
+.question-text {
+  font-weight: bold;
+  color: black;
+}
+
+.options-container {
+  margin-top: 10px;
+  /* color: black; */
+}
+
+.option {
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.option.user-answer {
+  color: #FF6B6C; /* Yellow for user answer */
+}
+
+.option.correct-answer {
+  color: #009082;  }
+
+.buttons-container {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+/* .lbutton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #5B287C; 
+  color: #FFC145;
+  border: #FFC145;
+  cursor: pointer;
+} */
+
+.lbutton {
+  background-color: #FFC145;
+  color: #5B287C;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+
+.pbutton {
+  padding: 10px 20px;
+  border: 2px solid #FFC145; /* تصحيح الحدود */
+  border-radius: 5px;
+  background-color: #5B287C; 
+  color: #FFC145;
+  cursor: pointer;
+}
