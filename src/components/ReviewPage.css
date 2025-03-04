@@ -47,12 +47,11 @@
   }
   
   .option.user-answer {
-    background-color: #ffeb3b; /* Yellow for user answer */
+    color: #FF6B6C; /* Yellow for user answer */
   }
   
   .option.correct-answer {
-    background-color: #90ee90; /* Light green for correct answer */
-  }
+    color: #009082;  }
   
   .buttons-container {
     margin-top: 20px;

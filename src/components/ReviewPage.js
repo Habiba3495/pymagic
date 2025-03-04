@@ -410,9 +410,7 @@ const ReviewPage = () => {
                   {option}
                 </div>
               ))}
-              <p>User Answer: {answer.user_answer || 'No answer provided'}</p>
-              <p>Correct Answer: {answer.correct_answer}</p>
-              <p>Correct? {answer.isCorrect ? 'Yes' : 'No'}</p>
+              
             </div>
           </div>
         ))}
