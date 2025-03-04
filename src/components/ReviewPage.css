@@ -1,0 +1,74 @@
+.quiz-review-container {
+    background-color: #e6e6fa; /* Light purple background */
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* background-image: url('/path/to/python-snake-icon.png'), url('/path/to/star-icon.png'); Add paths to your icons */
+    background-repeat: repeat, repeat;
+    background-size: 50px, 30px;
+  }
+  
+  .quiz-review-container h1 {
+    color: #4b0082; /* Dark purple for title */
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .quiz-box {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: 2px solid #9370DB; /* Purple border */
+  }
+  
+  .question-box {
+    margin-bottom: 20px;
+  }
+  
+  .question-text {
+    font-weight: bold;
+    color: #4b0082;
+  }
+  
+  .options-container {
+    margin-top: 10px;
+  }
+  
+  .option {
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .option.user-answer {
+    background-color: #ffeb3b; /* Yellow for user answer */
+  }
+  
+  .option.correct-answer {
+    background-color: #90ee90; /* Light green for correct answer */
+  }
+  
+  .buttons-container {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .rbutton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #9370DB; /* Purple buttons */
+    color: white;
+    cursor: pointer;
+  }
+  
+  .rbutton:hover {
+    background-color: #7b68ee; /* Darker purple on hover */
+  }
