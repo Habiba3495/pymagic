@@ -185,7 +185,7 @@ const Quiz = () => {
                           className={`check-answer-button ${selectedOption ? "selected" : ""}`}
                           onClick={checkAnswer}
                          disabled={!selectedOption}
->                        Check your answer
+>                        Check answer
                         </button>
 
                     </div>

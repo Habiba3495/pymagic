@@ -144,9 +144,14 @@ const UnitQuiz = () => {
                 {!isAnswered ? (
                     <div className="quiz-footer">
                         <img src={HintIcon} alt="Hint" className="extra-icon" onClick={handleHintClick} />
-                        <button className="check-answer-button" onClick={checkAnswer} disabled={!selectedOption}>
-                            Check Answer
-                        </button>
+                        <button
+                        className={`check-answer-button ${selectedOption ? "active-button" : ""}`}
+                        onClick={checkAnswer}
+                        disabled={!selectedOption}
+                        >
+                        Check Answer
+                       </button>
+
                     </div>
                 ) : (
                     <div className="unitquizcontainer">

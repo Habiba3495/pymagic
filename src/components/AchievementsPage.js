@@ -1,48 +1,84 @@
 import React, { useEffect, useState } from "react";
 import "./AchievementsPage.css";
 import { useNavigate } from "react-router-dom";
+import Exit from "./images/Exit iconsvg.svg";
+
 
 const AchievementsPage = () => {
   const [achievements, setAchievements] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const userId = 1; // Replace with dynamic user ID from auth context
 
   useEffect(() => {
     const fetchAchievements = async () => {
+      setLoading(true);
+      setError(null);
       try {
+        console.log("Fetching achievements for userId:", userId);
         const response = await fetch(`http://localhost:5000/api/achievements/${userId}`);
-        if (!response.ok) throw new Error("Failed to fetch achievements");
+        console.log("Response status:", response.status);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
-        setAchievements(data.achievements || []);
+        console.log("API Response:", data);
+        if (data.success) {
+          setAchievements(data.achievements || []); // Ensure achievements is an array
+        } else {
+          throw new Error(data.message || "Failed to load achievements");
+        }
       } catch (error) {
-        console.error("Error fetching achievements, using dummy data:", error);
+        console.error("Error fetching achievements:", error);
+        setError(error.message);
         setAchievements([
-          { id: 1, title: "Spellbook Scholar", description: "Completed all lessons in a chapter" },
-          { id: 2, title: "Daily Dedication", description: "Completed lessons for 5 days in a row" },
-          { id: 3, title: "Treasure Hunter", description: "Unlocked the first treasure chest" },
-          { id: 4, title: "Master Wizard", description: "Reached 500 points" },
+          { id: 1, title: "Spellbook Scholar", description: "Unlocked at 50 points", image: "./images/spellbook_scholar.svg" },
+          { id: 2, title: "Daily Dedication", description: "Unlocked at 70 points", image: "./images/daily_dedication.svg" },
+          { id: 3, title: "Treasure Hunter", description: "Unlocked at 100 points", image: "./images/treasure_hunter.svg" },
         ]);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchAchievements();
   }, [userId]);
 
+  if (loading) {
+    return <div className="loading">Loading achievements...</div>;
+  }
+
+  if (error) {
+    return <div className="error">Error: {error}</div>;
+  }
+
   return (
     <div className="achievements-bg">
-      <button className="back-button" onClick={() => navigate("/profile")}>
-        <span>← Back</span>
+      <button className="back-button" onClick={() => navigate("/lessons")}>
+        <img src={Exit} alt="Back" className="back-icon" />
       </button>
       <div className="achievements-container">
         <h1 className="achievements-header">Achievements</h1>
         <div className="achievements-grid">
-          {achievements.map((achievement) => (
-            <div key={achievement.id} className="achievement-card">
-              <p className="achievement-title">{achievement.title}</p>
-              <p className="achievement-description">{achievement.description}</p>
-            </div>
-          ))}
+          {achievements.length > 0 ? (
+            achievements.map((achievement) => (
+              <div key={achievement.id} className="achievement-card">
+                {achievement.image && (
+                  <img
+                    src={`http://localhost:5000${achievement.image}`} // Use absolute path to ensure images load
+                    alt={achievement.title}
+                    className="achievement-image"
+                    onError={(e) => console.error("Image failed to load:", e)}
+                  />
+                )}
+                <p className="achievement-title">{achievement.title}</p>
+                <p className="achievement-description">{achievement.description}</p>
+              </div>
+            ))
+          ) : (
+            <p className="no-achievements">No achievements yet. Earn points to unlock rewards!</p>
+          )}
         </div>
+       
       </div>
     </div>
   );

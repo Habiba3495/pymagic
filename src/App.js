@@ -47,6 +47,7 @@ import ReviewPage from "./components/ReviewPage";
 import UnitQuiz from "./components/UnitQuiz";
 import UnitQuizComplete from "./components/UnitQuizComplete";
 import ProgressReport from "./components/ProgressReport";
+import AchievementsPage from "./components/AchievementsPage";
 
 const App = () => {
   return (
@@ -67,7 +68,8 @@ const App = () => {
         <Route path="/unit-quiz-complete" element={<UnitQuizComplete />} />
         <Route path="/quiz-review" element={<ReviewPage />} />
         <Route path="/progress-report/:user_id" element={<ProgressReport />} />
-      </Routes>
+        <Route path="/achievements" element={<AchievementsPage />} />  
+            </Routes>
     </Router>
   );
 };

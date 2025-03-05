@@ -62,13 +62,13 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
   margin-top: 10px;
-  margin-left: 70px;
+  margin-left: 110px;
 }
 
-.check-answer-button:active {
-  background: #62108f;
+.check-answer-button:hover {
+  cursor: pointer; /* يتحول لشكل اليد */
 }
 
 .check-answer-button.selected {
@@ -171,14 +171,10 @@
   padding: 10px 15px;
   font-size: 16px;
   border: none;
-  background-color: #ffb400;
-  color: #6B21A8;
+  background-color: #6B21A8;
+  color: white;
   cursor: pointer;
   border-radius: 5px;
   font-weight: bold;
+  margin-left: 70px;
 }
-
-/* .next-button:hover {
-  background-color: #ffb400;
-  color: #6B21A8;
-} */

@@ -17,7 +17,6 @@
 }
 
 .unit-header {
-    background-color: #5B287C;
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 20px;
@@ -41,8 +40,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ffffff;
-    color: #5B287C;
+    background-color: #B8B8D1;
+    color: white;
     font-weight: bold;
     text-decoration: none;
     border-radius: 50%;
@@ -54,12 +53,6 @@
 
 .lesson-button:hover {
     transform: scale(1.1);
-}
-
-/* تغيير لون الدرس النشط */
-.active-lesson {
-    background-color: #5A189A !important; /* موف غامق */
-    color: white !important;
 }
 
 /* زر القسم التالي */
@@ -80,12 +73,40 @@
 }
 
 .active-lesson {
-    background-color: #5A189A !important;
+    /* background-color: #5A189A !important; */
     color: white !important;
 }
 
 .watched-lesson {
-    background-color: #D1C4E9 !important;
-    color: #4A148C !important;
+   color: white !important;
 }
 
+.unit-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* background-color: #B8B8D1; */
+    /* color: #5B287C; */
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, background-color 0.3s, color 0.3s;
+}
+.unit-button:hover {
+    transform: scale(1.1);
+}
+
+  .lesson-button.watched-lesson {
+    background-color: var(--unit-color) !important;
+  }
+  /* .unit-button.watched-unit {
+    background-color: inherit !important;
+  }   */
+
+  .unitquizicon{
+    width: 100px;
+    height: 100px;
+  }

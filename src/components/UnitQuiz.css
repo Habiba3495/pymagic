@@ -206,3 +206,18 @@
     font-weight: bold;
     color: #6B21A8; /* لون النص */
 }
+
+.check-answer-button {
+    background-color: #B8B8D1; /* اللون الافتراضي */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: not-allowed; /* تعطيل الزر عندما لا يتم تحديد خيار */
+    transition: background-color 0.3s ease;
+  }
+  
+  .check-answer-button.active-button {
+    background-color: #5B287C; /* موف غامق عند اختيار خيار */
+    cursor: pointer;
+  }
