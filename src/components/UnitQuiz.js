@@ -1,3 +1,180 @@
+// // src/components/UnitQuiz.js
+// import React, { useState, useEffect } from "react";
+// import { useNavigate, useParams } from "react-router-dom";
+// import "./UnitQuiz.css";
+// import ExitIcon from "./images/Exit iconsvg.svg";
+// import WizardIcon from "./images/Correct Potion.svg";
+// import CorrectAnswerIcon from "./images/Correct check.svg";
+// import WrongIcon from "./images/Wrong potion.svg";
+// import WrongAnswerIcon from "./images/Wrong icon.svg";
+// import HintIcon from "./images/Hint icon.svg";
+
+// const UnitQuiz = () => {
+//     const navigate = useNavigate();
+//     const { unitId } = useParams();
+//     const [questions, setQuestions] = useState([]);
+//     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+//     const [selectedOption, setSelectedOption] = useState(null);
+//     const [isAnswered, setIsAnswered] = useState(false);
+//     const [isCorrect, setIsCorrect] = useState(null);
+//     const [hint, setHint] = useState("");
+//     const [motivationMessage, setMotivationMessage] = useState("");
+//     const [answers, setAnswers] = useState([]);
+
+//     const userId = 1; //// Replace with actual user authentication
+
+//     useEffect(() => {
+//         const fetchUnitQuestions = async () => {
+//             try {
+//                 console.log(`Fetching unit quiz for unitId: ${unitId}, userId: ${userId}`);
+//                 const response = await fetch(`http://localhost:5000/api/quiz/unit/${userId}/${unitId}`);
+//                 if (!response.ok) throw new Error("Failed to fetch unit questions");
+//                 const data = await response.json();
+//                 console.log("Unit Quiz Data:", data);
+//                 setQuestions(data.questions || []);
+//             } catch (error) {
+//                 console.error("Error fetching unit quiz:", error);
+//                 setQuestions([
+//                     {
+//                         id: 1,
+//                         question: "What is a computer?",
+//                         options: ["A machine", "A book", "A food", "A drink"],
+//                         correct_answer: "A machine",
+//                         hint: "It processes data."
+//                     },
+//                     {
+//                         id: 1,
+//                         question: "What is Python?",
+//                         options: ["A snake", "A programming language", "A type of coffee", "A car brand"],
+//                         correct_answer: "A programming language",
+//                         hint: "It's widely used in software development."
+//                     },
+//                     {
+//                         id: 2,
+//                         question: "What does HTML stand for?",
+//                         options: ["Hyper Text Markup Language", "High Tech Machine Learning", "Home Tool Machine Language", "Hyperlink and Text Management Language"],
+//                         correct_answer: "Hyper Text Markup Language",
+//                         hint: "It's used to structure web pages."
+//                     }
+//                 ]);
+//             }
+//         };
+//         fetchUnitQuestions();
+//     }, [unitId]);
+
+//     const handleOptionClick = (option) => setSelectedOption(option);
+
+//     const checkAnswer = () => {
+//         if (selectedOption) {
+//             const isCorrectAnswer = selectedOption === questions[currentQuestionIndex].correct_answer;
+//             setIsCorrect(isCorrectAnswer);
+//             setIsAnswered(true);
+
+//             const newAnswer = {
+//                 question_id: questions[currentQuestionIndex].id,
+//                 user_answer: selectedOption,
+//                 is_correct: isCorrectAnswer
+//             };
+//             setAnswers([...answers, newAnswer]);
+//             setMotivationMessage(isCorrectAnswer ? "Correct! Well done!" : "Incorrect. Try again!");        }
+//     };
+
+//     const handleNextQuestion = async () => {
+//         if (currentQuestionIndex < questions.length - 1) {
+//             setCurrentQuestionIndex(currentQuestionIndex + 1);
+//             setSelectedOption(null);
+//             setIsAnswered(false);
+//             setIsCorrect(null);
+//             setHint("");
+//             setMotivationMessage("");
+//         } else {
+//             try {
+//                 console.log("Submitting unit quiz with answers:", answers);
+//                 const response = await fetch('http://localhost:5000/api/quiz/unit/submit', {
+//                     method: 'POST',
+//                     headers: { 'Content-Type': 'application/json' },
+//                     body: JSON.stringify({
+//                         user_id: userId,
+//                         unit_id: unitId,
+//                         answers: answers
+//                     })
+//                 });
+//                 const data = await response.json();
+//                 console.log("Unit Quiz Submission Response:", data);
+//                 if (data.success) {
+//                     navigate("/unit-quiz-complete", { state: { quizData: data } });
+//                 } else {
+//                     console.error("Error submitting unit quiz:", data.message);
+//                 }
+//             } catch (error) {
+//                 console.error("Error submitting unit quiz:", error);
+//             }
+//         }
+//     };
+
+//     const handleHintClick = () => setHint(questions[currentQuestionIndex].hint);
+
+//     if (questions.length === 0) return <div>Loading...</div>;
+
+//     const currentQuestion = questions[currentQuestionIndex];
+
+//     return (
+//         <div className="quiz-container">
+//             <button className="exit-button" onClick={() => navigate("/lessons")}>
+//                 <img src={ExitIcon} alt="Exit" className="exit-icon" />
+//             </button>
+//             <div className="quiz-box">
+//                 <h1 className="quiz-header">Unit {unitId} Quiz</h1>
+//                 <p className="quiz-question">{currentQuestion.question}</p>
+//                 <div className="quiz-options">
+//                     {currentQuestion.options.map((option, index) => (
+//                         <button
+//                             key={index}
+//                             className={`option-button 
+//                                 ${selectedOption === option ? "selected" : ""} 
+//                                 ${isAnswered && option === currentQuestion.correct_answer ? "correct" : ""}
+//                                 ${isAnswered && selectedOption === option && !isCorrect ? "wrong" : ""}`}
+//                             onClick={() => handleOptionClick(option)}
+//                             disabled={isAnswered}
+//                         >
+//                             {option}
+//                         </button>
+//                     ))}
+//                 </div>
+//                 {!isAnswered ? (
+//                     <div className="quiz-footer">
+//                         <img src={HintIcon} alt="Hint" className="extra-icon" onClick={handleHintClick} />
+//                         <button
+//                         className={`check-answer-button ${selectedOption ? "active-button" : ""}`}
+//                         onClick={checkAnswer}
+//                         disabled={!selectedOption}
+//                         >
+//                         Check Answer
+//                        </button>
+
+//                     </div>
+//                 ) : (
+//                     <div className="unitquizcontainer">
+//                     <div className={isCorrect ? "success-message" : "error-message"}>
+//                     <img src={isCorrect ? WizardIcon : WrongIcon} alt={isCorrect ? "Correct" : "Wrong"} />
+//                     <p>{motivationMessage}</p>
+
+//                     <img src={isCorrect ? CorrectAnswerIcon : WrongAnswerIcon} alt="Extra Icon" className="extra-icon" />
+//                     <p className="extra-text">{isCorrect ? "Correct answer" : "Wrong answer"}</p>
+//                     <button className="next-button" onClick={handleNextQuestion}>
+//                     {currentQuestionIndex === questions.length - 1 ? "Submit" : "Next"}
+//                     </button>
+//                     </div>
+//                     </div>
+//                 )}
+//                 {hint && <p className="hint-text"><strong>Hint:</strong> {hint}</p>}
+//             </div>
+//         </div>
+// )}
+
+// export default UnitQuiz;
+
+
 // src/components/UnitQuiz.js
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -10,166 +187,183 @@ import WrongAnswerIcon from "./images/Wrong icon.svg";
 import HintIcon from "./images/Hint icon.svg";
 
 const UnitQuiz = () => {
-    const navigate = useNavigate();
-    const { unitId } = useParams();
-    const [questions, setQuestions] = useState([]);
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [selectedOption, setSelectedOption] = useState(null);
-    const [isAnswered, setIsAnswered] = useState(false);
-    const [isCorrect, setIsCorrect] = useState(null);
-    const [hint, setHint] = useState("");
-    const [motivationMessage, setMotivationMessage] = useState("");
-    const [answers, setAnswers] = useState([]);
+  const navigate = useNavigate();
+  const { unitId } = useParams();
+  const [questions, setQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [isAnswered, setIsAnswered] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(null);
+  const [hint, setHint] = useState("");
+  const [motivationMessage, setMotivationMessage] = useState("");
+  const [answers, setAnswers] = useState([]);
+  const userId = 1; // Replace with actual user authentication (e.g., from context or token)
 
-    const userId = 1; //// Replace with actual user authentication
+  useEffect(() => {
+    const fetchUnitQuestions = async () => {
+      try {
+        console.log(`Fetching unit quiz for unitId: ${unitId}, userId: ${userId}`);
+        const response = await fetch(`http://localhost:5000/api/quiz/unit/${userId}/${unitId}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        console.log("Unit Quiz Data:", data);
+        setQuestions(data.questions || []);
+      } catch (error) {
+        console.error("Error fetching unit quiz:", error);
+        // Fallback dummy questions for testing
+        setQuestions([
+          {
+            id: 1,
+            question: "What is a computer?",
+            options: ["A machine", "A book", "A food", "A drink"],
+            correct_answer: "A machine",
+            hint: "It processes data."
+          },
+          {
+            id: 2,
+            question: "What is Python?",
+            options: ["A snake", "A programming language", "A type of coffee", "A car brand"],
+            correct_answer: "A programming language",
+            hint: "It's widely used in software development."
+          },
+          {
+            id: 3,
+            question: "What does HTML stand for?",
+            options: [
+              "Hyper Text Markup Language",
+              "High Tech Machine Learning",
+              "Home Tool Machine Language",
+              "Hyperlink and Text Management Language"
+            ],
+            correct_answer: "Hyper Text Markup Language",
+            hint: "It's used to structure web pages."
+          }
+        ]);
+      }
+    };
+    fetchUnitQuestions();
+  }, [unitId, userId]);
 
-    useEffect(() => {
-        const fetchUnitQuestions = async () => {
-            try {
-                console.log(`Fetching unit quiz for unitId: ${unitId}, userId: ${userId}`);
-                const response = await fetch(`http://localhost:5000/api/quiz/unit/${userId}/${unitId}`);
-                if (!response.ok) throw new Error("Failed to fetch unit questions");
-                const data = await response.json();
-                console.log("Unit Quiz Data:", data);
-                setQuestions(data.questions || []);
-            } catch (error) {
-                console.error("Error fetching unit quiz:", error);
-                setQuestions([
-                    {
-                        id: 1,
-                        question: "What is a computer?",
-                        options: ["A machine", "A book", "A food", "A drink"],
-                        correct_answer: "A machine",
-                        hint: "It processes data."
-                    },
-                    {
-                        id: 1,
-                        question: "What is Python?",
-                        options: ["A snake", "A programming language", "A type of coffee", "A car brand"],
-                        correct_answer: "A programming language",
-                        hint: "It's widely used in software development."
-                    },
-                    {
-                        id: 2,
-                        question: "What does HTML stand for?",
-                        options: ["Hyper Text Markup Language", "High Tech Machine Learning", "Home Tool Machine Language", "Hyperlink and Text Management Language"],
-                        correct_answer: "Hyper Text Markup Language",
-                        hint: "It's used to structure web pages."
+  const handleOptionClick = (option) => {
+    setSelectedOption(option);
+  };
+
+  const checkAnswer = () => {
+    if (selectedOption) {
+      const isCorrectAnswer = selectedOption === questions[currentQuestionIndex].correct_answer;
+      setIsCorrect(isCorrectAnswer);
+      setIsAnswered(true);
+
+      const newAnswer = {
+        question_id: questions[currentQuestionIndex].id,
+        user_answer: selectedOption,
+        is_correct: isCorrectAnswer
+      };
+      setAnswers([...answers, newAnswer]);
+      setMotivationMessage(isCorrectAnswer ? "Correct! Well done!" : "Incorrect. Try again!");
+    }
+  };
+
+  const handleNextQuestion = async () => {
+    if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+        setSelectedOption(null);
+        setIsAnswered(false);
+        setIsCorrect(null);
+        setHint("");
+        setMotivationMessage("");
+    } else {
+        try {
+            console.log("Submitting unit quiz with answers:", answers);
+            const response = await fetch("http://localhost:5000/api/quiz/unit/submit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    user_id: userId,
+                    unit_id: unitId,
+                    answers: answers
+                })
+            });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            console.log("Unit Quiz Submission Response:", data);
+            if (data.success) {
+                navigate("/unit-quiz-complete", {
+                    state: {
+                        quizData: data,
+                        total_user_points: data.total_user_points,
+                        achievements: data.achievements || []
                     }
-                ]);
-            }
-        };
-        fetchUnitQuestions();
-    }, [unitId]);
-
-    const handleOptionClick = (option) => setSelectedOption(option);
-
-    const checkAnswer = () => {
-        if (selectedOption) {
-            const isCorrectAnswer = selectedOption === questions[currentQuestionIndex].correct_answer;
-            setIsCorrect(isCorrectAnswer);
-            setIsAnswered(true);
-
-            const newAnswer = {
-                question_id: questions[currentQuestionIndex].id,
-                user_answer: selectedOption,
-                is_correct: isCorrectAnswer
-            };
-            setAnswers([...answers, newAnswer]);
-            setMotivationMessage(isCorrectAnswer ? "Correct! Well done!" : "Incorrect. Try again!");        }
-    };
-
-    const handleNextQuestion = async () => {
-        if (currentQuestionIndex < questions.length - 1) {
-            setCurrentQuestionIndex(currentQuestionIndex + 1);
-            setSelectedOption(null);
-            setIsAnswered(false);
-            setIsCorrect(null);
-            setHint("");
-            setMotivationMessage("");
-        } else {
-            try {
-                console.log("Submitting unit quiz with answers:", answers);
-                const response = await fetch('http://localhost:5000/api/quiz/unit/submit', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        user_id: userId,
-                        unit_id: unitId,
-                        answers: answers
-                    })
                 });
-                const data = await response.json();
-                console.log("Unit Quiz Submission Response:", data);
-                if (data.success) {
-                    navigate("/unit-quiz-complete", { state: { quizData: data } });
-                } else {
-                    console.error("Error submitting unit quiz:", data.message);
-                }
-            } catch (error) {
-                console.error("Error submitting unit quiz:", error);
+            } else {
+                throw new Error(data.message || "Failed to submit unit quiz");
             }
+        } catch (error) {
+            console.error("Error submitting unit quiz:", error);
+            alert(`Error: ${error.message}. Please try again or contact support.`);
         }
-    };
+    }
+};
 
-    const handleHintClick = () => setHint(questions[currentQuestionIndex].hint);
+  const handleHintClick = () => {
+    setHint(questions[currentQuestionIndex].hint);
+  };
 
-    if (questions.length === 0) return <div>Loading...</div>;
+  if (questions.length === 0) return <div>Loading...</div>;
 
-    const currentQuestion = questions[currentQuestionIndex];
+  const currentQuestion = questions[currentQuestionIndex];
 
-    return (
-        <div className="quiz-container">
-            <button className="exit-button" onClick={() => navigate("/lessons")}>
-                <img src={ExitIcon} alt="Exit" className="exit-icon" />
+  return (
+    <div className="quiz-container">
+      <button className="exit-button" onClick={() => navigate("/lessons")}>
+        <img src={ExitIcon} alt="Exit" className="exit-icon" />
+      </button>
+      <div className="quiz-box">
+        <h1 className="quiz-header">Unit {unitId} Quiz</h1>
+        <p className="quiz-question">{currentQuestion.question}</p>
+        <div className="quiz-options">
+          {currentQuestion.options.map((option, index) => (
+            <button
+              key={index}
+              className={`option-button 
+                ${selectedOption === option ? "selected" : ""} 
+                ${isAnswered && option === currentQuestion.correct_answer ? "correct" : ""}
+                ${isAnswered && selectedOption === option && !isCorrect ? "wrong" : ""}`}
+              onClick={() => handleOptionClick(option)}
+              disabled={isAnswered}
+            >
+              {option}
             </button>
-            <div className="quiz-box">
-                <h1 className="quiz-header">Unit {unitId} Quiz</h1>
-                <p className="quiz-question">{currentQuestion.question}</p>
-                <div className="quiz-options">
-                    {currentQuestion.options.map((option, index) => (
-                        <button
-                            key={index}
-                            className={`option-button 
-                                ${selectedOption === option ? "selected" : ""} 
-                                ${isAnswered && option === currentQuestion.correct_answer ? "correct" : ""}
-                                ${isAnswered && selectedOption === option && !isCorrect ? "wrong" : ""}`}
-                            onClick={() => handleOptionClick(option)}
-                            disabled={isAnswered}
-                        >
-                            {option}
-                        </button>
-                    ))}
-                </div>
-                {!isAnswered ? (
-                    <div className="quiz-footer">
-                        <img src={HintIcon} alt="Hint" className="extra-icon" onClick={handleHintClick} />
-                        <button
-                        className={`check-answer-button ${selectedOption ? "active-button" : ""}`}
-                        onClick={checkAnswer}
-                        disabled={!selectedOption}
-                        >
-                        Check Answer
-                       </button>
-
-                    </div>
-                ) : (
-                    <div className="unitquizcontainer">
-                    <div className={isCorrect ? "success-message" : "error-message"}>
-                    <img src={isCorrect ? WizardIcon : WrongIcon} alt={isCorrect ? "Correct" : "Wrong"} />
-                    <p>{motivationMessage}</p>
-
-                    <img src={isCorrect ? CorrectAnswerIcon : WrongAnswerIcon} alt="Extra Icon" className="extra-icon" />
-                    <p className="extra-text">{isCorrect ? "Correct answer" : "Wrong answer"}</p>
-                    <button className="next-button" onClick={handleNextQuestion}>
-                    {currentQuestionIndex === questions.length - 1 ? "Submit" : "Next"}
-                    </button>
-                    </div>
-                    </div>
-                )}
-                {hint && <p className="hint-text"><strong>Hint:</strong> {hint}</p>}
-            </div>
+          ))}
         </div>
-)}
+        {!isAnswered ? (
+          <div className="quiz-footer">
+            <img src={HintIcon} alt="Hint" className="extra-icon" onClick={handleHintClick} />
+            <button
+              className={`check-answer-button ${selectedOption ? "active-button" : ""}`}
+              onClick={checkAnswer}
+              disabled={!selectedOption}
+            >
+              Check Answer
+            </button>
+          </div>
+        ) : (
+          <div className="unitquizcontainer">
+            <div className={isCorrect ? "success-message" : "error-message"}>
+              <img src={isCorrect ? WizardIcon : WrongIcon} alt={isCorrect ? "Correct" : "Wrong"} />
+              <p>{motivationMessage}</p>
+              <img src={isCorrect ? CorrectAnswerIcon : WrongAnswerIcon} alt="Extra Icon" className="extra-icon" />
+              <p className="extra-text">{isCorrect ? "Correct answer" : "Wrong answer"}</p>
+              <button className="next-button" onClick={handleNextQuestion}>
+                {currentQuestionIndex === questions.length - 1 ? "Submit" : "Next"}
+              </button>
+            </div>
+          </div>
+        )}
+        {hint && <p className="hint-text"><strong>Hint:</strong> {hint}</p>}
+      </div>
+    </div>
+  );
+};
 
 export default UnitQuiz;

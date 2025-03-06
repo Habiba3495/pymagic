@@ -3,7 +3,6 @@ import "./AchievementsPage.css";
 import { useNavigate } from "react-router-dom";
 import Exit from "./images/Exit iconsvg.svg";
 
-
 const AchievementsPage = () => {
   const [achievements, setAchievements] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,7 +16,9 @@ const AchievementsPage = () => {
       setError(null);
       try {
         console.log("Fetching achievements for userId:", userId);
-        const response = await fetch(`http://localhost:5000/api/achievements/${userId}`);
+        const response = await fetch(`http://localhost:5000/api/achievements/${userId}`, {
+          mode: 'cors', // Explicitly enable CORS mode
+        });
         console.log("Response status:", response.status);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
@@ -31,9 +32,9 @@ const AchievementsPage = () => {
         console.error("Error fetching achievements:", error);
         setError(error.message);
         setAchievements([
-          { id: 1, title: "Spellbook Scholar", description: "Unlocked at 50 points", image: "./images/spellbook_scholar.svg" },
-          { id: 2, title: "Daily Dedication", description: "Unlocked at 70 points", image: "./images/daily_dedication.svg" },
-          { id: 3, title: "Treasure Hunter", description: "Unlocked at 100 points", image: "./images/treasure_hunter.svg" },
+          { id: 1, title: "Spellbook Scholar", description: "Unlocked at 50 points", image: "http://localhost:5000/images/spellbook_scholar.svg" },
+          { id: 2, title: "Daily Dedication", description: "Unlocked at 70 points", image: "http://localhost:5000/images/daily_dedication.svg" },
+          { id: 3, title: "Treasure Hunter", description: "Unlocked at 100 points", image: "http://localhost:5000/images/treasure_hunter.svg" },
         ]);
       } finally {
         setLoading(false);
@@ -64,10 +65,21 @@ const AchievementsPage = () => {
               <div key={achievement.id} className="achievement-card">
                 {achievement.image && (
                   <img
-                    src={`http://localhost:5000${achievement.image}`} // Use absolute path to ensure images load
+                    src={achievement.image.startsWith('http') ? achievement.image : `http://localhost:5000${achievement.image}`} // Use absolute path or fallback
                     alt={achievement.title}
                     className="achievement-image"
-                    onError={(e) => console.error("Image failed to load:", e)}
+                    onError={(e) => {
+                      console.error("Image failed to load:", {
+                        src: e.target.src,
+                        status: e.target.status || "Unknown",
+                        error: e
+                      });
+                      e.target.src = "https://via.placeholder.com/50"; // Fallback placeholder
+                      e.target.alt = `${achievement.title} (Image not found)`;
+                    }}
+                    onLoad={(e) => console.log("Image loaded successfully:", e.target.src)} // Debug successful loads
+                    loading="lazy" // Lazy load images for performance
+                    crossOrigin="anonymous" // Ensure CORS for images
                   />
                 )}
                 <p className="achievement-title">{achievement.title}</p>
@@ -78,7 +90,6 @@ const AchievementsPage = () => {
             <p className="no-achievements">No achievements yet. Earn points to unlock rewards!</p>
           )}
         </div>
-       
       </div>
     </div>
   );
