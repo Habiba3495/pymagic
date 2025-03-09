@@ -1,104 +1,47 @@
- 
-
-/* .page-container {
-    display: flex;
-    background-color: #F3E8FF;
-    min-height: 100vh;
-}
-
-
-.content {
-    flex: 1; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
-
-
-.fheader {
-    width: 80%;
-    background-color: #7e22ce;
-    color: white;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
-
-
-.cards-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    justify-items: center;
-}
-
-
-.flashcard {
-    width: 80px;
-    height: 120px;
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out;
-}
-
-
-.flashcard.flipped {
-    transform: rotateY(180deg);
-} */
-
 .page-container {
     display: flex;
-    background-color: #F3E8FF;
-    min-height: 100vh;
 }
 
-/* تصميم القسم الأساسي */
 .content {
-    flex: 1; /* يأخذ باقي المساحة بجانب الـ Sidebar */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-left: 15%; /* نفس عرض الـ sidebar */
-    width: 85%; /* تأكدي من أن العرض يأخذ باقي الصفحة */
-    padding: 20px; /* يعطي مساحة داخلية جميلة */
+    flex: 1;
+    padding: 20px;
+    margin-left: 250px; /* تأكد من أنه يبدأ بعد الـ Sidebar */
 }
 
-/* العنوان */
-.fheader {
-    width: 80%;
-    background-color: #7e22ce;
-    color: white;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    padding: 10px;
-    border-radius: 10px;
+.section-container {
+    width: 100%;
     margin-bottom: 20px;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* تصميم الشبكة التي تحتوي على الكروت */
+.section-title {
+    background: #6a0dad;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    width: 50%; /* جعل العنوان يأخذ نصف عرض المساحة المتاحة */
+    margin: 0 auto; /* توسيط العنوان في منتصف القسم */
+}
+
+
 .cards-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    justify-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
 }
 
-/* تصميم الفلاش كارد */
 .flashcard {
-    width: 100px;
-    height: 140px;
+    width: 120px;
+    height: 160px;
     cursor: pointer;
-    transition: transform 0.3s ease-in-out;
 }
 
-/* تأثير القلب عند النقر */
-.flashcard.flipped {
-    transform: rotateY(180deg);
-}
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -111,7 +54,7 @@
     align-items: center;
 }
 .modal-window {
-    background: #5E2B97; /* الموف */
+    background: #5E2B97; 
     color: white;
     padding: 20px;
     border-radius: 10px;
@@ -119,10 +62,10 @@
     max-width: 400px;
     position: relative;
     text-align: center;
-    border: 4px solid #FDC82E; /* الأصفر */
+    border: 4px solid #FDC82E;
 }
 
-/* ✅ زر الإغلاق الأحمر */
+
 .close-button {
     position: absolute;
     top: 10px;
@@ -134,15 +77,79 @@
     cursor: pointer;
 }
 
-/* ✅ عنوان النافذة */
+
 .modal-title {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
-/* ✅ نص المحتوى */
+
 .modal-text {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* .error-message {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  } */
+
+  .Emodal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.Emodal-window {
+    background: white; 
+    color: red;
+    padding: 20px;
+    border-radius: 10px;
+    width: 50%;
+    max-width: 400px;
+    position: relative;
+    text-align: center;
+    border: 4px solid #FDC82E;
+}
+
+
+.Eclose-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #FDC82E;
+    cursor: pointer;
+}
+
+
+.Emodal-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+
+.Emodal-text {
     font-size: 16px;
     line-height: 1.5;
 }
