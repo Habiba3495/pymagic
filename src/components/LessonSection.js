@@ -382,18 +382,15 @@ const LessonSection = () => {
                   globalIndex++;
                   if (globalIndex % 5 === 1) isLeft = !isLeft;
 
-                  const marginLeft =
-                    globalIndex % 5 === 2 || globalIndex % 5 === 4 ? "50px" : globalIndex % 5 === 3 ? "100px" : "0px";
-                  const marginRight =
-                    globalIndex % 5 === 2 || globalIndex % 5 === 4 ? "50px" : globalIndex % 5 === 3 ? "100px" : "0px";
+                  const marginLeft = globalIndex % 5 === 2 || globalIndex % 5 === 4 ? "50px" : globalIndex % 5 === 3 ? "100px" : "0px";
+                  const marginRight = globalIndex % 5 === 2 || globalIndex % 5 === 4 ? "50px" : globalIndex % 5 === 3 ? "100px" : "0px";
                   const margin = isLeft ? { marginLeft } : { marginRight };
 
                   let quizMargin = null;
                   if (index === unit.lessons.length - 1) {
                     globalIndex++;
                     if (globalIndex % 5 === 1) isLeft = !isLeft;
-                    const quizMarginValue =
-                      globalIndex % 5 === 2 || globalIndex % 5 === 4 ? "50px" : globalIndex % 5 === 3 ? "100px" : "0px";
+                    const quizMarginValue = globalIndex % 5 === 2 || globalIndex % 5 === 4 ? "50px" : globalIndex % 5 === 3 ? "100px" : "0px";
                     quizMargin = isLeft ? { marginLeft: quizMarginValue } : { marginRight: quizMarginValue };
                   }
 
@@ -449,3 +446,8 @@ const LessonSection = () => {
 };
 
 export default LessonSection;
+
+
+
+
+
