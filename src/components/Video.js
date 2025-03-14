@@ -195,7 +195,11 @@ const Video = () => {
   useEffect(() => {
     const fetchLessonData = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/lessons/${lessonId}`);
+        const response = await fetch(`http://localhost:5000/api/lessons/${lessonId}`
+          , {
+            credentials: "include", // يسمح بإرسال الكوكيز
+          }
+        );
         if (!response.ok) {
           throw new Error(`Failed to fetch lesson data: ${response.status} ${response.statusText}`);
         }
@@ -231,27 +235,40 @@ const Video = () => {
             <>
               <p>Error: {error}</p>
               <video controls>
-                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+                <source
+                  src="https://www.w3schools.com/html/mov_bbb.mp4"
+                  type="video/mp4"
+                />
                 Your browser does not support the video tag.
               </video>
             </>
           ) : lessonData?.video_url ? ( // Use video_url from the lesson object
             <video controls>
-              <source src={`http://localhost:5000${lessonData.video_url}`} type="video/mp4" />
+              <source
+                src={`http://localhost:5000${lessonData.video_url}`}
+                type="video/mp4"
+                crossOrigin="use-credentials"
+              />
               Your browser does not support the video tag.
             </video>
           ) : (
             <>
               <p>No video available. Playing default video.</p>
               <video controls>
-                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+                <source
+                  src="https://www.w3schools.com/html/mov_bbb.mp4"
+                  type="video/mp4"
+                />
                 Your browser does not support the video tag.
               </video>
             </>
           )}
         </div>
 
-        <button className="quiz-button" onClick={() => navigate(`/quiz/${unitId}/${lessonId}`)}>
+        <button
+          className="quiz-button"
+          onClick={() => navigate(`/quiz/${unitId}/${lessonId}`)}
+        >
           Start Quiz
         </button>
       </div>

@@ -236,8 +236,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Lsidebar from "./Lsidebar";
 import "./LessonSection.css";
 import unitquizicon from "../components/images/unitquizicon.svg";
+import { useAuth } from '../context/AuthContext';//1
 
 const LessonSection = () => {
+  const { user } = useAuth();//2
   const [lessonData, setLessonData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -249,7 +251,7 @@ const LessonSection = () => {
   const navigate = useNavigate();
 
   // Assume user_id is stored in localStorage (replace with your auth mechanism)
-  const userId = localStorage.getItem("user_id") || "1"; // Default to "1" for testing
+  const userId = user.id//3
 
   // Generate color based on unit ID
   const generateColor = (id) => {
@@ -270,8 +272,12 @@ const LessonSection = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/sections/1");
-        if (!response.ok) throw new Error("Failed to fetch data");
+        const response = await fetch("http://localhost:5000/sections/1", {
+          credentials: "include", // يسمح بإرسال الكوكيز
+        });
+        console.log(response);
+        
+                if (!response.ok) throw new Error("Failed to fetch data");
         const data = await response.json();
         setLessonData(data);
       } catch (error) {
@@ -296,6 +302,8 @@ const LessonSection = () => {
       const response = await fetch(`http://localhost:5000/api/quiz/check-access/${userId}/${lessonId}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
+        credentials: "include", // يسمح بإرسال الكوكيز
+
       });
       const data = await response.json();
       if (!response.ok || !data.success) {
@@ -315,6 +323,7 @@ const LessonSection = () => {
       const response = await fetch(`http://localhost:5000/api/quiz/check-access/${userId}/unit/${unitId}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
+        credentials: "include", // يسمح بإرسال الكوكيز
       });
       const data = await response.json();
       if (!response.ok || !data.success) {
