@@ -33,17 +33,13 @@ const LoginSection = () => {
         throw new Error(data.error || 'Login failed');
       }
 
-      // Store token based on rememberMe
       const { token, user } = data;
-      if (formData.rememberMe) {
-        localStorage.setItem('token', token);
-        document.cookie = `token=${token}; max-age=604800; path=/`; // 7 days
-      } else {
-        sessionStorage.setItem('token', token);
-        document.cookie = `token=${token}; path=/`; // Session cookie
-      }
+
+      localStorage.setItem('token', token);
+      document.cookie = `token=${token}; max-age=604800; path=/`; // 7 days
+
       // Store user information in context
-      login(user, formData.rememberMe);
+      login(user);
       // Navigate to lessons page on successful login
       navigate("/lessons", { replace: true }); // replace: true prevents going back to login
     } catch (err) {

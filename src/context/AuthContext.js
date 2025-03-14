@@ -8,19 +8,14 @@ export function AuthProvider({ children }) {
     JSON.parse(localStorage.getItem('user')) || null
   );
 
-  const login = (userData, remember) => {
+  const login = (userData) => {
     setUser(userData);
-    if (remember) {
-      localStorage.setItem('user', JSON.stringify(userData));
-    } else {
-      sessionStorage.setItem('user', JSON.stringify(userData));
-    }
+    localStorage.setItem('user', JSON.stringify(userData));
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
-    sessionStorage.removeItem('user');
     document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
   };
 
