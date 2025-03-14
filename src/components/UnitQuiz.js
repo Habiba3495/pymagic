@@ -9,8 +9,10 @@ import CorrectAnswerIcon from "./images/Correct check.svg";
 import WrongIcon from "./images/Wrong potion.svg";
 import WrongAnswerIcon from "./images/Wrong icon.svg";
 import HintIcon from "./images/Hint icon.svg";
+import { useAuth } from '../context/AuthContext';
 
 const UnitQuiz = () => {
+  const { user } = useAuth();//2
   const navigate = useNavigate();
   const { unitId } = useParams();
   const [questions, setQuestions] = useState([]);
@@ -21,7 +23,7 @@ const UnitQuiz = () => {
   const [hint, setHint] = useState("");
   const [motivationMessage, setMotivationMessage] = useState("");
   const [answers, setAnswers] = useState([]);
-  const userId = 1; // Replace with dynamic user ID from auth context
+  const userId = user.id; 
 
   useEffect(() => {
     const fetchQuestions = async () => {

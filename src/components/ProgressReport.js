@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import "./ProgressReport.css"; // تأكد من وجود ملف CSS
 import Exit from "./images/Exit iconsvg.svg";
 import points from "./images/points.svg";
+import { useAuth } from '../context/AuthContext';
 
 const ProgressReport = () => {
+  const { user } = useAuth();
   const [progressData, setProgressData] = useState([]);
   const navigate = useNavigate();
-  const userId = 1; // يمكنك تغييره لاحقًا ليكون ديناميكيًا
+  const userId = user.id; // يمكنك تغييره لاحقًا ليكون ديناميكيًا
 
   useEffect(() => {
     const fetchProgress = async () => {

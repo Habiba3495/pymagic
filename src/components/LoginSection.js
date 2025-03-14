@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./LoginSection.css";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../context/AuthContext'; // Import UserContext
+import { apiClient } from "../services";
 
 const LoginSection = () => {
   const { login } = useAuth();
@@ -18,22 +19,15 @@ const LoginSection = () => {
     setError(null); // Clear previous errors
 
     try {
-      const response = await fetch('http://localhost:5000/api/users/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-      credentials: 'include',
-    });
+      const response = await apiClient.post('/api/users/login', formData); /// all api 
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
+      if (response.status !== 200 || !response.data?.token) {
+        throw new Error(response.data?.error || 'Login failed');
       }
 
-      const { token, user } = data;
+      //if (response.status !== 200) if response != ok
+
+      const { token, user } = response.data;
 
       localStorage.setItem('token', token);
       document.cookie = `token=${token}; max-age=604800; path=/`; // 7 days
