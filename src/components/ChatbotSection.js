@@ -102,6 +102,7 @@ import "./ChatbotSection.css";
 import userAvatar from "./images/Profile.svg";
 import botAvatar from "./images/Chatbot.svg";
 import sendIcon from "./images/sendicon.svg";
+import { apiClient } from "../services";
 
 const ChatbotSection = () => {
   // Load messages from localStorage on mount or when empty
@@ -119,8 +120,8 @@ const ChatbotSection = () => {
 
   useEffect(() => {
     // Fetch initial messages from the backend
-    axios
-      .get("http://localhost:5000/api/chatbot/messages")
+    apiClient
+      .get("/api/chatbot/messages")
       .then((response) => {
         setMessages((prevMessages) => {
           const newMessages = response.data.filter(
@@ -134,16 +135,17 @@ const ChatbotSection = () => {
 
   const sendMessage = async () => {
     if (input.trim() === "") return;
-
+  
     const newMessage = { text: input, sender: "user" };
     setMessages([...messages, newMessage]);
-
+  
     try {
       console.log("Sending message:", input); // Debug log
-      const response = await axios.post("http://localhost:5000/api/chatbot/send", {
+  
+      const response = await apiClient.post("/api/chatbot/send", {
         message: input,
       });
-      console.log("Received response:", response.data); // Debug log
+      console.log("Received response:", response.data); // Debug log  
       setMessages((prevMessages) => [
         ...prevMessages,
         newMessage,
@@ -152,7 +154,7 @@ const ChatbotSection = () => {
     } catch (error) {
       console.error("Error sending message:", error);
     }
-
+  
     setInput("");
   };
 

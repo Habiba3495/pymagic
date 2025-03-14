@@ -1,36 +1,9 @@
-// src/components/UnitQuizComplete.jsx
-// import React from "react";
-// import { useLocation, useNavigate } from "react-router-dom";
-
-// const UnitQuizComplete = () => {
-//     const { state } = useLocation();
-//     const navigate = useNavigate();
-//     const { quizData } = state || {};
-
-//     console.log("Quiz Data in UnitQuizComplete:", quizData); // Debug log
-
-//     if (!quizData) return <div>No quiz data available</div>;
-
-//     return (
-//         <div className="quiz-complete-container">
-//             <h1>Unit Quiz Completed!</h1>
-//             <p>Score: {quizData.score} / {quizData.answers.length}</p>
-//             <p>Points Earned: {quizData.earned_points}</p>
-//             <p>Status: {quizData.is_passed ? "Passed" : "Failed"}</p>
-//             <button onClick={() => navigate("/lessons")}>Back to Lessons</button>
-//             <button onClick={() => navigate("/quiz-review", { state: { quizData } })}>Review</button>
-//         </div>
-//     );
-// };
-
-// export default UnitQuizComplete;
-
-
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import bookIcon from "./images/Score icon.svg";
 import pointsIcon from "./images/points.svg";
 import "./QuizComplete.css";
+import { apiClient } from "../services";
 
 const UnitQuizComplete = () => {
   const { state } = useLocation();
@@ -60,9 +33,14 @@ const UnitQuizComplete = () => {
   const handleReview = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/quiz/review/${quizData.id || state?.quizId}`);
-      if (!response.ok) throw new Error("Failed to fetch review data");
-      const data = await response.json();
+      const response = await apiClient.get(`/api/quiz/review/${quizData.id || state?.quizId}`);
+      
+      if (response.status !== 200) {
+        throw new Error("Failed to fetch review data");
+      }
+  
+      const data = response.data;
+  
       if (data.success) {
         navigate("/quiz-review", { state: { quizData: data.reviewData } });
       } else {

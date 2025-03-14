@@ -4,19 +4,24 @@ import "./ProgressReport.css"; // تأكد من وجود ملف CSS
 import Exit from "./images/Exit iconsvg.svg";
 import points from "./images/points.svg";
 import { useAuth } from '../context/AuthContext';
+import { apiClient } from "../services";
 
 const ProgressReport = () => {
   const { user } = useAuth();
   const [progressData, setProgressData] = useState([]);
   const navigate = useNavigate();
-  const userId = user.id; // يمكنك تغييره لاحقًا ليكون ديناميكيًا
-
+  const userId = user.id;
   useEffect(() => {
     const fetchProgress = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/quiz/progress/${userId}`);
-        if (!response.ok) throw new Error("Failed to fetch progress");
-        const data = await response.json();
+        const response = await apiClient.get(`/api/quiz/progress/${userId}`);
+        
+        if (response.status !== 200) {
+          throw new Error("Failed to fetch progress");
+        }
+  
+        const data = response.data;
+  
         if (data.success && data.progress.length > 0) {
           setProgressData(data.progress);
         } else {
@@ -53,7 +58,7 @@ const ProgressReport = () => {
         ]);
       }
     };
-
+  
     fetchProgress();
   }, [userId]);
 

@@ -10,6 +10,7 @@ import WrongIcon from "./images/Wrong potion.svg";
 import WrongAnswerIcon from "./images/Wrong icon.svg";
 import HintIcon from "./images/Hint icon.svg";
 import { useAuth } from '../context/AuthContext';
+import { apiClient } from "../services";
 
 const UnitQuiz = () => {
   const { user } = useAuth();//2
@@ -28,15 +29,13 @@ const UnitQuiz = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/quiz/unit/${userId}/${unitId}`
-          , {
-            credentials: "include", // يسمح بإرسال الكوكيز
-          }
-        );
-        if (!response.ok) {
+        const response = await apiClient.get(`/api/quiz/unit/${userId}/${unitId}`);
+        
+        if (response.status !== 200) {
           throw new Error("Failed to fetch questions");
         }
-        const data = await response.json();
+  
+        const data = response.data;
         setQuestions(data.questions || []);
       } catch (error) {
         console.error("Error fetching unit quiz questions:", error);
@@ -50,6 +49,7 @@ const UnitQuiz = () => {
         setQuestions(defaultQuestions);
       }
     };
+  
     fetchQuestions();
   }, [unitId, userId]);
 
@@ -92,31 +92,26 @@ const UnitQuiz = () => {
       setMotivationMessage("");
     } else {
       // Filter out invalid answers
-      const validAnswers = answers.filter(answer => answer.user_answer !== undefined);
+      const validAnswers = answers.filter((answer) => answer.user_answer !== undefined);
       localStorage.setItem("unitQuizAnswers", JSON.stringify(validAnswers));
-
+  
       if (!userId) {
         navigate("/login");
         return;
       }
-
+  
       try {
         console.log("Submitting unit quiz with answers:", validAnswers);
-        const response = await fetch("http://localhost:5000/api/quiz/unit/submit", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            user_id: userId,
-            unit_id: unitId,
-            answers: validAnswers,
-          }),
+  
+        const response = await apiClient.post("/api/quiz/unit/submit", {
+          user_id: userId,
+          unit_id: unitId,
+          answers: validAnswers,
         });
-
-        const data = await response.json();
+  
+        const data = response.data;
         console.log("Unit quiz submission response:", data);
-
+  
         if (data.success) {
           navigate("/unit-quiz-complete", {
             state: {
@@ -135,7 +130,6 @@ const UnitQuiz = () => {
       }
     }
   };
-
   const handleHintClick = () => {
     setHint(questions[currentQuestionIndex].hint);
   };

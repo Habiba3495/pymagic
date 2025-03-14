@@ -2,27 +2,31 @@ import React, { useEffect, useState } from "react";
 import "./AchievementsPage.css";
 import { useNavigate } from "react-router-dom";
 import Exit from "./images/Exit iconsvg.svg";
+import { useAuth } from '../context/AuthContext';
+import { apiClient } from "../services";
 
 const AchievementsPage = () => {
+  const { user } = useAuth();
   const [achievements, setAchievements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const userId = 1; // Replace with dynamic user ID from auth context
+  const userId = user.id;
 
   useEffect(() => {
     const fetchAchievements = async () => {
       setLoading(true);
       setError(null);
       try {
-        console.log("Fetching achievements for userId:", userId);
-        const response = await fetch(`http://localhost:5000/api/achievements/${userId}`, {
-          mode: 'cors', // Explicitly enable CORS mode
-        });
-        console.log("Response status:", response.status);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-        console.log("API Response:", data);
+        console.log("Fetching achievements for userId:", userId);  
+
+        const response = await apiClient.get(`/api/achievements/${userId}`);  
+        if (response.status !== 200) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+  
+        const data = response.data;
+  
         if (data.success) {
           setAchievements(data.achievements || []); // Ensure achievements is an array
         } else {
@@ -30,17 +34,32 @@ const AchievementsPage = () => {
         }
       } catch (error) {
         console.error("Error fetching achievements:", error);
-        setError(error.message);
+        setError(error.message);  
         setAchievements([
-          { id: 1, title: "Spellbook Scholar", description: "Unlocked at 50 points", image: "http://localhost:5000/images/spellbook_scholar.svg" },
-          { id: 2, title: "Daily Dedication", description: "Unlocked at 70 points", image: "http://localhost:5000/images/daily_dedication.svg" },
-          { id: 3, title: "Treasure Hunter", description: "Unlocked at 100 points", image: "http://localhost:5000/images/treasure_hunter.svg" },
+          {
+            id: 1,
+            title: "Spellbook Scholar",
+            description: "Unlocked at 50 points",
+            image: `${apiClient.defaults.baseURL}/images/spellbook_scholar.svg`,
+          },
+          {
+            id: 2,
+            title: "Daily Dedication",
+            description: "Unlocked at 70 points",
+            image: `${apiClient.defaults.baseURL}/images/daily_dedication.svg`,
+          },
+          {
+            id: 3,
+            title: "Treasure Hunter",
+            description: "Unlocked at 100 points",
+            image: `${apiClient.defaults.baseURL}/images/treasure_hunter.svg`,
+          },
         ]);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchAchievements();
   }, [userId]);
 
@@ -65,7 +84,7 @@ const AchievementsPage = () => {
               <div key={achievement.id} className="achievement-card">
                 {achievement.image && (
                   <img
-                    src={achievement.image.startsWith('http') ? achievement.image : `http://localhost:5000${achievement.image}`} // Use absolute path or fallback
+                    src={achievement.image.startsWith("http") ? achievement.image : `${apiClient.defaults.baseURL}${achievement.image}`}
                     alt={achievement.title}
                     className="achievement-image"
                     onError={(e) => {
