@@ -4,27 +4,34 @@ import "./ProfileSection.css";
 import Lsidebar from "./Lsidebar";
 import { useNavigate } from "react-router-dom";
 import points from "./images/points.svg"; // Points icon for progress
+import { useAuth } from '../context/AuthContext';
+import { apiClient } from "../services";
+
 
 const ProfilePage = () => {
+  const { user } = useAuth();//2
   const navigate = useNavigate();
   const [userProfile, setUserProfile] = useState({ name: "", points: 0 }); // For user data
   const [progressData, setProgressData] = useState([]); // For progress report data
   const [achievements, setAchievements] = useState([]); // For achievements data
-  const userId = 1; // Replace with dynamic user ID from auth context or props
+  const userId = user.id; 
+  // Replace with dynamic user ID from auth context or props
+
+
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/users/profile/${userId}`);
-        if (!response.ok) throw new Error("Failed to fetch user profile");
-        const data = await response.json();
-        if (data.success) {
+        const response = await apiClient.get(`/api/users/profile/${userId}`);
+        if (response.status !== 200) throw new Error("Failed to fetch user profile");
+        // const data = await response.json();
+        if (response.data.success) {
           setUserProfile({
-            name: data.user.name,
-            points: data.user.points
+            name: response.data.user.name,
+            points: response.data.user.points,
           });
         } else {
-          throw new Error(data.message || "Failed to load user profile");
+          throw new Error(response.data.message || "Failed to load user profile");
         }
       } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -34,11 +41,11 @@ const ProfilePage = () => {
 
     const fetchProgressData = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/quiz/progress/${userId}`);
-        if (!response.ok) throw new Error("Failed to fetch progress data");
-        const data = await response.json();
-        if (data.success && data.progress.length > 0) {
-          setProgressData(data.progress.slice(0, 3));
+        const response = await apiClient.get(`/api/quiz/progress/${userId}`);
+        if (response.status !== 200) throw new Error("Failed to fetch progress data");
+        // const data = await response.json();
+        if (response.data.success && response.data.progress.length > 0) {
+          setProgressData(response.data.progress.slice(0, 3));
         } else {
           throw new Error("No progress data available");
         }
@@ -52,15 +59,16 @@ const ProfilePage = () => {
       }
     };
 
+
     const fetchAchievements = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/achievements/${userId}`);
-        if (!response.ok) throw new Error("Failed to fetch achievements");
-        const data = await response.json();
-        if (data.success) {
-          setAchievements(data.achievements.slice(0, 3)); // Show only 3 achievements in profile
+        const response = await apiClient.get(`/api/achievements/${userId}`);
+        if (response.status !== 200) throw new Error("Failed to fetch achievements");
+        // const data = await response.json();
+        if (response.data.success) {
+          setAchievements(response.data.achievements.slice(0, 3)); // Show only 3 achievements in profile
         } else {
-          throw new Error(data.message || "Failed to load achievements");
+          throw new Error(response.data.message || "Failed to load achievements");
         }
       } catch (error) {
         console.error("Error fetching achievements, using dummy data:", error);

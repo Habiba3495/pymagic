@@ -239,6 +239,8 @@ import WrongIcon from "./images/Wrong potion.svg";
 import WrongAnswerIcon from "./images/Wrong icon.svg";
 import HintIcon from "./images/Hint icon.svg";
 import { useAuth } from '../context/AuthContext';
+import { apiClient } from "../services";
+
 
 const Quiz = () => {
     const { user } = useAuth();
@@ -252,19 +254,19 @@ const Quiz = () => {
     const [hint, setHint] = useState("");
     const [motivationMessage, setMotivationMessage] = useState("");
     const [answers, setAnswers] = useState([]); 
+    
     const userId = user.id;
 
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/quiz/lesson/${lessonId}`, {
-                    credentials: "include", // يسمح بإرسال الكوكيز
-                  });
-                if (!response.ok) {
+                const response = await apiClient.get(`/api/quiz/lesson/${lessonId}`);
+
+                if (response.status !== 200) {
                     throw new Error("Failed to fetch questions");
                 }
-                const data = await response.json();
-                setQuestions(data.questions);
+                // const data = await response.json();
+                setQuestions(response.data.questions); // Set the fetched questions
             } catch (error) {
                 console.error("Error fetching quiz questions:", error);
                 const defaultQuestions = [
@@ -338,23 +340,45 @@ const Quiz = () => {
                 navigate("/login");
                 return;
             }
+
+
+
+                //  try {
+                //     console.log("Submitting unit quiz with answers:", validAnswers);
+              
+                //     const response = await apiClient.post("/api/quiz/unit/submit", {
+                //       user_id: userId,
+                //       unit_id: unitId,
+                //       answers: validAnswers,
+                //     });
+              
+                //     const data = response.data;
+                //     console.log("Unit quiz submission response:", data);
+              
+                //     if (data.success) {
+                //       navigate("/unit-quiz-complete", {
+                //         state: {
+                //           quizData: data,
+                //           total_user_points: data.total_user_points,
+                //           achievements: data.achievements || [],
+                //         },
+                //       });
+                //     } else {
+                //       console.error("Error submitting unit quiz:", data.message);
+                //       navigate("/unit-quiz-complete");
+                //     }
+                //   }
     
             try {
                 console.log("Submitting quiz with answers:", answers);
     
-                const response = await fetch('http://localhost:5000/api/quiz/submit', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        user_id: userId,
-                        lesson_id: lessonId,
-                        answers: answers,
-                    }),
+                const response = await apiClient.post('/api/quiz/submit', {
+                    user_id: userId,
+                    lesson_id: lessonId,
+                    answers: answers,
                 });
     
-                const data = await response.json();
+                const data = response.data;
                 console.log("Quiz submission response:", data);
     
                 if (data.success) {
