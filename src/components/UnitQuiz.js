@@ -10,7 +10,7 @@ import WrongIcon from "./images/Wrong potion.svg";
 import WrongAnswerIcon from "./images/Wrong icon.svg";
 import HintIcon from "./images/Hint icon.svg";
 import { useAuth } from '../context/AuthContext';
-import { apiClient } from "../services";
+import apiClient from '../services';
 
 const UnitQuiz = () => {
   const { user } = useAuth();//2

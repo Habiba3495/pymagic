@@ -8,8 +8,9 @@ export function AuthProvider({ children }) {
     JSON.parse(localStorage.getItem('user')) || null
   );
 
-  const login = (userData) => {
+  const login = (userData , token) => {
     setUser(userData);
+    document.cookie = `token=${token}; max-age=604800; path=/`; // 7 days
     localStorage.setItem('user', JSON.stringify(userData));
   };
 

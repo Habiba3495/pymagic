@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import bookIcon from "./images/Score icon.svg";
 import pointsIcon from "./images/points.svg";
 import "./QuizComplete.css";
-import { apiClient } from "../services";
+import apiClient from '../services';
 
 
 const QuizComplete = () => {

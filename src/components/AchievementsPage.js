@@ -3,7 +3,7 @@ import "./AchievementsPage.css";
 import { useNavigate } from "react-router-dom";
 import Exit from "./images/Exit iconsvg.svg";
 import { useAuth } from '../context/AuthContext';
-import { apiClient } from "../services";
+import apiClient from '../services';
 
 const AchievementsPage = () => {
   const { user } = useAuth();

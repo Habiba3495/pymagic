@@ -102,7 +102,7 @@ import "./ChatbotSection.css";
 import userAvatar from "./images/Profile.svg";
 import botAvatar from "./images/Chatbot.svg";
 import sendIcon from "./images/sendicon.svg";
-import { apiClient } from "../services";
+import apiClient from '../services';
 
 const ChatbotSection = () => {
   // Load messages from localStorage on mount or when empty

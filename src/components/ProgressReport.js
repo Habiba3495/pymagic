@@ -4,7 +4,7 @@ import "./ProgressReport.css"; // تأكد من وجود ملف CSS
 import Exit from "./images/Exit iconsvg.svg";
 import points from "./images/points.svg";
 import { useAuth } from '../context/AuthContext';
-import { apiClient } from "../services";
+import apiClient from '../services';
 
 const ProgressReport = () => {
   const { user } = useAuth();

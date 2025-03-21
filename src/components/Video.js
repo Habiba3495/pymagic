@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Video.css";
 import Exit from "./images/Exit iconsvg.svg";
-import { apiClient } from "../services";
+import apiClient from '../services';
 
 
 const Video = () => {

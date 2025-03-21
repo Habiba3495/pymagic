@@ -3,7 +3,7 @@ import Lsidebar from "./Lsidebar";
 import "./FlashcardSection.css";
 import cardBack from "./images/Flashcard_black.svg";
 import cardFront from "./images/Flashcard_color.svg";
-import { apiClient } from "../services";
+import apiClient from '../services';
 import { useAuth } from '../context/AuthContext';
 
 const FlashCardSection = () => {

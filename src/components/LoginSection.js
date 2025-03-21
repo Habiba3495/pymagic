@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./LoginSection.css";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../context/AuthContext'; // Import UserContext
-import { apiClient } from "../services";
+import apiClient from '../services';
 
 const LoginSection = () => {
   const { login } = useAuth();
@@ -17,28 +17,25 @@ const LoginSection = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null); // Clear previous errors
-
+  
     try {
       const response = await apiClient.post('/api/users/login', formData); /// all api 
-
+  
       if (response.status !== 200 || !response.data?.token) {
         throw new Error(response.data?.error || 'Login failed');
       }
 
       //if (response.status !== 200) if response != ok
-
+  
       const { token, user } = response.data;
-
-      localStorage.setItem('token', token);
-      document.cookie = `token=${token}; max-age=604800; path=/`; // 7 days
-
+    
       // Store user information in context
-      login(user);
+      login(user , token);
       // Navigate to lessons page on successful login
       navigate("/lessons", { replace: true }); // replace: true prevents going back to login
     } catch (err) {
       console.error('Login error:', err);
-      setError(err.message);
+      setError(err.message || 'Login failed');
     }
   };
 

@@ -4,7 +4,7 @@ import Lsidebar from "./Lsidebar";
 import "./LessonSection.css";
 import unitquizicon from "../components/images/unitquizicon.svg";
 import { useAuth } from '../context/AuthContext';//1
-import { apiClient } from "../services";
+import apiClient from '../services';
 
 const LessonSection = () => {
   const { user } = useAuth();//2

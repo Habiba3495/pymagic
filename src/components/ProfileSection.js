@@ -5,7 +5,7 @@ import Lsidebar from "./Lsidebar";
 import { useNavigate } from "react-router-dom";
 import points from "./images/points.svg"; // Points icon for progress
 import { useAuth } from '../context/AuthContext';
-import { apiClient } from "../services";
+import apiClient from '../services';
 
 
 const ProfilePage = () => {
