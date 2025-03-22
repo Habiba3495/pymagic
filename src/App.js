@@ -17,6 +17,7 @@ import UnitQuiz from "./components/UnitQuiz";
 import UnitQuizComplete from "./components/UnitQuizComplete";
 import ProgressReport from "./components/ProgressReport";
 import AchievementsPage from "./components/AchievementsPage";
+import AvatarCustomization from "./components/AvatarCustomization";
 
 const App = () => {
   const { user } = useAuth(); // Get user from AuthContext
@@ -49,6 +50,7 @@ const App = () => {
             <Route path="/quiz-review" element={<ReviewPage />} />
             <Route path="/progress-report/:user_id" element={<ProgressReport />} />
             <Route path="/achievements" element={<AchievementsPage />} />
+            <Route path="/profile/avatar" element={<AvatarCustomization />} />
           </>
         ) : (
             <Route path="*" element={<Navigate to="/Login" replace />} />
