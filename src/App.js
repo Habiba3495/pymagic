@@ -26,7 +26,9 @@ const App = () => {
     <Router>
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" 
+          element={user ? <Navigate to="/lessons" replace /> : <HomePage />}
+        />
         <Route path="/register"
           element={user ? <Navigate to="/lessons" replace /> : <RegisterPage />}
         />
