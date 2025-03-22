@@ -36,17 +36,20 @@ const AvatarCustomization = () => {
         // Add null checks
         setAssets(assetsRes?.data || []);
         setOwnedAssets(ownedAssetsRes?.data || []);
+
+        console.log(assetsRes.data);
+        
         
 
         if (preferencesRes.data) {
           setEquippedAssets({
-            face: preferencesRes.data.face || "/assets/faces/boy_face_1.svg",
-            brow: preferencesRes.data.brow || "/assets/brows/brows_1.svg",
-            eye: preferencesRes.data.eye || "/assets/eyes/eyes_1.svg",
-            hairstyle: preferencesRes.data.hairstyle || "/assets/hairstyles/hairstyles_1.svg",
-            lip: preferencesRes.data.lip || "/assets/lips/lips_1.svg",
-            nose: preferencesRes.data.nose || "/assets/nose/nose_1.svg",
-            headdress: preferencesRes.data.headdress || null,
+            face: preferencesRes.data.face ,
+            brow: preferencesRes.data.brow ,
+            eye: preferencesRes.data.eye ,
+            hairstyle: preferencesRes.data.hairstyle ,
+            lip: preferencesRes.data.lip ,
+            nose: preferencesRes.data.nose ,
+            headdress: preferencesRes.data.headdress,
           });
         }
       } catch (error) {
@@ -197,9 +200,10 @@ const AvatarCustomization = () => {
               <div key={asset.id} className="asset-card">
                 <img src={asset.image_url} alt={asset.name} />
                 <p>{asset.name}</p>
-                {ownedAssets.some((owned) => owned.id === asset.id) ? (
+                {ownedAssets.some((owned) => asset.price !== 0 && owned.id === asset.id) ? (
                   <span className="owned-label">Owned</span>
                 ) : (
+                  asset.price > 0 ?
                   <div>
                     <p>Price: {asset.price} points</p>
                     <button
@@ -210,8 +214,9 @@ const AvatarCustomization = () => {
                       Buy
                     </button>
                   </div>
+                  : null
                 )}
-                {ownedAssets.some((owned) => owned.id === asset.id) && (
+                { (ownedAssets.some((owned) => owned.id === asset.id) ||  asset.price === 0 ) && (
                   <button onClick={() => handleEquip(asset.image_url, asset.type)}>Equip</button>
                 )}
                 {equippedAssets[asset.type] === asset.image_url && (
