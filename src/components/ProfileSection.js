@@ -170,7 +170,7 @@ const ProfilePage = () => {
                 return null;
               })}
             </div>
-            <button className="edit-button" onClick={() => navigate("/avatar-customization")}>
+            <button className="edit-button" onClick={() => navigate("/profile/avatar")}>
               Edit
             </button>
           </div>
