@@ -1,13 +1,12 @@
-
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "./AvatarCustomization.css";
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
-
+import { useNavigate } from "react-router-dom";
 
 const AvatarCustomization = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [assets, setAssets] = useState([]);
   const [ownedAssets, setOwnedAssets] = useState([]);
   const [equippedAssets, setEquippedAssets] = useState({
@@ -19,38 +18,39 @@ const AvatarCustomization = () => {
     nose: "/assets/nose/nose_1.svg",
     headdress: null,
   });
+  const [userPoints, setUserPoints] = useState(0); // Initialize to 0, will fetch from backend
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState("face");
-  const userId = user.id; 
+  const userId = user.id;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [assetsRes, ownedAssetsRes, preferencesRes] = await Promise.all([
+        const [assetsRes, ownedAssetsRes, preferencesRes, userProfileRes] = await Promise.all([
           apiClient.get("/assets"),
           apiClient.get(`/user/${userId}/owned-assets`),
           apiClient.get(`/user-preferences/${userId}`),
+          apiClient.get(`/api/users/profile/${userId}`), // Fetch user profile to get points
         ]);
 
-        // Add null checks
         setAssets(assetsRes?.data || []);
         setOwnedAssets(ownedAssetsRes?.data || []);
 
-        console.log(assetsRes.data);
-        
-        
-
         if (preferencesRes.data) {
           setEquippedAssets({
-            face: preferencesRes.data.face ,
-            brow: preferencesRes.data.brow ,
-            eye: preferencesRes.data.eye ,
-            hairstyle: preferencesRes.data.hairstyle ,
-            lip: preferencesRes.data.lip ,
-            nose: preferencesRes.data.nose ,
+            face: preferencesRes.data.face,
+            brow: preferencesRes.data.brow,
+            eye: preferencesRes.data.eye,
+            hairstyle: preferencesRes.data.hairstyle,
+            lip: preferencesRes.data.lip,
+            nose: preferencesRes.data.nose,
             headdress: preferencesRes.data.headdress,
           });
+        }
+
+        if (userProfileRes.data.success) {
+          setUserPoints(userProfileRes.data.user.points || 0); // Set the points from the backend
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -69,14 +69,16 @@ const AvatarCustomization = () => {
 
     try {
       const response = await apiClient.post("/buy", { userId, assetId });
-      
-      // Correctly access response data
+
       if (response.data.success) {
         setOwnedAssets((prev) => [
-          ...prev, 
-          response.data.asset
+          ...prev,
+          response.data.asset,
         ]);
-        setMessage("Item purchased!");
+        setUserPoints(response.data.updatedPoints); // Update the points in the UI
+        setMessage("Item purchased successfully!");
+      } else {
+        setMessage(response.data.message || "Error purchasing item");
       }
     } catch (error) {
       setMessage(error.response?.data?.message || "Error purchasing item");
@@ -112,6 +114,8 @@ const AvatarCustomization = () => {
       });
   };
 
+
+
   const getStyleForType = (type) => {
     switch (type) {
       case "face":
@@ -133,8 +137,6 @@ const AvatarCustomization = () => {
     }
   };
 
-  // if (loading) return <p>Loading...</p>;
-
   const assetTypes = [
     { type: "face", icon: "person.svg" },
     { type: "hairstyle", icon: "comb.svg" },
@@ -152,10 +154,9 @@ const AvatarCustomization = () => {
           <span className="username">{user.name}</span>
           <span className="points">
             <img src="/icons/coin.svg" alt="coin" />
-            {user.earned_points} points
+            {userPoints} 
           </span>
         </div>
-        {/* <div className="edit-avatar-banner">Edit Avatar</div> */}
       </div>
 
       <div className="Anavigation-tabs">
@@ -201,22 +202,22 @@ const AvatarCustomization = () => {
                 <img src={asset.image_url} alt={asset.name} />
                 <p>{asset.name}</p>
                 {ownedAssets.some((owned) => asset.price !== 0 && owned.id === asset.id) ? (
-                  <span className="owned-label">Owned</span>
+                  <span className="owned-label">OWNED</span>
                 ) : (
-                  asset.price > 0 ?
-                  <div>
-                    <p>Price: {asset.price} points</p>
-                    <button
-                      onClick={() =>
-                        handlePurchase(asset.id, asset.price, asset.image_url, asset.type)
-                      }
-                    >
-                      Buy
-                    </button>
-                  </div>
-                  : null
+                  asset.price > 0 ? (
+                    <div>
+                      <p>Price: {asset.price} points</p>
+                      <button
+                        onClick={() =>
+                          handlePurchase(asset.id, asset.price, asset.image_url, asset.type)
+                        }
+                      >
+                        Buy
+                      </button>
+                    </div>
+                  ) : null
                 )}
-                { (ownedAssets.some((owned) => owned.id === asset.id) ||  asset.price === 0 ) && (
+                {(ownedAssets.some((owned) => owned.id === asset.id) || asset.price === 0) && (
                   <button onClick={() => handleEquip(asset.image_url, asset.type)}>Equip</button>
                 )}
                 {equippedAssets[asset.type] === asset.image_url && (
@@ -228,7 +229,6 @@ const AvatarCustomization = () => {
       </div>
 
       <div className="action-buttons">
-        <button className="cancel-button">Cancel</button>
         <button className="save-button" onClick={handleSave}>
           Save
         </button>
@@ -240,6 +240,3 @@ const AvatarCustomization = () => {
 };
 
 export default AvatarCustomization;
-
-
-
