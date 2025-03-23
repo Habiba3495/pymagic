@@ -155,7 +155,7 @@ const AvatarCustomization = () => {
             {user.earned_points} points
           </span>
         </div>
-        <div className="edit-avatar-banner">Edit Avatar</div>
+        {/* <div className="edit-avatar-banner">Edit Avatar</div> */}
       </div>
 
       <div className="Anavigation-tabs">

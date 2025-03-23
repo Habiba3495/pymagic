@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import "./ProfileSection.css";
 import Lsidebar from "./Lsidebar";
@@ -7,24 +6,31 @@ import points from "./images/points.svg"; // Points icon for progress
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
 
+// Import a logout icon (you can use an SVG or an icon library like react-icons)
+import { FiLogOut } from 'react-icons/fi'; // Using react-icons for the logout icon
 
 const ProfilePage = () => {
-  const { user } = useAuth();//2
+  const { user, logout } = useAuth(); // Get logout function from AuthContext
   const navigate = useNavigate();
   const [userProfile, setUserProfile] = useState({ name: "", points: 0 }); // For user data
   const [progressData, setProgressData] = useState([]); // For progress report data
   const [achievements, setAchievements] = useState([]); // For achievements data
-  const userId = user.id; 
-  // Replace with dynamic user ID from auth context or props
-
-
+  const [equippedAssets, setEquippedAssets] = useState({
+    face: "/assets/faces/boy_face_1.svg",
+    brow: "/assets/brows/brows_1.svg",
+    eye: "/assets/eyes/eyes_1.svg",
+    hairstyle: "/assets/hairstyles/hairstyles_1.svg",
+    lip: "/assets/lips/lips_1.svg",
+    nose: "/assets/nose/nose_1.svg",
+    headdress: null,
+  }); // For equipped avatar assets
+  const userId = user.id;
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         const response = await apiClient.get(`/api/users/profile/${userId}`);
         if (response.status !== 200) throw new Error("Failed to fetch user profile");
-        // const data = await response.json();
         if (response.data.success) {
           setUserProfile({
             name: response.data.user.name,
@@ -43,7 +49,6 @@ const ProfilePage = () => {
       try {
         const response = await apiClient.get(`/api/quiz/progress/${userId}`);
         if (response.status !== 200) throw new Error("Failed to fetch progress data");
-        // const data = await response.json();
         if (response.data.success && response.data.progress.length > 0) {
           setProgressData(response.data.progress.slice(0, 3));
         } else {
@@ -59,31 +64,81 @@ const ProfilePage = () => {
       }
     };
 
-
     const fetchAchievements = async () => {
       try {
         const response = await apiClient.get(`/api/achievements/${userId}`);
         if (response.status !== 200) throw new Error("Failed to fetch achievements");
-        // const data = await response.json();
         if (response.data.success) {
-          setAchievements(response.data.achievements.slice(0, 3)); // Show only 3 achievements in profile
+          setAchievements(response.data.achievements.slice(0, 3));
         } else {
           throw new Error(response.data.message || "Failed to load achievements");
         }
       } catch (error) {
         console.error("Error fetching achievements, using dummy data:", error);
         setAchievements([
-          { id: 1, title: "Spellbook Scholar",  image: "./images/spellbook_scholar.svg" },
+          { id: 1, title: "Spellbook Scholar", image: "./images/spellbook_scholar.svg" },
           { id: 2, title: "Daily Dedication", image: "./images/daily_dedication.svg" },
-          { id: 3, title: "Treasure Hunter",  image: "./images/treasure_hunter.svg" },
+          { id: 3, title: "Treasure Hunter", image: "./images/treasure_hunter.svg" },
         ]);
+      }
+    };
+
+    const fetchAvatarPreferences = async () => {
+      try {
+        const response = await apiClient.get(`/user-preferences/${userId}`);
+        if (response.data) {
+          setEquippedAssets({
+            face: response.data.face,
+            brow: response.data.brow,
+            eye: response.data.eye,
+            hairstyle: response.data.hairstyle,
+            lip: response.data.lip,
+            nose: response.data.nose,
+            headdress: response.data.headdress,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching avatar preferences:", error);
       }
     };
 
     fetchUserProfile();
     fetchProgressData();
     fetchAchievements();
+    fetchAvatarPreferences();
   }, [userId]);
+
+  const handleLogout = async () => {
+    try {
+      logout();
+      navigate('/login');
+    } catch (error) {
+      console.error("Error logging out:", error);
+      logout();
+      navigate('/login');
+    }
+  };
+
+  const getStyleForType = (type) => {
+    switch (type) {
+      case "face":
+        return { position: "absolute", top: "0", left: "0", width: "150px", zIndex: 0 };
+      case "eye":
+        return { position: "absolute", top: "60px", left: "32px", width: "88px", zIndex: 2 };
+      case "brow":
+        return { position: "absolute", top: "45px", left: "25px", width: "98px", zIndex: 3 };
+      case "hairstyle":
+        return { position: "absolute", top: "-35px", left: "-2px", width: "152px", zIndex: 4 };
+      case "lip":
+        return { position: "absolute", top: "113px", left: "52px", width: "46px", zIndex: 2 };
+      case "nose":
+        return { position: "absolute", top: "92px", left: "65px", width: "22px", zIndex: 1 };
+      case "headdress":
+        return { position: "absolute", top: "-40px", left: "-5px", width: "162px", zIndex: 5 };
+      default:
+        return {};
+    }
+  };
 
   return (
     <div className="profile-container">
@@ -91,64 +146,86 @@ const ProfilePage = () => {
         <Lsidebar active="Profile" />
       </div>
       <div className="profile-content">
-      <div className="profile-header">
-        <div className="profile-avatar-container">
-          <div className="profile-avatar">
-            <span className="avatar-icon">🧙‍♂️</span>
+         {/* Add Logout Icon in the Top-Right Corner */}
+         <button className="logout-button" onClick={handleLogout}>
+            <FiLogOut size={24} />
+          </button>
+        <div className="profile-header">
+          <div className="profile-avatar-container">
+            <div className="profile-avatar" style={{ position: "relative", width: "150px", height: "200px" }}>
+              {equippedAssets.face && (
+                <img src={equippedAssets.face} alt="Equipped face" style={getStyleForType("face")} />
+              )}
+              {Object.keys(equippedAssets).map((type, index) => {
+                if (type !== "face" && equippedAssets[type]) {
+                  return (
+                    <img
+                      key={index}
+                      src={equippedAssets[type]}
+                      alt={`Equipped ${type}`}
+                      style={getStyleForType(type)}
+                    />
+                  );
+                }
+                return null;
+              })}
+            </div>
+            <button className="edit-button" onClick={() => navigate("/avatar-customization")}>
+              Edit
+            </button>
           </div>
-          <button className="edit-button">Edit</button>
+          <div className="profile-name-container">
+            <h2 className="profile-name">{userProfile.name}</h2>
+            <p className="profile-points">✨ {userProfile.points} points</p>
+          </div>
+      
         </div>
-        <div className="profile-name-container">
-          <h2 className="profile-name">{userProfile.name}</h2>
-          <p className="profile-points">✨ {userProfile.points} points</p>
-        </div>
-      </div>
 
-      {/* Achievements Section (Partial) */}
-      <div className="section achievements">
-        <h3 className="section-title">Achievements</h3>
-        <div className="achievements-grid">
-          {achievements.map((achievement) => (
-            <div key={achievement.id} className="achievement-card">
-              {achievement.image && <img src={`http://localhost:5000${achievement.image}`} alt={achievement.title} className="achievement-image" />}
-              <p className="achievement-title">{achievement.title}</p>
-              <p className="achievement-description">{achievement.description}</p>
-            </div>
-          ))}
-        </div>
-        <button className="view-all-button" onClick={() => navigate("/achievements")}>
-          View All
-        </button>
-      </div>
-
-      {/* Progress Report Section (Partial) */}
-      <div className="section progress-report">
-        <h3 className="section-title">Progress Report</h3>
-        <div className="progress-grid">
-          {progressData.map((quiz) => (
-            <div key={quiz.id} className="progress-card">
-              <div className="pscore-circle">
-                {quiz.score} / {quiz.total_questions}
+        {/* Achievements Section (Partial) */}
+        <div className="section achievements">
+          <h3 className="section-title">Achievements</h3>
+          <div className="achievements-grid">
+            {achievements.map((achievement) => (
+              <div key={achievement.id} className="achievement-card">
+                {achievement.image && <img src={`http://localhost:5000${achievement.image}`} alt={achievement.title} className="achievement-image" />}
+                <p className="achievement-title">{achievement.title}</p>
+                <p className="achievement-description">{achievement.description}</p>
               </div>
-              <p className="lesson-info">
-                {quiz.unit_id ? `Unit ${quiz.unit_id} completed` : "Unit completed"}
-              </p>
-              <p className="points-earned">
-                <img src={points} alt="points icon" className="points" />{" "}
-                {quiz.earned_points} points earned
-              </p>
-            </div>
-          ))}
+            ))}
+          </div>
+          <button className="view-all-button" onClick={() => navigate("/achievements")}>
+            View All
+          </button>
         </div>
-        <button
-          className="view-all-button"
-          onClick={() => navigate(`/progress-report/${userId}`)}
-        >
-          View All
-        </button>
+
+        {/* Progress Report Section (Partial) */}
+        <div className="section progress-report">
+          <h3 className="section-title">Progress Report</h3>
+          <div className="progress-grid">
+            {progressData.map((quiz) => (
+              <div key={quiz.id} className="progress-card">
+                <div className="pscore-circle">
+                  {quiz.score} / {quiz.total_questions}
+                </div>
+                <p className="lesson-info">
+                  {quiz.unit_id ? `Unit ${quiz.unit_id} completed` : "Unit completed"}
+                </p>
+                <p className="points-earned">
+                  <img src={points} alt="points icon" className="points" />{" "}
+                  {quiz.earned_points} points earned
+                </p>
+              </div>
+            ))}
+          </div>
+          <button
+            className="view-all-button"
+            onClick={() => navigate(`/progress-report/${userId}`)}
+          >
+            View All
+          </button>
+        </div>
       </div>
     </div>
-  </div>
   );
 };
 
