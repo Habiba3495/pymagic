@@ -102,7 +102,6 @@ const AchievementsPage = () => {
                   />
                 )}
                 <p className="achievement-title">{achievement.title}</p>
-                <p className="achievement-description">{achievement.description}</p>
               </div>
             ))
           ) : (

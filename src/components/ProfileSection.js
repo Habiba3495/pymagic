@@ -5,17 +5,17 @@ import { useNavigate } from "react-router-dom";
 import points from "./images/points.svg"; // Points icon for progress
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
-
-// Import a logout icon (you can use an SVG or an icon library like react-icons)
 import { FiLogOut } from 'react-icons/fi'; // Using react-icons for the logout icon
 
 const ProfilePage = () => {
-  const { user, logout } = useAuth(); // Get logout function from AuthContext
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [userProfile, setUserProfile] = useState({ name: "", points: 0 }); // For user data
-  const [progressData, setProgressData] = useState([]); // For progress report data
-  const [achievements, setAchievements] = useState([]); // For achievements data
-  const [equippedAssets, setEquippedAssets] = useState({
+  const [userProfile, setUserProfile] = useState({ name: "", points: 0 });
+  const [progressData, setProgressData] = useState([]);
+  const [achievements, setAchievements] = useState([]);
+
+  // Define default assets as a constant for reuse
+  const defaultAssets = {
     face: "/assets/faces/boy_face_1.svg",
     brow: "/assets/brows/brows_1.svg",
     eye: "/assets/eyes/eyes_1.svg",
@@ -23,7 +23,9 @@ const ProfilePage = () => {
     lip: "/assets/lips/lips_1.svg",
     nose: "/assets/nose/nose_1.svg",
     headdress: null,
-  }); // For equipped avatar assets
+  };
+
+  const [equippedAssets, setEquippedAssets] = useState(defaultAssets);
   const userId = user.id;
 
   useEffect(() => {
@@ -56,11 +58,11 @@ const ProfilePage = () => {
         }
       } catch (error) {
         console.error("Error fetching progress data, using dummy data:", error);
-        setProgressData([
-          { id: 1, score: 1, total_questions: 10, unit_id: "1", earned_points: 7 },
-          { id: 2, score: 1, total_questions: 10, unit_id: "1", earned_points: 5 },
-          { id: 3, score: 2, total_questions: 10, unit_id: "1", earned_points: 20 },
-        ]);
+        // setProgressData([
+        //   { id: 1, score: 1, total_questions: 10, unit_id: "1", earned_points: 7 },
+        //   { id: 2, score: 1, total_questions: 10, unit_id: "1", earned_points: 5 },
+        //   { id: 3, score: 2, total_questions: 10, unit_id: "1", earned_points: 20 },
+        // ]);
       }
     };
 
@@ -87,18 +89,24 @@ const ProfilePage = () => {
       try {
         const response = await apiClient.get(`/user-preferences/${userId}`);
         if (response.data) {
+          // Merge backend response with defaults to avoid null values
           setEquippedAssets({
-            face: response.data.face,
-            brow: response.data.brow,
-            eye: response.data.eye,
-            hairstyle: response.data.hairstyle,
-            lip: response.data.lip,
-            nose: response.data.nose,
-            headdress: response.data.headdress,
+            face: response.data.face || defaultAssets.face,
+            brow: response.data.brow || defaultAssets.brow,
+            eye: response.data.eye || defaultAssets.eye,
+            hairstyle: response.data.hairstyle || defaultAssets.hairstyle,
+            lip: response.data.lip || defaultAssets.lip,
+            nose: response.data.nose || defaultAssets.nose,
+            headdress: response.data.headdress || defaultAssets.headdress,
           });
+        } else {
+          // If no preferences exist (new user), explicitly set the default assets
+          setEquippedAssets(defaultAssets);
         }
       } catch (error) {
         console.error("Error fetching avatar preferences:", error);
+        // In case of an error, fall back to default assets
+        setEquippedAssets(defaultAssets);
       }
     };
 
@@ -146,10 +154,9 @@ const ProfilePage = () => {
         <Lsidebar active="Profile" />
       </div>
       <div className="profile-content">
-         {/* Add Logout Icon in the Top-Right Corner */}
-         <button className="logout-button" onClick={handleLogout}>
-            <FiLogOut size={24} />
-          </button>
+        <button className="logout-button" onClick={handleLogout}>
+          <FiLogOut size={24} />
+        </button>
         <div className="profile-header">
           <div className="profile-avatar-container">
             <div className="profile-avatar" style={{ position: "relative", width: "150px", height: "200px" }}>
@@ -178,10 +185,8 @@ const ProfilePage = () => {
             <h2 className="profile-name">{userProfile.name}</h2>
             <p className="profile-points">✨ {userProfile.points} points</p>
           </div>
-      
         </div>
 
-        {/* Achievements Section (Partial) */}
         <div className="section achievements">
           <h3 className="section-title">Achievements</h3>
           <div className="achievements-grid">
@@ -189,7 +194,6 @@ const ProfilePage = () => {
               <div key={achievement.id} className="achievement-card">
                 {achievement.image && <img src={`http://localhost:5000${achievement.image}`} alt={achievement.title} className="achievement-image" />}
                 <p className="achievement-title">{achievement.title}</p>
-                <p className="achievement-description">{achievement.description}</p>
               </div>
             ))}
           </div>
@@ -198,7 +202,6 @@ const ProfilePage = () => {
           </button>
         </div>
 
-        {/* Progress Report Section (Partial) */}
         <div className="section progress-report">
           <h3 className="section-title">Progress Report</h3>
           <div className="progress-grid">

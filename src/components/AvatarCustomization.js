@@ -9,7 +9,9 @@ const AvatarCustomization = () => {
   const navigate = useNavigate();
   const [assets, setAssets] = useState([]);
   const [ownedAssets, setOwnedAssets] = useState([]);
-  const [equippedAssets, setEquippedAssets] = useState({
+  
+  // Define default assets as a constant for reuse
+  const defaultAssets = {
     face: "/assets/faces/boy_face_1.svg",
     brow: "/assets/brows/brows_1.svg",
     eye: "/assets/eyes/eyes_1.svg",
@@ -17,8 +19,10 @@ const AvatarCustomization = () => {
     lip: "/assets/lips/lips_1.svg",
     nose: "/assets/nose/nose_1.svg",
     headdress: null,
-  });
-  const [userPoints, setUserPoints] = useState(0); // Initialize to 0, will fetch from backend
+  };
+
+  const [equippedAssets, setEquippedAssets] = useState(defaultAssets);
+  const [userPoints, setUserPoints] = useState(0);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState("face");
@@ -31,29 +35,35 @@ const AvatarCustomization = () => {
           apiClient.get("/assets"),
           apiClient.get(`/user/${userId}/owned-assets`),
           apiClient.get(`/user-preferences/${userId}`),
-          apiClient.get(`/api/users/profile/${userId}`), // Fetch user profile to get points
+          apiClient.get(`/api/users/profile/${userId}`),
         ]);
 
         setAssets(assetsRes?.data || []);
         setOwnedAssets(ownedAssetsRes?.data || []);
 
+        // If preferences exist, merge them with defaults to ensure no null values
         if (preferencesRes.data) {
           setEquippedAssets({
-            face: preferencesRes.data.face,
-            brow: preferencesRes.data.brow,
-            eye: preferencesRes.data.eye,
-            hairstyle: preferencesRes.data.hairstyle,
-            lip: preferencesRes.data.lip,
-            nose: preferencesRes.data.nose,
-            headdress: preferencesRes.data.headdress,
+            face: preferencesRes.data.face || defaultAssets.face,
+            brow: preferencesRes.data.brow || defaultAssets.brow,
+            eye: preferencesRes.data.eye || defaultAssets.eye,
+            hairstyle: preferencesRes.data.hairstyle || defaultAssets.hairstyle,
+            lip: preferencesRes.data.lip || defaultAssets.lip,
+            nose: preferencesRes.data.nose || defaultAssets.nose,
+            headdress: preferencesRes.data.headdress || defaultAssets.headdress,
           });
+        } else {
+          // If no preferences exist (new user), explicitly set the default assets
+          setEquippedAssets(defaultAssets);
         }
 
         if (userProfileRes.data.success) {
-          setUserPoints(userProfileRes.data.user.points || 0); // Set the points from the backend
+          setUserPoints(userProfileRes.data.user.points || 0);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+        // In case of an error, ensure defaults are applied
+        setEquippedAssets(defaultAssets);
       } finally {
         setLoading(false);
       }
@@ -71,11 +81,8 @@ const AvatarCustomization = () => {
       const response = await apiClient.post("/buy", { userId, assetId });
 
       if (response.data.success) {
-        setOwnedAssets((prev) => [
-          ...prev,
-          response.data.asset,
-        ]);
-        setUserPoints(response.data.updatedPoints); // Update the points in the UI
+        setOwnedAssets((prev) => [...prev, response.data.asset]);
+        setUserPoints(response.data.updatedPoints);
         setMessage("Item purchased successfully!");
       } else {
         setMessage(response.data.message || "Error purchasing item");
@@ -90,7 +97,7 @@ const AvatarCustomization = () => {
   };
 
   const handleUnequip = (type) => {
-    setEquippedAssets((prev) => ({ ...prev, [type]: null }));
+    setEquippedAssets((prev) => ({ ...prev, [type]: defaultAssets[type] || null }));
   };
 
   const handleSave = () => {
@@ -113,8 +120,6 @@ const AvatarCustomization = () => {
         console.error("Error saving preferences:", error);
       });
   };
-
-
 
   const getStyleForType = (type) => {
     switch (type) {
@@ -154,7 +159,7 @@ const AvatarCustomization = () => {
           <span className="username">{user.name}</span>
           <span className="points">
             <img src="/icons/coin.svg" alt="coin" />
-            {userPoints} 
+            {userPoints}
           </span>
         </div>
       </div>
@@ -200,7 +205,8 @@ const AvatarCustomization = () => {
             .map((asset) => (
               <div key={asset.id} className="asset-card">
                 <img src={asset.image_url} alt={asset.name} />
-                <p>{asset.name}</p>
+                {/* remove name  */}
+                <p>{asset.name}</p> 
                 {ownedAssets.some((owned) => asset.price !== 0 && owned.id === asset.id) ? (
                   <span className="owned-label">OWNED</span>
                 ) : (
