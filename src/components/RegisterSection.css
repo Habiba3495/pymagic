@@ -1,48 +1,58 @@
 .register-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 90vh; /* يأخذ معظم الشاشة */
-    display: flex;
-    flex-direction: column;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh; /* يأخذ معظم الشاشة */
+  display: flex;
+  flex-direction: column;
+  
+}
 
-  .Rform-container {
-    background-color: #4e2678e1;
-    padding: 30px;
-    border-radius: 10px;
-    color: #ffb400;
-    width: 350px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    margin-top: 100px;
-  }
-  
-  form {
-    display: flex;
-    flex-direction: column;
-    margin-right: 30px;
-  }
-  
-  input {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0 15px;
-    border: none;
-    border-radius: 5px;
-  }
-  
-  .Rbutton {
-    background-color: #ffb400;
-    color: #6B21A8;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 30px;
-    font-weight: bold;
-  }
-  
-  .Rh2{
-    color:#4e2678;
-    margin-top: 150px;
-  }
+.Rform-container {
+  background-color: #4e2678e1;
+  padding: 30px;
+  border-radius: 10px;
+  color: #ffb400;
+  width: 350px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-top: 100px;
+ 
+
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin-right: 30px;
+  font-family: 'Germania One', cursive;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 15px;
+  border: none;
+  border-radius: 5px;
+  font-family: 'Fredoka', sans-serif;
+}
+input::placeholder {
+  color: #ffcc66; 
+  opacity: 0.8;
+}
+.Rbutton {
+  background-color: #ffb400;
+  color: #6B21A8;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 30px;
+  font-weight: 500;
+  font-family: 'Germania One', cursive;
+}
+
+.Rh2{
+  color:#4e2678;
+  margin-top: 150px;
+  font-family: 'Germania One', cursive;
+}

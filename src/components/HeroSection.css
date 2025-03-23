@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
+
 .hero {
     background: url("../components/images/herosection_bg.svg") no-repeat center center/cover;
     height: 100vh;
@@ -9,6 +12,7 @@
 
   }
   
+  
 
 .overlay {
 
@@ -19,22 +23,25 @@
     flex-direction: column;
     align-items: center;
     margin-left: 15%; /* إزاحة طفيفة لليمين */
+    
 }
 
   /* لون العنوان الرئيسي */
 .overlay h1 {
     color: #fff; /* الأبيض */
-    font-family: "Poppins", sans-serif; /* لو عايزة خط معين */
     font-size: 3rem; /* حجم الخط */
     text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5); /* تأثير ظل */
+    font-family: 'Germania One', cursive;
 }
 
 /* لون النص العادي */
 .overlay p {
     color: white; /* اللون الأصفر */
-    font-size: 1.2rem;
+    font-size: 20px;
     margin-top: 10px;
     text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 300;
 }
   
   .hero-buttons {
@@ -60,11 +67,12 @@
   .btn.primary {
     background: #FFC145;
     color: #4b0082;
+    font-family: 'Germania One', cursive;
   }
   
   .btn.secondary {
     background: #5B287C;
     border: 2px solid #FFC145;
     color: #FFC145;
+    font-family: 'Germania One', cursive;
   }
-      

@@ -8,7 +8,7 @@ const HeroSection = () => {
     <header id="herosection" className="hero">
       <div className="overlay">
         <h1>Welcome to PyMagic, Young Wizard!</h1>
-        <p>Unleash Your Inner Wizard! Learn Python, Unlock Secrets, and Find Hidden Treasures!</p>
+        <p>Unleash Your Inner Wizard! Learn Python, Unlock <br /> Secrets, and Find Hidden Treasures!</p>
         <div className="hero-buttons">
         <button className="btn primary" onClick={() => navigate("/register")}>
             Get Started
@@ -24,5 +24,3 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-
-

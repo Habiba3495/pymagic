@@ -1,4 +1,5 @@
-/* تصميم الفوتر بالكامل */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
 .footer {
     background-color: #ffcc00; /* لون الخلفية */
     color: #4b0082; /* لون النص */
@@ -25,16 +26,19 @@
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 10px;
+    font-family: 'Germania One', cursive;
   }
   
   .footer-left p {
     line-height: 1.5;
+    font-family: 'Fredoka', sans-serif;
   }
   
   /* القسم الأيمن */
   .footer-right {
     margin-top: -130px;
     margin-left: auto;
+    font-family: 'Germania One', cursive;
 
   }
   
@@ -79,4 +83,3 @@
     text-align: center;
     font-size: 12px;
   }
-  
