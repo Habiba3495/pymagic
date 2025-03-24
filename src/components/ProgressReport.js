@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./ProgressReport.css"; // تأكد من وجود ملف CSS
+import "./ProgressReport.css";
 import Exit from "./images/Exit iconsvg.svg";
 import points from "./images/points.svg";
 import { useAuth } from '../context/AuthContext';
@@ -11,6 +11,7 @@ const ProgressReport = () => {
   const [progressData, setProgressData] = useState([]);
   const navigate = useNavigate();
   const userId = user.id;
+
   useEffect(() => {
     const fetchProgress = async () => {
       try {
@@ -29,11 +30,12 @@ const ProgressReport = () => {
         }
       } catch (error) {
         console.error("Error fetching progress, using dummy data:", error);
-        // بيانات تجريبية في حال فشل جلب البيانات من الـ API
         setProgressData([
           {
             id: 1,
-            lesson_id: "1.1",
+            lesson_id: "1",
+            unit_id: "1",
+            lesson_number: 1,
             score: 7,
             total_questions: 10,
             earned_points: 70,
@@ -49,7 +51,9 @@ const ProgressReport = () => {
           },
           {
             id: 3,
-            lesson_id: "3.2",
+            lesson_id: "3",
+            unit_id: "3",
+            lesson_number: 2,
             score: 9,
             total_questions: 10,
             earned_points: 90,
@@ -100,10 +104,8 @@ const ProgressReport = () => {
                 {quiz.score} / {quiz.total_questions}
               </div>
               <p className="lesson-info">
-                {quiz.lesson_id
-                  ? `Unit ${quiz.lesson_id.split(".")[0]}, Lesson ${
-                      quiz.lesson_id.split(".")[1]
-                    }`
+                {quiz.lesson_id && quiz.lesson_number
+                  ? `Unit ${quiz.unit_id}, Lesson ${quiz.lesson_number}`
                   : `Unit ${quiz.unit_id}`}
               </p>
               <p className="points-earned">

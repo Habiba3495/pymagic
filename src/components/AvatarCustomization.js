@@ -28,6 +28,7 @@ const AvatarCustomization = () => {
   const [selectedTab, setSelectedTab] = useState("face");
   const userId = user.id;
 
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -152,6 +153,98 @@ const AvatarCustomization = () => {
     { type: "nose", icon: "nose.svg" },
   ];
 
+  // return (
+  //   <div className="avatar-customization-container">
+  //     <div className="Aheader">
+  //       <div className="user-info">
+  //         <span className="username">{user.name}</span>
+  //         <span className="points">
+  //           <img src="/icons/coin.svg" alt="coin" />
+  //           {userPoints}
+  //         </span>
+  //       </div>
+  //     </div>
+
+  //     <div className="Anavigation-tabs">
+  //       {assetTypes.map(({ type, icon }) => (
+  //         <button
+  //           key={type}
+  //           onClick={() => setSelectedTab(type)}
+  //           className={selectedTab === type ? "active" : ""}
+  //         >
+  //           <img src={`/icons/${icon}`} alt={type} />
+  //         </button>
+  //       ))}
+  //     </div>
+
+  //     <div className="avatar-preview">
+  //       <div style={{ position: "relative", width: "240px", height: "400px", margin: "0 auto" }}>
+  //         {equippedAssets.face && (
+  //           <img src={equippedAssets.face} alt="Equipped face" style={getStyleForType("face")} />
+  //         )}
+  //         {Object.keys(equippedAssets).map((type, index) => {
+  //           if (type !== "face" && equippedAssets[type]) {
+  //             return (
+  //               <img
+  //                 key={index}
+  //                 src={equippedAssets[type]}
+  //                 alt={`Equipped ${type}`}
+  //                 style={getStyleForType(type)}
+  //               />
+  //             );
+  //           }
+  //           return null;
+  //         })}
+  //       </div>
+  //     </div>
+
+  //     <div className="asset-section">
+  //       <h2>{selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1)}s</h2>
+  //       <div className="asset-grid">
+  //         {assets
+  //           .filter((asset) => asset.type === selectedTab)
+  //           .map((asset) => (
+  //             <div key={asset.id} className="asset-card">
+  //               <img src={asset.image_url} alt={asset.name} />
+  //               {/* remove name  */}
+  //               <p>{asset.name}</p> 
+  //               {ownedAssets.some((owned) => asset.price !== 0 && owned.id === asset.id) ? (
+  //                 <span className="owned-label">OWNED</span>
+  //               ) : (
+  //                 asset.price > 0 ? (
+  //                   <div>
+  //                     <p>Price: {asset.price} points</p>
+  //                     <button
+  //                       onClick={() =>
+  //                         handlePurchase(asset.id, asset.price, asset.image_url, asset.type)
+  //                       }
+  //                     >
+  //                       Buy
+  //                     </button>
+  //                   </div>
+  //                 ) : null
+  //               )}
+  //               {(ownedAssets.some((owned) => owned.id === asset.id) || asset.price === 0) && (
+  //                 <button onClick={() => handleEquip(asset.image_url, asset.type)}>Equip</button>
+  //               )}
+  //               {equippedAssets[asset.type] === asset.image_url && (
+  //                 <button onClick={() => handleUnequip(asset.type)}>Unequip</button>
+  //               )}
+  //             </div>
+  //           ))}
+  //       </div>
+  //     </div>
+
+  //     <div className="action-buttons">
+  //       <button className="save-button" onClick={handleSave}>
+  //         Save
+  //       </button>
+  //     </div>
+
+  //     {message && <p>{message}</p>}
+  //   </div>
+  // );
+
   return (
     <div className="avatar-customization-container">
       <div className="Aheader">
@@ -163,7 +256,7 @@ const AvatarCustomization = () => {
           </span>
         </div>
       </div>
-
+  
       <div className="Anavigation-tabs">
         {assetTypes.map(({ type, icon }) => (
           <button
@@ -175,74 +268,77 @@ const AvatarCustomization = () => {
           </button>
         ))}
       </div>
-
-      <div className="avatar-preview">
-        <div style={{ position: "relative", width: "240px", height: "400px", margin: "0 auto" }}>
-          {equippedAssets.face && (
-            <img src={equippedAssets.face} alt="Equipped face" style={getStyleForType("face")} />
-          )}
-          {Object.keys(equippedAssets).map((type, index) => {
-            if (type !== "face" && equippedAssets[type]) {
-              return (
-                <img
-                  key={index}
-                  src={equippedAssets[type]}
-                  alt={`Equipped ${type}`}
-                  style={getStyleForType(type)}
-                />
-              );
-            }
-            return null;
-          })}
+  
+      {/* New container to hold the preview and assets side by side */}
+      <div className="main-content">
+        <div className="avatar-preview">
+          <div style={{ position: "relative", width: "240px", height: "400px", margin: "0 auto" }}>
+            {equippedAssets.face && (
+              <img src={equippedAssets.face} alt="Equipped face" style={getStyleForType("face")} />
+            )}
+            {Object.keys(equippedAssets).map((type, index) => {
+              if (type !== "face" && equippedAssets[type]) {
+                return (
+                  <img
+                    key={index}
+                    src={equippedAssets[type]}
+                    alt={`Equipped ${type}`}
+                    style={getStyleForType(type)}
+                  />
+                );
+              }
+              return null;
+            })}
+          </div>
+        </div>
+  
+        <div className="asset-section">
+          <h2>{selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1)}s</h2>
+          <div className="asset-grid">
+            {assets
+              .filter((asset) => asset.type === selectedTab)
+              .map((asset) => (
+                <div key={asset.id} className="asset-card">
+                  <img src={asset.image_url} alt={asset.name} />
+                  <p>{asset.name}</p>
+                  {ownedAssets.some((owned) => asset.price !== 0 && owned.id === asset.id) ? (
+                    <span className="owned-label">OWNED</span>
+                  ) : (
+                    asset.price > 0 ? (
+                      <div>
+                        <p>Price: {asset.price} points</p>
+                        <button
+                          onClick={() =>
+                            handlePurchase(asset.id, asset.price, asset.image_url, asset.type)
+                          }
+                        >
+                          Buy
+                        </button>
+                      </div>
+                    ) : null
+                  )}
+                  {(ownedAssets.some((owned) => owned.id === asset.id) || asset.price === 0) && (
+                    <button onClick={() => handleEquip(asset.image_url, asset.type)}>Equip</button>
+                  )}
+                  {equippedAssets[asset.type] === asset.image_url && (
+                    <button onClick={() => handleUnequip(asset.type)}>Unequip</button>
+                  )}
+                </div>
+              ))}
+          </div>
         </div>
       </div>
-
-      <div className="asset-section">
-        <h2>{selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1)}s</h2>
-        <div className="asset-grid">
-          {assets
-            .filter((asset) => asset.type === selectedTab)
-            .map((asset) => (
-              <div key={asset.id} className="asset-card">
-                <img src={asset.image_url} alt={asset.name} />
-                {/* remove name  */}
-                <p>{asset.name}</p> 
-                {ownedAssets.some((owned) => asset.price !== 0 && owned.id === asset.id) ? (
-                  <span className="owned-label">OWNED</span>
-                ) : (
-                  asset.price > 0 ? (
-                    <div>
-                      <p>Price: {asset.price} points</p>
-                      <button
-                        onClick={() =>
-                          handlePurchase(asset.id, asset.price, asset.image_url, asset.type)
-                        }
-                      >
-                        Buy
-                      </button>
-                    </div>
-                  ) : null
-                )}
-                {(ownedAssets.some((owned) => owned.id === asset.id) || asset.price === 0) && (
-                  <button onClick={() => handleEquip(asset.image_url, asset.type)}>Equip</button>
-                )}
-                {equippedAssets[asset.type] === asset.image_url && (
-                  <button onClick={() => handleUnequip(asset.type)}>Unequip</button>
-                )}
-              </div>
-            ))}
-        </div>
-      </div>
-
+  
       <div className="action-buttons">
         <button className="save-button" onClick={handleSave}>
           Save
         </button>
       </div>
-
+  
       {message && <p>{message}</p>}
     </div>
   );
+
 };
 
 export default AvatarCustomization;
