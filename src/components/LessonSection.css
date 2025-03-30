@@ -4,8 +4,8 @@
 
 .l-content {
     background: #f2ddff;
-    margin-left: 15%; /* نفس عرض الـ sidebar */
-    width: calc(100% - 15%); /* تأكد من أن العرض يأخذ باقي الصفحة */
+    margin-left: 15%;
+    width: calc(100% - 15%);
     padding: 20px;
 }
 
@@ -21,17 +21,16 @@
     border-radius: 10px;
     margin-bottom: 20px;
     margin-left: 45px;
-    text-align: center; /* يجعل النص في المنتصف */
+    text-align: center;
     display: flex;
-    justify-content: center; /* يوسّط العنوان أفقيًا */
-    align-items: center; /* يوسّط العنوان عموديًا */
+    justify-content: center;
+    align-items: center;
 }
-
 
 .lesson-list {
     margin-top: 10px;
     display: flex;
-    flex-direction: column; /* Ensures each lesson appears on a new line */
+    flex-direction: column;
     align-items: center;
     gap: 10px;
 }
@@ -55,38 +54,20 @@
     transform: scale(1.1);
 }
 
-/* زر القسم التالي */
-.next-section-button {
-    bottom: 20px;
-    right: 20px;
-    padding: 10px 20px;
-    background-color: #6B21A8;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.next-section-button:hover {
-    background-color: #7C3AED;
-}
-
 .active-lesson {
-    /* background-color: #5A189A !important; */
     color: white !important;
 }
 
-.watched-lesson {
-   color: white !important;
+.passed-lesson {
+    background-color: var(--unit-color) !important;
+    color: white !important;
 }
 
-.unit-button{
+.unit-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* background-color: #B8B8D1; */
-    /* color: #5B287C; */
+    background-color: #B8B8D1;
     font-weight: bold;
     text-decoration: none;
     border-radius: 50%;
@@ -95,18 +76,23 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease-in-out, background-color 0.3s, color 0.3s;
 }
+
 .unit-button:hover {
     transform: scale(1.1);
 }
 
-  .lesson-button.watched-lesson {
+.passed-unit {
     background-color: var(--unit-color) !important;
-  }
-  /* .unit-button.watched-unit {
-    background-color: inherit !important;
-  }   */
+    color: white !important;
+}
 
-  .unitquizicon{
+
+.unitquizicon {
     width: 100px;
     height: 100px;
-  }
+}
+
+.disabled-lesson, .disabled-unit {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
