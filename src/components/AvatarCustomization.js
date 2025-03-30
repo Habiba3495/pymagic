@@ -28,7 +28,26 @@ const AvatarCustomization = () => {
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState("face");
   const userId = user.id;
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [selectedAsset, setSelectedAsset] = useState(null);
 
+
+  const handleBuyClick = (asset) => {
+    setSelectedAsset(asset);
+    setShowConfirmation(true);
+  };
+ 
+  const confirmPurchase = () => {
+    if (selectedAsset) {
+      handlePurchase(selectedAsset.id, selectedAsset.price, selectedAsset.image_url, selectedAsset.type);
+    }
+    setShowConfirmation(false); // إغلاق النافذة بعد الشراء
+  };
+ 
+  const cancelPurchase = () => {
+    setShowConfirmation(false);
+    setSelectedAsset(null);
+  };
   
   useEffect(() => {
     const fetchData = async () => {
@@ -155,12 +174,13 @@ const AvatarCustomization = () => {
   ];
   
   return (
+    
     <div className="avatar-customization-container">
       <div className="Aheader">
      
           <span className="username">{user.name}</span>
           <img src={points} alt="points icon" className="userpoints" />
-           {userPoints} points
+          <span  className="user_points" > {userPoints}  points</span>
          
         </div>
     
@@ -195,10 +215,11 @@ const AvatarCustomization = () => {
               <span className="owned-label">OWNED</span>
             ) : asset.price > 0 ? (
               <div>
-                <p>Price: {asset.price} points</p>
-                <button onClick={() => handlePurchase(asset.id, asset.price, asset.image_url, asset.type)}>
-                  Buy
+                <p className="pointsname"><img src={points} alt="points icon" className="userpointstow" /> {asset.price} points</p>
+                <button className="buy_button" onClick={() => handleBuyClick(asset)}>
+                 Buy
                 </button>
+
               </div>
             ) : null}
             {(ownedAssets.some((owned) => owned.id === asset.id) || asset.price === 0) && (
@@ -215,7 +236,7 @@ const AvatarCustomization = () => {
     
         <div className="avatar-preview">
         
-          <div style={{ position: "relative", width: "240px", height: "400px", margin: "0 auto" }}>
+          <div style={{ position: "relative", width: "300px", height: "350px", margin: "0 auto" }}>
             {equippedAssets.face && (
               <img src={equippedAssets.face} alt="Equipped face" style={getStyleForType("face")} />
             )}
@@ -243,6 +264,17 @@ const AvatarCustomization = () => {
       </div>
     
       {message && <p>{message}</p>}
+
+      {showConfirmation && (
+         <div className="confirmation-modal-overlay">
+  <div className="confirmation-modal">
+    <p>Are you sure you want to buy this item for {selectedAsset.price} points?</p>
+    <button onClick={confirmPurchase}>Yes</button>
+    <button onClick={cancelPurchase}>No</button>
+  </div>
+  </div>
+)}
+
     </div>
   );
 
