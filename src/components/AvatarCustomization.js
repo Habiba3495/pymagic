@@ -31,7 +31,16 @@ const AvatarCustomization = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(null);
 
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage(""); // مسح الرسالة بعد ثانيتين
+      }, 1000);
+      return () => clearTimeout(timer); // تنظيف المؤقت عند إلغاء المكون
+    }
+  }, [message]);
 
+  
   const handleBuyClick = (asset) => {
     setSelectedAsset(asset);
     setShowConfirmation(true);
@@ -263,7 +272,16 @@ const AvatarCustomization = () => {
         </button>
       </div>
     
-      {message && <p>{message}</p>}
+      {/* {message && <p>{message}</p>} */}
+
+      {message && (
+  <div className="message-modal_overlay">
+    <div className="message-modal">
+      <p>{message}</p>
+    </div>
+  </div>
+)}
+
 
       {showConfirmation && (
          <div className="confirmation-modal-overlay">

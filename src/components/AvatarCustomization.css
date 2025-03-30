@@ -82,32 +82,6 @@
   align-items: center;
   justify-content: center;
 }
-/* 
-.avatar {
-  position: relative;
-  width: 500px; 
-  height: 500px;
-  transform-origin: center;
-} */
-
-.avatar-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: auto;
-}
-
-.avatar img,
-.avatar .hair,
-.avatar .skinColor {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  object-fit: contain;
-}
 
 .asset-section {
   flex: 2;
@@ -318,4 +292,35 @@ button:hover {
 .pointsname{
   color: #5B287C;
   font-weight: bold;
+}
+
+.message-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #5B287C;
+  color: white;
+  border: 4px solid #FFA500;
+  padding: 15px 25px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+.message-modal_overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* شفافية للخلفية */
+  z-index: 999; 
+}
+
+.avatar-preview, .asset-section {
+  min-height: 500px; /* يمنع النمو الزائد */
 }

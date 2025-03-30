@@ -11,6 +11,12 @@
   .profile-content{
     margin-left: 250px;
   }
+  .profile-name{
+    color: #6b21a8;
+    font-family: Germania One;
+    font-size: 20px;
+    margin-left: 30px;
+  }
   
   /* Profile Header */
   .profile-header {
@@ -78,12 +84,6 @@
     display: flex;
     justify-content: space-between; /* Name on right, points on left */
     align-items: center;
-  }
-  
-  .profile-name {
-    font-size: 15px;
-    font-weight: bold;
-    margin-left: 30px; /* Push name to the right */
   }
   
   .profile-points {

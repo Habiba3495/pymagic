@@ -183,7 +183,7 @@ const ProfilePage = () => {
           </div>
           <div className="profile-name-container">
             <h2 className="profile-name">{userProfile.name}</h2>
-            <p className="profile-points">✨ {userProfile.points} points</p>
+            <p className="profile-points"><img src={points} alt="points icon" className="userpointstow" />  {userProfile.points} points</p>
           </div>
         </div>
 
