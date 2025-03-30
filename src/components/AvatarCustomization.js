@@ -3,6 +3,7 @@ import "./AvatarCustomization.css";
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
 import { useNavigate } from "react-router-dom";
+import points from "./images/points.svg";
 
 const AvatarCustomization = () => {
   const { user } = useAuth();
@@ -158,10 +159,9 @@ const AvatarCustomization = () => {
       <div className="Aheader">
      
           <span className="username">{user.name}</span>
-          <span className="points">
-            <img src="/icons/coin.svg" alt="coin" />
-            {userPoints}
-          </span>
+          <img src={points} alt="points icon" className="userpoints" />
+           {userPoints} points
+         
         </div>
     
 
@@ -181,9 +181,10 @@ const AvatarCustomization = () => {
     ))}
   </div>
 
-  {/* محتوى العناصر مع خاصية التمرير */}
+
+  <h2 className="assetoptionname">{selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1)}s</h2>
   <div className="asset-content">
-    <h2>{selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1)}s</h2>
+
     <div className="asset-grid">
       {assets
         .filter((asset) => asset.type === selectedTab)

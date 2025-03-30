@@ -1,28 +1,14 @@
-body {
-  background-color: #f0e6fa; 
-}
-html, body {
-  overflow: hidden;
-}
-/* .avatar-customization-container {
-  max-width: 1300px;
-  overflow: hidden; 
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: auto; 
-} */
 .avatar-customization-container {
-  max-width: 1300px;
-  min-height: 100vh; /* يضمن عدم قطع المحتوى في الشاشات الصغيرة */
+  width: 100vw; /* يجعل الصفحة تمتد على عرض الشاشة بالكامل */
+  height: 100vh; /* يجعل الصفحة تأخذ كامل ارتفاع الشاشة */
   display: flex;
-  flex-direction: column; /* يجعل المحتوى يظهر عموديًا تحت بعض */
-  justify-content: center; /* يوسّط العناصر عموديًا */
-  align-items: center; /* يوسّط العناصر أفقيًا */
-  margin: auto;
-  padding: 20px;
+  flex-direction: column;
+  justify-content: center; /* توسيط العناصر عموديًا */
+  align-items: center; /* توسيط العناصر أفقيًا */
+  overflow: hidden; /* يمنع ظهور الـ scroll */
+  background-color: #f5e1ff;
 }
+
 .Aheader {
   display: flex;
   justify-content: space-between;
@@ -98,7 +84,7 @@ html, body {
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  max-height: 500px; /* تعديل الارتفاع لاستيعاب شريط الاختيار */
+  max-height: 400px; /* تعديل الارتفاع لاستيعاب شريط الاختيار */
   display: flex;
   flex-direction: column;
 }
@@ -114,6 +100,7 @@ html, body {
   top: 0;
   z-index: 10;
   border-bottom: 2px solid #e6e6fa;
+  margin-bottom: auto;
 }
 
 /* تنسيق شريط التمرير داخل القسم */
@@ -202,4 +189,22 @@ button:hover {
 
 .save-button:hover {
   background-color: #e6c200; /* Slightly darker yellow for hover */
+}
+
+.assetoptionname{
+  background-color: #8a2be2;
+  color: white;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+}
+.username{
+  font-family: Germania One;
+  color: #5B287C;
+  font-size:45px;
+}
+.userpoints{
+  margin-right: 10px;
+  margin-left: 20px;
+  font-size: 40px;
+  font-family: Germania One;
 }
