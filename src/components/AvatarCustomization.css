@@ -1,16 +1,28 @@
 body {
-  background-color: #f0e6fa; /* Light pastel purple */
+  background-color: #f0e6fa; 
 }
-
-.avatar-customization-container {
-  background-color: white;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+html, body {
+  overflow: hidden;
+}
+/* .avatar-customization-container {
   max-width: 1300px;
-  margin: 140px auto;
+  overflow: hidden; 
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto; 
+} */
+.avatar-customization-container {
+  max-width: 1300px;
+  min-height: 100vh; /* يضمن عدم قطع المحتوى في الشاشات الصغيرة */
+  display: flex;
+  flex-direction: column; /* يجعل المحتوى يظهر عموديًا تحت بعض */
+  justify-content: center; /* يوسّط العناصر عموديًا */
+  align-items: center; /* يوسّط العناصر أفقيًا */
+  margin: auto;
+  padding: 20px;
 }
-
 .Aheader {
   display: flex;
   justify-content: space-between;
@@ -36,7 +48,7 @@ body {
 }
 
 .edit-avatar-banner {
-  background-color: #8a2be2; /* Purple */
+  background-color: #8a2be2;
   color: white;
   padding: 10px 20px;
   border-radius: 10px;
@@ -46,11 +58,11 @@ body {
   display: flex;
   gap: 10px;
   margin-bottom: 75px;
-  justify-content: center; /* Center the tabs */
+  justify-content: center;
 }
 
 .Anavigation-tabs button {
-  background-color: #e6e6fa; /* Light purple */
+  background-color: #e6e6fa; 
   border: none;
   padding: 10px;
   border-radius: 10px;
@@ -58,7 +70,7 @@ body {
 }
 
 .Anavigation-tabs button.active {
-  background-color: #8a2be2; /* Darker purple */
+  background-color: #8a2be2;
 }
 
 .main-content {
@@ -66,8 +78,8 @@ body {
   justify-content: space-between;
   gap: 20px;
   margin-bottom: 20px;
+  /* background-color: red; */
 }
-
 .avatar-preview {
   flex: 1;
   display: flex;
@@ -79,31 +91,60 @@ body {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+
 .asset-section {
   flex: 2;
   background-color: #fff;
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  max-height: 600px; /* Adjusted for better fit */
-  overflow-y: auto; /* Allow scrolling if there are many assets */
+  max-height: 500px; /* تعديل الارتفاع لاستيعاب شريط الاختيار */
+  display: flex;
+  flex-direction: column;
 }
 
-.asset-section h2 {
-  background-color: #8a2be2;
-  color: white;
-  padding: 10px;
+/* شريط الاختيار يكون ثابت في الأعلى */
+.Anavigation-tabs {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  background-color: white;
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 2px solid #e6e6fa;
+}
+
+/* تنسيق شريط التمرير داخل القسم */
+.asset-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #8a2be2 #e6e6fa;
+}
+
+.asset-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.asset-content::-webkit-scrollbar-track {
+  background: #e6e6fa;
   border-radius: 10px;
-  margin-bottom: 10px;
-  margin-top: 0;
+}
+
+.asset-content::-webkit-scrollbar-thumb {
+  background: #8a2be2;
+  border-radius: 10px;
 }
 
 .asset-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Responsive grid */
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 15px;
 }
-
+ 
 .asset-card {
   background-color: #e6e6fa;
   text-align: center;
@@ -132,7 +173,7 @@ body {
 }
 
 .cancel-button {
-  background-color: #ff69b4; /* Pink */
+  background-color: #ff69b4;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -141,7 +182,7 @@ body {
 }
 
 .save-button {
-  background-color: #ffd700; /* Yellow */
+  background-color: #ffd700;
   color: black;
   padding: 10px 20px;
   border: none;
