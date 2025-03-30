@@ -9,18 +9,16 @@ import { useAuth } from '../context/AuthContext';
 const FlashCardSection = () => {
   const { user } = useAuth();
   const [sections, setSections] = useState([]);
-  const [flippedCards, setFlippedCards] = useState({});
   const [selectedCard, setSelectedCard] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await apiClient.get('/sections/1/flashcards'); //section not var
+        const response = await apiClient.get('/sections/1/flashcards');
         const data = response.data;
-  
+
         if (data.units && data.units.length > 0) {
           const transformedSections = [
             {
@@ -32,25 +30,14 @@ const FlashCardSection = () => {
                 flashcards: unit.lessons.map((lesson) => ({
                   lessonId: lesson.lessonId,
                   lessonName: lesson.lessonName,
+                  lessonNumber: lesson.lessonNumber, // Use lesson number from backend
                   flashCard: lesson.flashCard,
+                  isPassed: lesson.isPassed, // Use isPassed from backend
                 })),
               })),
             },
           ];
           setSections(transformedSections);
-  
-          const savedFlippedCards = JSON.parse(localStorage.getItem("flippedCards"));
-          if (savedFlippedCards) {
-            setFlippedCards(savedFlippedCards);
-          } else {
-            const initialFlippedCards = transformedSections.reduce((acc, section) => {
-              section.units.forEach((unit) => {
-                acc[unit.unitId] = Array(unit.flashcards.length).fill(false);
-              });
-              return acc;
-            }, {});
-            setFlippedCards(initialFlippedCards);
-          }
         } else {
           setDefaultData();
         }
@@ -58,7 +45,7 @@ const FlashCardSection = () => {
         setDefaultData();
       }
     };
-  
+
     fetchData();
   }, []);
 
@@ -72,16 +59,16 @@ const FlashCardSection = () => {
             unitId: 1,
             unitName: "Unit 1: default 1",
             flashcards: [
-              { lessonId: 1, lessonName: "Lesson 1", flashCard: "This is a default flashcard 1." },
-              { lessonId: 2, lessonName: "Lesson 2", flashCard: "This is a default flashcard 2." },
+              { lessonId: 1, lessonName: "Lesson 1", lessonNumber: 1, flashCard: "This is a default flashcard 1.", isPassed: false },
+              { lessonId: 2, lessonName: "Lesson 2", lessonNumber: 2, flashCard: "This is a default flashcard 2.", isPassed: false },
             ],
           },
           {
             unitId: 2,
             unitName: "Unit 2: default 2",
             flashcards: [
-              { lessonId: 3, lessonName: "Lesson 3", flashCard: "This is a default flashcard 3." },
-              { lessonId: 4, lessonName: "Lesson 4", flashCard: "This is a default flashcard 4." },
+              { lessonId: 3, lessonName: "Lesson 3", lessonNumber: 1, flashCard: "This is a default flashcard 3.", isPassed: false },
+              { lessonId: 4, lessonName: "Lesson 4", lessonNumber: 2, flashCard: "This is a default flashcard 4.", isPassed: false },
             ],
           },
         ],
@@ -89,49 +76,27 @@ const FlashCardSection = () => {
     ];
 
     setSections(defaultSections);
-
-    const savedFlippedCards = JSON.parse(localStorage.getItem("flippedCards"));
-    if (savedFlippedCards) {
-      setFlippedCards(savedFlippedCards);
-    } else {
-      const initialFlippedCards = defaultSections.reduce((acc, section) => {
-        section.units.forEach((unit) => {
-          acc[unit.unitId] = Array(unit.flashcards.length).fill(false);
-        });
-        return acc;
-      }, {});
-      setFlippedCards(initialFlippedCards);
-    }
   };
 
   const handleCardClick = async (unitId, index) => {
     const flashcard = findFlashcard(unitId, index);
     const lessonId = flashcard.lessonId;
-  
+
     try {
       const response = await apiClient.get(
         `/sections/flashcard-access/${user.id}/${lessonId}`
       );
-      const data = response.data; // Access the response data
-  
+      const data = response.data;
+
       if (!data.accessGranted) {
         setErrorMessage(data.message);
-        return; // Do not flip the card or open the modal
+        return;
       }
-  
-      // If access is granted, proceed with flipping the card and opening the modal
-      setFlippedCards((prev) => {
-        const newFlippedCards = {
-          ...prev,
-          [unitId]: prev[unitId].map((val, i) => (i === index ? !val : val)),
-        };
-        localStorage.setItem("flippedCards", JSON.stringify(newFlippedCards));
-        return newFlippedCards;
-      });
-  
+
+      // If access is granted, open the modal to show the flashcard content
       setSelectedCard({ unitId, index });
       setModalOpen(true);
-      setErrorMessage(null); // Clear any previous error message
+      setErrorMessage(null);
     } catch (error) {
       console.error("Error checking flashcard access:", error);
       setErrorMessage("An error occurred while checking access.");
@@ -152,7 +117,6 @@ const FlashCardSection = () => {
   return (
     <div className="page-container">
       <Lsidebar />
-
       <div className="content" style={{ marginLeft: "250px" }}>
         <div className="fheader"></div>
 
@@ -162,30 +126,32 @@ const FlashCardSection = () => {
               <h2 className="section-title">{unit.unitName}</h2>
               <div className="cards-container">
                 {unit.flashcards.map((card, index) => (
-                  <img
-                    key={index}
-                    src={flippedCards[unit.unitId]?.[index] ? cardFront : cardBack}
-                    alt="Flash Card"
-                    className={`flashcard ${flippedCards[unit.unitId]?.[index] ? "flipped" : ""}`}
-                    onClick={() => handleCardClick(unit.unitId, index)}
-                  />
+                  <div key={index} className="flashcard-wrapper">
+                    <img
+                      src={card.isPassed ? cardFront : cardBack}
+                      alt="Flash Card"
+                      className={`flashcard ${card.isPassed ? "passed" : ""}`}
+                      onClick={() => handleCardClick(unit.unitId, index)}
+                    />
+                    {/* <span className="lesson-number">{card.lessonNumber}</span> */}
+                  </div>
                 ))}
               </div>
             </div>
           ))
         )}
 
-{errorMessage && (
-  <div className="Emodal-overlay">
-    <div className="Emodal-window">
-      <button className="Eclose-button" onClick={() => setErrorMessage(null)}>
-        ✖
-      </button>
-      <h2 className="Emodal-title">Error</h2>
-      <p className="Emodal-text">{errorMessage}</p>
-    </div>
-  </div>
-)}
+        {errorMessage && (
+          <div className="Emodal-overlay">
+            <div className="Emodal-window">
+              <button className="Eclose-button" onClick={() => setErrorMessage(null)}>
+                ✖
+              </button>
+              <h2 className="Emodal-title">Error</h2>
+              <p className="Emodal-text">{errorMessage}</p>
+            </div>
+          </div>
+        )}
 
         {modalOpen && selectedCard !== null && (
           <div className="modal-overlay">
