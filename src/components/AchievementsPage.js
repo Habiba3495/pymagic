@@ -73,7 +73,7 @@ const AchievementsPage = () => {
 
   return (
     <div className="achievements-bg">
-      <button className="back-button" onClick={() => navigate("/lessons")}>
+      <button className="back-button" onClick={() => navigate("/profile")}>
         <img src={Exit} alt="Back" className="back-icon" />
       </button>
       <div className="achievements-container">
