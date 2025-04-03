@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useAuth } from "./context/AuthContext"; 
+import { useAuth } from "./context/AuthContext";
+import { useTranslation } from "react-i18next";
 import HomePage from "./components/HomePage";
 import RegisterPage from "./components/RegisterPage";
 import LoginPage from "./components/LoginPage";
@@ -18,25 +19,31 @@ import UnitQuizComplete from "./components/UnitQuizComplete";
 import ProgressReport from "./components/ProgressReport";
 import AchievementsPage from "./components/AchievementsPage";
 import AvatarCustomization from "./components/AvatarCustomization";
-
+import "./i18n"; // Import your i18n configuration
 const App = () => {
-  const { user } = useAuth(); // Get user from AuthContext
+  const { user } = useAuth();
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    document.documentElement.setAttribute("dir", i18n.language === "ar" ? "rtl" : "ltr");
+    document.documentElement.setAttribute("lang", i18n.language);
+  }, [i18n.language]);
 
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
-        <Route path="/" 
+        <Route
+          path="/"
           element={user ? <Navigate to="/lessons" replace /> : <HomePage />}
         />
-        <Route path="/register"
+        <Route
+          path="/register"
           element={user ? <Navigate to="/lessons" replace /> : <RegisterPage />}
         />
-        <Route path="/Login"
+        <Route
+          path="/Login"
           element={user ? <Navigate to="/lessons" replace /> : <LoginPage />}
         />
-
-        {/* Private Routes (only rendered if user is logged in) */}
         {user ? (
           <>
             <Route path="/lessons" element={<Lessons />} />
@@ -55,7 +62,7 @@ const App = () => {
             <Route path="/profile/avatar" element={<AvatarCustomization />} />
           </>
         ) : (
-            <Route path="*" element={<Navigate to="/Login" replace />} />
+          <Route path="*" element={<Navigate to="/Login" replace />} />
         )}
       </Routes>
     </Router>

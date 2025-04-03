@@ -9,3 +9,27 @@
   }
  
   
+  .language-switcher {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  
+  .language-switcher button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+  }
+  
+  /* RTL adjustments */
+  [dir="rtl"] .language-switcher {
+    right: auto;
+    left: 20px;
+  }
+  
+  [dir="rtl"] .language-switcher button {
+    margin-left: 0;
+    margin-right: 10px;
+  }

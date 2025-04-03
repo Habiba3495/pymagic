@@ -74,11 +74,9 @@ const ChatbotSection = () => {
 
   return (
     <div className="chatbot-wrapper">
-      <div className="sidebar-container">
-        <Lsidebar active="Chatbot" />
-      </div>
-
       <div className="chatbot-container">
+      <Lsidebar />
+
         <div className="chat-section">
           <div className="chat-header">Ask Your Magical Python Wizard</div>
 

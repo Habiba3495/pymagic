@@ -117,7 +117,7 @@ const FlashCardSection = () => {
   return (
     <div className="page-container">
       <Lsidebar />
-      <div className="content" style={{ marginLeft: "250px" }}>
+      <div className="content">
         <div className="fheader"></div>
 
         {sections.map((section) =>

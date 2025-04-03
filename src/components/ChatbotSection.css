@@ -5,14 +5,13 @@
   background-color: #f3e5f5; /* Light purple background for magic feel */
 }
 
-.sidebar-container {
+/* .sidebar-container {
   width: 15%;
-  background-color: #6a1b9a; /* Purple for wizard theme */
   height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
-}
+} */
 
 .chatbot-container {
   flex: 1;
@@ -20,9 +19,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-left: 15%;
   width: 100%;
   position: relative;
+  margin-left: 16.5%; /* Adjusted for sidebar */
 }
 
 .chat-section {
@@ -107,7 +106,7 @@
 /* Input container styling */
 .input-container {
   position: absolute;
-  bottom: 20px;
+  bottom: 90px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -151,4 +150,10 @@ input::placeholder {
   font-size: 16px;
   font-family: 'Comic Sans MS', cursive;
   color: #6a1b9a;
+}
+
+[dir="rtl"] .chatbot-container {
+  margin-right: 16.5%;
+  margin-left: 0;
+
 }

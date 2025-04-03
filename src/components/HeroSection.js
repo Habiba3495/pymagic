@@ -1,25 +1,27 @@
 import React from "react";
 import "./HeroSection.css";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const HeroSection = () => {
-    const navigate = useNavigate();
+  const { t } = useTranslation(); // Hook to access translations
+  const navigate = useNavigate();
+
   return (
     <header id="herosection" className="hero">
       <div className="overlay">
-        <h1>Welcome to PyMagic, Young Wizard!</h1>
-        <p>Unleash Your Inner Wizard! Learn Python, Unlock <br /> Secrets, and Find Hidden Treasures!</p>
+        <h1>{t("welcome")}</h1>
+        <p dangerouslySetInnerHTML={{ __html: t("unleash") }} />
         <div className="hero-buttons">
-        <button className="btn primary" onClick={() => navigate("/register")}>
-            Get Started
+          <button className="btn primary" onClick={() => navigate("/register")}>
+            {t("getStarted")}
           </button>
           <button className="btn secondary" onClick={() => navigate("/Login")}>
-          I already have an account
+            {t("alreadyHaveAccount")}
           </button>
         </div>
       </div>
     </header>
-
   );
 };
 

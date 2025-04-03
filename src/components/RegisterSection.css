@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
+
 .register-section {
   display: flex;
   justify-content: center;
@@ -20,10 +22,11 @@
 
 }
 
-form {
+.Rform {
   display: flex;
   flex-direction: column;
-  margin-right: 30px;
+  margin-right: 25px;
+  margin-left: 30px;
   font-family: 'Germania One', cursive;
 }
 
@@ -46,7 +49,6 @@ input::placeholder {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-left: 30px;
   font-weight: 500;
   font-family: 'Germania One', cursive;
 }
@@ -54,5 +56,23 @@ input::placeholder {
 .Rh2{
   color:#4e2678;
   margin-top: 150px;
+  font-family: 'Germania One', cursive;
+}
+
+/* RTL Adjustments */
+[dir="rtl"] .register-section {
+  text-align: right;
+}
+
+[dir="rtl"] .Rh2 {
+  text-align: center; /* Keep centered for consistency */
+}
+
+[dir="rtl"] .Rform label {
+  text-align: right;
+}
+
+/* Ensure Arabic text uses an appropriate font */
+[dir="rtl"] .Rform-container * {
   font-family: 'Germania One', cursive;
 }

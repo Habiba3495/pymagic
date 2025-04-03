@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
+
 .Login-section {
     display: flex;
     justify-content: center;
@@ -18,10 +21,11 @@
     margin-top: 450px;
   }
   
-  form {
+  .Lform {
     display: flex;
     flex-direction: column;
-    margin-right: 30px;
+    margin-right: 25px;
+    margin-left: 30px;
   }
   
   input {
@@ -39,7 +43,6 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-left: 30px;
     font-weight: bold;
   }
   
@@ -53,9 +56,32 @@
     margin: 10px 0;
     display: flex;
     align-items: center;
+    gap: 10px;
+  }
+
+  .remember-me input[type="checkbox"] {
+    margin: 0; /* Remove margin-right for consistency */
   }
   
-  .remember-me input[type="checkbox"] {
-    margin-right: 5px;
+  .remember-me label {
+    color: white;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 14px;
   }
-    
+  
+  /* RTL Adjustments */
+  [dir="rtl"] .Login-section {
+    text-align: right;
+  }
+  
+  [dir="rtl"] .Lform label {
+    text-align: right;
+  }
+  
+  [dir="rtl"] .error-message {
+    text-align: right;
+  }
+  
+  [dir="rtl"] .remember-me {
+    flex-direction: row-reverse;
+  }

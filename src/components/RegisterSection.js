@@ -1,87 +1,12 @@
-// import React, { useState } from "react";
-// import "./RegisterSection.css";
-// import { useNavigate } from "react-router-dom";
-
-// const RegisterSection = () => {
-//   const navigate = useNavigate();
-//   const [formData, setFormData] = useState({
-//     name: "",
-//     age: "",
-//     email: "",
-//     parentEmail: "",
-//     password: "",
-//     confirmPassword: "",
-//   });
-
-//   const handleChange = (e) => {
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     if (formData.password !== formData.confirmPassword) {
-//       alert("Passwords do not match");
-//       return;
-//     }
-
-//     try {
-//       const response = await fetch("http://localhost:5000/api/users/register", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(formData),
-//       });
-
-//       const data = await response.json();
-//       if (response.ok) {
-//         alert("Registration successful");
-//       } else {
-//         alert(data.error);
-//       }
-//     } catch (error) {
-//       console.error("Error:", error);
-//     }
-//   };
-
-//   return (
-//     <section className="register-section">
-//       <h2>Join us at the Academy of Mystic Code and Arts</h2>
-//       <div className="Rform-container">
-//         <form onSubmit={handleSubmit}>
-//           <label>Name</label>
-//           <input type="text" name="name" placeholder="Name" onChange={handleChange} required />
-
-//           <label>Age</label>
-//           <input type="number" name="age" placeholder="Age" onChange={handleChange} required />
-
-//           <label>User Email</label>
-//           <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-
-//           <label>Parent Email</label>
-//           <input type="email" name="parentEmail" placeholder="Parent Email" onChange={handleChange} required />
-
-//           <label>Password</label>
-//           <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-
-//           <label>Confirm Password</label>
-//           <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={handleChange} required />
-
-//           <button className="Rbutton" type="submit" onClick={() => navigate("/Login")}>Register</button>
-//         </form>
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default RegisterSection;
-
 import React, { useState } from "react";
 import "./RegisterSection.css";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import apiClient from '../services';
 
 const RegisterSection = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation(); // Add useTranslation hook
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -99,7 +24,7 @@ const RegisterSection = () => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
+      alert(t("passwordMismatch"));
       return;
     }
 
@@ -113,77 +38,77 @@ const RegisterSection = () => {
       const response = await apiClient.post("/api/users/register", registrationData);
       
       if (response.status === 201) {
-        alert("Registration successful");
-        navigate("/Login"); // Move navigation here after successful registration
+        alert(t("registrationSuccess"));
+        navigate("/Login");
       }
     } catch (error) {
-      alert(error.response?.data?.error || "Registration failed");
+      alert(error.response?.data?.error || t("registrationFailed"));
       console.error("Registration Error:", error);
     }
   };
 
   return (
     <section className="register-section">
-      <h2>Join us at the Academy of Mystic Code and Arts</h2>
+      <h2>{t("registerTitle")}</h2>
       <div className="Rform-container">
-        <form onSubmit={handleSubmit}>
-          <label>Name</label>
+        <form onSubmit={handleSubmit} className="Rform">
+          <label>{t("nameLabel")}</label>
           <input
             type="text"
             name="name"
-            placeholder="Name"
+            placeholder={t("nameLabel")}
             onChange={handleChange}
             required
           />
 
-          <label>Age</label>
+          <label>{t("ageLabel")}</label>
           <input
             type="number"
             name="age"
-            placeholder="Age"
+            placeholder={t("ageLabel")}
             min="1"
             onChange={handleChange}
             required
           />
 
-          <label>User Email</label>
+          <label>{t("userEmailLabel")}</label>
           <input
             type="email"
             name="email"
-            placeholder="Email"
+            placeholder={t("userEmailLabel")}
             onChange={handleChange}
             required
           />
 
-          <label>Parent Email</label>
+          <label>{t("parentEmailLabel")}</label>
           <input
             type="email"
             name="parentEmail"
-            placeholder="Parent Email"
+            placeholder={t("parentEmailLabel")}
             onChange={handleChange}
             required
           />
 
-          <label>Password</label>
+          <label>{t("RpasswordLabel")}</label>
           <input
             type="password"
             name="password"
-            placeholder="Password"
+            placeholder={t("RpasswordLabel")}
             onChange={handleChange}
             required
           />
 
-          <label>Confirm Password</label>
+          <label>{t("confirmPasswordLabel")}</label>
           <input
             type="password"
             name="confirmPassword"
-            placeholder="Confirm Password"
+            placeholder={t("confirmPasswordLabel")}
             onChange={handleChange}
             required
           />
 
           <button className="Rbutton" type="submit">
-            Register
+            {t("registerButton")}
           </button>
         </form>
       </div>

@@ -1,5 +1,6 @@
 .page-container {
     display: flex;
+    justify-content: space-between;
 }
 
 .content {
@@ -157,3 +158,8 @@
     font-size: 16px;
     line-height: 1.5;
 }
+
+[dir="rtl"] .content {
+    margin-left: 0%;
+    margin-right: 16%;
+  }

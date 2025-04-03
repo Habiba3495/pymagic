@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./ProfileSection.css";
 import Lsidebar from "./Lsidebar";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next"; // Add useTranslation
 import points from "./images/points.svg"; // Points icon for progress
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
@@ -10,6 +11,7 @@ import { FiLogOut } from 'react-icons/fi'; // Using react-icons for the logout i
 const ProfilePage = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation(); // Add useTranslation hook
   const [userProfile, setUserProfile] = useState({ name: "", points: 0 });
   const [progressData, setProgressData] = useState([]);
   const [achievements, setAchievements] = useState([]);
@@ -43,7 +45,7 @@ const ProfilePage = () => {
         }
       } catch (error) {
         console.error("Error fetching user profile:", error);
-        setUserProfile({ name: "Unknown User", points: 0 });
+        setUserProfile({ name: t("profileUnknownUser"), points: 0 });
       }
     };
 
@@ -77,11 +79,11 @@ const ProfilePage = () => {
         }
       } catch (error) {
         console.error("Error fetching achievements, using dummy data:", error);
-        setAchievements([
-          { id: 1, title: "Spellbook Scholar", image: "./images/spellbook_scholar.svg" },
-          { id: 2, title: "Daily Dedication", image: "./images/daily_dedication.svg" },
-          { id: 3, title: "Treasure Hunter", image: "./images/treasure_hunter.svg" },
-        ]);
+        // setAchievements([
+        //   { id: 1, title: t("achievementSpellbookScholar"), image: "./images/spellbook_scholar.svg" },
+        //   { id: 2, title: t("achievementDailyDedication"), image: "./images/daily_dedication.svg" },
+        //   { id: 3, title: t("achievementTreasureHunter"), image: "./images/treasure_hunter.svg" },
+        // ]);
       }
     };
 
@@ -114,7 +116,7 @@ const ProfilePage = () => {
     fetchProgressData();
     fetchAchievements();
     fetchAvatarPreferences();
-  }, [userId]);
+  }, [userId, t]); // Add t as a dependency to re-fetch if language changes
 
   const handleLogout = async () => {
     try {
@@ -153,10 +155,10 @@ const ProfilePage = () => {
       <div className="sidebar-container">
         <Lsidebar active="Profile" />
       </div>
+      <button className="logout-button" onClick={handleLogout}>
+        <FiLogOut size={24} />
+      </button>
       <div className="profile-content">
-        <button className="logout-button" onClick={handleLogout}>
-          <FiLogOut size={24} />
-        </button>
         <div className="profile-header">
           <div className="profile-avatar-container">
             <div className="profile-avatar" style={{ position: "relative", width: "150px", height: "200px" }}>
@@ -178,17 +180,20 @@ const ProfilePage = () => {
               })}
             </div>
             <button className="edit-button" onClick={() => navigate("/profile/avatar")}>
-              Edit
+              {t("profileEdit")}
             </button>
           </div>
           <div className="profile-name-container">
             <h2 className="profile-name">{userProfile.name}</h2>
-            <p className="profile-points"><img src={points} alt="points icon" className="userpointstow" />  {userProfile.points} points</p>
+            <p className="profile-points">
+              <img src={points} alt="points icon" className="userpointstow" /> 
+              {userProfile.points} {t("profilePoints")}
+            </p>
           </div>
         </div>
 
         <div className="section achievements">
-          <h3 className="section-title">Achievements</h3>
+          <h3 className="section-title">{t("profileAchievements")}</h3>
           <div className="achievements-grid">
             {achievements.map((achievement) => (
               <div key={achievement.id} className="achievement-card">
@@ -198,12 +203,12 @@ const ProfilePage = () => {
             ))}
           </div>
           <button className="view-all-button" onClick={() => navigate("/achievements")}>
-            View All
+            {t("profileViewAll")}
           </button>
         </div>
 
         <div className="section progress-report">
-          <h3 className="section-title">Progress Report</h3>
+          <h3 className="section-title">{t("profileProgressReport")}</h3>
           <div className="progress-grid">
             {progressData.map((quiz) => (
               <div key={quiz.id} className="progress-card">
@@ -211,11 +216,11 @@ const ProfilePage = () => {
                   {quiz.score} / {quiz.total_questions}
                 </div>
                 <p className="lesson-info">
-                  {quiz.unit_id ? `Unit ${quiz.unit_id} completed` : "Unit completed"}
+                  {quiz.unit_id ? t("profileUnitCompleted", { unitId: quiz.unit_id }) : t("profileUnitCompletedGeneric")}
                 </p>
                 <p className="points-earned">
                   <img src={points} alt="points icon" className="points" />{" "}
-                  {quiz.earned_points} points earned
+                  {quiz.earned_points} {t("profilePointsEarned")}
                 </p>
               </div>
             ))}
@@ -224,7 +229,7 @@ const ProfilePage = () => {
             className="view-all-button"
             onClick={() => navigate(`/progress-report/${userId}`)}
           >
-            View All
+            {t("profileViewAll")}
           </button>
         </div>
       </div>
