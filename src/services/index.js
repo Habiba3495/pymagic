@@ -1,13 +1,25 @@
 import axios from "axios";
+import i18next from "./i18n";
 
 const apiClient = axios.create({
-    baseURL: "http://localhost:5000",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
+  baseURL: "http://localhost:5000",
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
 });
+
+// Request interceptor to set Accept-Language dynamically
+apiClient.interceptors.request.use(
+  (config) => {
+    config.headers["Accept-Language"] = i18next.language || "en"; // Default to "en" if undefined
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 apiClient.interceptors.response.use(
   (response) => response,
