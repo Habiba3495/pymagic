@@ -1,6 +1,5 @@
 import axios from "axios";
-import i18next from "./i18n";
-
+import i18next from "../i18n"; // This import is failing
 const apiClient = axios.create({
   baseURL: "http://localhost:5000",
   headers: {
