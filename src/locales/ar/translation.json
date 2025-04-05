@@ -55,6 +55,12 @@
     "profilePoints": "نقطة",
     "profilePointsEarned": "نقاط مكتسبة",
     "profileUnitCompleted": "الوحدة {unitId} خلصت",
-    "profileUnitCompletedGeneric": "الوحدة خلصت"
+    "profileUnitCompletedGeneric": "الوحدة خلصت",
+    "startQuiz": "ابدأ الاختبار",
+    "checkAnswer": "تحقق من الإجابة",
+    "correctAnswer": "الإجابة الصحيحة",
+    "wrongAnswer": "الإجابة غير صحيحة",
+    "next": "التالي"
+
   }
   

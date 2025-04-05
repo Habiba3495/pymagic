@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./AchievementsPage.css";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next"; // Add useTranslation
 import Exit from "./images/Exit iconsvg.svg";
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
@@ -12,6 +13,7 @@ const AchievementsPage = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const userId = user.id;
+  const { t } = useTranslation(); // Add useTranslation hook
 
   useEffect(() => {
     const fetchAchievements = async () => {
@@ -77,7 +79,7 @@ const AchievementsPage = () => {
         <img src={Exit} alt="Back" className="back-icon" />
       </button>
       <div className="achievements-container">
-        <h1 className="achievements-header">Achievements</h1>
+        <h1 className="achievements-header">{t("profileAchievements")}</h1>
         <div className="achievements-grid">
           {achievements.length > 0 ? (
             achievements.map((achievement) => (

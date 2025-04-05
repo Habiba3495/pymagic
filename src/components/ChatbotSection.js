@@ -34,15 +34,15 @@ const ChatbotSection = () => {
     if (input.trim() === "") return;
 
     // Check if the prompt already exists in the messages
-    const isDuplicate = messages.some(
-      (msg) => msg.text === input && msg.sender === "user"
-    );
+    // const isDuplicate = messages.some(
+    //   (msg) => msg.text === input && msg.sender === "user"
+    // );
 
-    if (isDuplicate) {
-      console.log("Duplicate prompt detected, not sending:", input);
-      setInput(""); // Clear the input field
-      return;
-    }
+    // if (isDuplicate) {
+    //   console.log("Duplicate prompt detected, not sending:", input);
+    //   setInput(""); // Clear the input field
+    //   return;
+    // }
 
     const newMessage = { text: input, sender: "user" };
     setMessages((prevMessages) => [...prevMessages, newMessage]);

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import "./Video.css";
 import Exit from "./images/Exit iconsvg.svg";
 import apiClient from '../services';
+import { useTranslation } from "react-i18next"; // Add useTranslation
 
 
 const Video = () => {
@@ -12,6 +13,7 @@ const Video = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [unitColor] = useState("#6B21A8"); // Default purple color
+  const { t } = useTranslation(); // Add useTranslation hook
 
   useEffect(() => {
     const fetchLessonData = async () => {
@@ -89,7 +91,7 @@ const Video = () => {
           className="quiz-button"
           onClick={() => navigate(`/quiz/${unitId}/${lessonId}`)}
         >
-          Start Quiz
+          {t("startQuiz")}
         </button>
       </div>
     </div>

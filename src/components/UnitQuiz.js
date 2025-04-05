@@ -11,6 +11,7 @@ import WrongAnswerIcon from "./images/Wrong icon.svg";
 import HintIcon from "./images/Hint icon.svg";
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
+import { useTranslation } from "react-i18next"; // Add useTranslation
 
 const UnitQuiz = () => {
   const { user } = useAuth();//2
@@ -25,6 +26,8 @@ const UnitQuiz = () => {
   const [motivationMessage, setMotivationMessage] = useState("");
   const [answers, setAnswers] = useState([]);
   const userId = user.id; 
+  const { t } = useTranslation(); // Add useTranslation hook
+
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -179,7 +182,7 @@ const UnitQuiz = () => {
               onClick={checkAnswer}
               disabled={!selectedOption}
             >
-              Check answer
+              {t("checkAnswer")}
             </button>
           </div>
         ) : (
@@ -189,9 +192,9 @@ const UnitQuiz = () => {
                 <img src={WizardIcon} alt="Wizard" className="icon" />
                 <p className="message">{motivationMessage}</p>
                 <img src={CorrectAnswerIcon} alt="Correct" className="icon" />
-                <p className="correct-message">Correct answer</p>
+                <p className="correct-message">{t("correctAnswer")}</p>
                 <button className="next-button" onClick={handleNextQuestion}>
-                  Next
+                  {t("next")}
                 </button>
               </div>
             ) : (
@@ -199,9 +202,9 @@ const UnitQuiz = () => {
                 <img src={WrongIcon} alt="Wrong" className="icon" />
                 <p className="message">{motivationMessage}</p>
                 <img src={WrongAnswerIcon} alt="Wrong" className="icon" />
-                <p className="wrong-message">Wrong answer</p>
+                <p className="wrong-message">{t("wrongAnswer")}</p>
                 <button className="next-button" onClick={handleNextQuestion}>
-                  Next
+                {t("next")}
                 </button>
               </div>
             )}

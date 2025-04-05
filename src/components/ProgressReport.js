@@ -4,6 +4,8 @@ import "./ProgressReport.css";
 import Exit from "./images/Exit iconsvg.svg";
 import points from "./images/points.svg";
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from "react-i18next"; // Add useTranslation
+
 import apiClient from '../services';
 
 const ProgressReport = () => {
@@ -11,6 +13,7 @@ const ProgressReport = () => {
   const [progressData, setProgressData] = useState([]);
   const navigate = useNavigate();
   const userId = user.id;
+  const { t } = useTranslation(); // Add useTranslation hook
 
   useEffect(() => {
     const fetchProgress = async () => {
@@ -92,7 +95,7 @@ const ProgressReport = () => {
         <img src={Exit} alt="Back" className="back-icon" />
       </button>
       <div className="progress-report-container">
-        <div className="progress-report-header">Progress Report</div>
+        <div className="progress-report-header">{t("profileProgressReport")}</div>
         <div className="progress-cards">
           {progressData.map((quiz) => (
             <div

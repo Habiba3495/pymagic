@@ -62,7 +62,7 @@ const App = () => {
             <Route path="/profile/avatar" element={<AvatarCustomization />} />
           </>
         ) : (
-          <Route path="*" element={<Navigate to="/Login" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         )}
       </Routes>
     </Router>

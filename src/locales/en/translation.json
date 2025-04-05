@@ -55,5 +55,11 @@
   "profilePoints": "points",
   "profilePointsEarned": "points earned",
   "profileUnitCompleted": "Unit {unitId} completed",
-  "profileUnitCompletedGeneric": "Unit completed"
+  "profileUnitCompletedGeneric": "Unit completed",
+  "startQuiz": "Start Quiz",
+  "checkAnswer": "Check Answer",
+  "correctAnswer": "Correct Answer",
+  "wrongAnswer": "Wrong Answer",
+  "next": "Next"
+
 }

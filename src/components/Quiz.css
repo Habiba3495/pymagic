@@ -178,3 +178,13 @@
   font-weight: bold;
   margin-left: 70px;
 }
+
+
+[dir="rtl"] .quiz-footer {
+     direction: ltr;
+}
+
+[dir="rtl"] .result-container {
+  direction: ltr;
+  /* text-align: right; */
+}

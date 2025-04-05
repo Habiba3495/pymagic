@@ -121,11 +121,11 @@ const ProfilePage = () => {
   const handleLogout = async () => {
     try {
       logout();
-      navigate('/login');
+      navigate('/HomePage');
     } catch (error) {
       console.error("Error logging out:", error);
       logout();
-      navigate('/login');
+      navigate('/HomePage');
     }
   };
 

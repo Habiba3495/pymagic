@@ -221,3 +221,12 @@
     background-color: #5B287C; /* موف غامق عند اختيار خيار */
     cursor: pointer;
   }
+
+  [dir="rtl"] .unit-quiz-footer {
+    direction: ltr;
+}
+
+[dir="rtl"] .unit-result-container {
+ direction: ltr;
+ /* text-align: right; */
+}
