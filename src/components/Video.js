@@ -60,7 +60,7 @@ const Video = () => {
                   type="video/mp4"
                 />
                 Your browser does not support the video tag.
-              </video>
+              </video>              
             </>
           ) : lessonData?.video_url ? ( // Use video_url from the lesson object
             <video controls>
