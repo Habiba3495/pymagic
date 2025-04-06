@@ -47,7 +47,7 @@ const Video = () => {
 
       <div className="vlesson-content">
         <h1 className="lesson-header" style={{ backgroundColor: unitColor }}>
-          Unit {unitId} - {lessonData?.title || `Lesson ${lessonId}`}
+        {t("unit")} {unitId} - {lessonData?.title || `Lesson ${lessonId}`}
         </h1>
 
         <div className="video-container">

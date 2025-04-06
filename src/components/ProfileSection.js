@@ -216,8 +216,10 @@ const ProfilePage = () => {
                   {quiz.score} / {quiz.total_questions}
                 </div>
                 <p className="lesson-info">
-                  {quiz.unit_id ? t("profileUnitCompleted", { unitId: quiz.unit_id }) : t("profileUnitCompletedGeneric")}
-                </p>
+                {quiz.lesson_id && quiz.lesson_number
+                  ? `${t("unit")} ${quiz.unit_id}, ${t("lesson")} ${quiz.lesson_number}`
+                  : `${t("unit")} ${quiz.unit_id}`}
+              </p>
                 <p className="points-earned">
                   <img src={points} alt="points icon" className="points" />{" "}
                   {quiz.earned_points} {t("profilePointsEarned")}

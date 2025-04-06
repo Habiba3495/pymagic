@@ -4,6 +4,8 @@ import bookIcon from "./images/Score icon.svg";
 import pointsIcon from "./images/points.svg";
 import "./QuizComplete.css";
 import apiClient from '../services';
+import { useTranslation } from "react-i18next"; // Add useTranslation
+
 
 const UnitQuizComplete = () => {
   const { state } = useLocation();
@@ -11,6 +13,7 @@ const UnitQuizComplete = () => {
   const [quizData, setQuizData] = useState(state?.quizData || null);
   const [loading, setLoading] = useState(false);
   const [motivationalMessage, setMotivationalMessage] = useState("Keep going, wizard!");
+  const { t } = useTranslation(); // Add useTranslation hook
 
   useEffect(() => {
     const fetchQuizData = async () => {
@@ -108,7 +111,7 @@ const UnitQuizComplete = () => {
     <div className="quizcomplete">
       <div className="quiz-complete-container">
         <img src={bookIcon} alt="Book Icon" className="book" />
-        <h1 className="title">Unit Quiz Completed!</h1>
+        <h1 className="title">{t("profileUnitCompletedGeneric")}</h1>
         <div className="score-points">
           <div className="score-container">
             <div className="score-circle">
@@ -118,7 +121,7 @@ const UnitQuizComplete = () => {
           </div>
           <div className="points-container">
             <img src={pointsIcon} alt="Points Icon" className="points-icon" />
-            <p className="points-text">{quizData.earned_points} Points Earned</p>
+            <p className="points-text">{quizData.earned_points} {t("profilePointsEarned")}</p>
           </div>
         </div>
         <div class="buttons-container">
@@ -127,13 +130,13 @@ const UnitQuizComplete = () => {
             onClick={handleReview}
             disabled={loading}
           >
-            {loading ? "Loading..." : "Review"}
+            {t("review")}
           </button>
           <button 
             className="continue-btn" 
             onClick={() => navigate("/lessons")}
           >
-            Continue
+            {t("continue")}
           </button>
         </div>
       </div>

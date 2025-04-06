@@ -150,7 +150,7 @@ const UnitQuiz = () => {
       </button>
 
       <div className="quiz-box">
-        <h1 className="quiz-header">Unit {unitId} Quiz</h1>
+        <h1 className="quiz-header"> {t("quiz")} {t("unit")} {unitId} </h1>
         <p className="quiz-question">{currentQuestion.question}</p>
 
         <div className="quiz-options">

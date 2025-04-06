@@ -9,6 +9,8 @@ import botAvatar from "./images/Chatbot.svg";
 import sendIcon from "./images/sendicon.svg";
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
+import { useTranslation } from "react-i18next"; // Add useTranslation
+
 
 const ChatbotSection = () => {
   // Load messages from localStorage on mount or when empty
@@ -17,6 +19,7 @@ const ChatbotSection = () => {
   const [input, setInput] = useState("");
   const chatEndRef = useRef(null);
   const userId = user.id;
+  const { t } = useTranslation(); // Add useTranslation hook
 
   // Fetch initial messages from the backend and avoid duplicates
   useEffect(() => {
@@ -33,16 +36,6 @@ const ChatbotSection = () => {
   const sendMessage = async () => {
     if (input.trim() === "") return;
 
-    // Check if the prompt already exists in the messages
-    // const isDuplicate = messages.some(
-    //   (msg) => msg.text === input && msg.sender === "user"
-    // );
-
-    // if (isDuplicate) {
-    //   console.log("Duplicate prompt detected, not sending:", input);
-    //   setInput(""); // Clear the input field
-    //   return;
-    // }
 
     const newMessage = { text: input, sender: "user" };
     setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -78,7 +71,7 @@ const ChatbotSection = () => {
       <Lsidebar />
 
         <div className="chat-section">
-          <div className="chat-header">Ask Your Magical Python Wizard</div>
+          <div className="chat-header">{t("askPythonWizard")}</div>
 
           <div className="chat-messages">
             {messages.map((msg, index) => (

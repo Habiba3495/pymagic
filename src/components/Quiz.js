@@ -15,6 +15,7 @@ const Quiz = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const { lessonId } = useParams();
+    const {leeonTitle} = useParams();
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedOption, setSelectedOption] = useState(null);
@@ -161,7 +162,8 @@ const Quiz = () => {
             </button>
 
             <div className="quiz-box">
-                <h1 className="quiz-header">Quiz 1: What is programming</h1>
+                {/*  */}
+                <h1 className="quiz-header">{t("quiz")} {t("lesson")} {lessonId}</h1>
                 <p className="quiz-question">{currentQuestion.question}</p>
 
                 <div className="quiz-options">

@@ -4,13 +4,15 @@ import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
 import { useNavigate } from "react-router-dom";
 import points from "./images/points.svg";
+import { useTranslation } from "react-i18next"; // Add useTranslation
 
 const AvatarCustomization = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [assets, setAssets] = useState([]);
   const [ownedAssets, setOwnedAssets] = useState([]);
-  
+  const { t } = useTranslation(); // Add useTranslation hook
+
   // Define default assets as a constant for reuse
   const defaultAssets = {
     face: "/assets/faces/boy_face_1.svg",

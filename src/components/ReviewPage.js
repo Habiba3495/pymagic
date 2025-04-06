@@ -2,11 +2,13 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./ReviewPage.css";
+import { useTranslation } from "react-i18next"; // Add useTranslation
 
 const ReviewPage = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const { quizData } = state || {};
+  const { t } = useTranslation(); // Add useTranslation hook
 
   if (!quizData) {
     return (
@@ -29,7 +31,7 @@ const ReviewPage = () => {
   return (
     <div className="quiz-review-container">
       <div className="quiz-box-review">
-      <h1 className="Reviewheader">Quiz {quizData.answers[0]?.question_id || 1}: {quizData.answers[0]?.question || "Quiz Review"}</h1>
+      <h1 className="Reviewheader"> {t("quizReview")}</h1>
         {quizData.answers.map((answer, index) => (
           <div key={answer.question_id || index} className="question-box">
             <p className="question-text">{index + 1}. {answer.question}</p>
@@ -51,8 +53,8 @@ const ReviewPage = () => {
          
         ))}
         <div className="buttons-container">
-        <button className="pbutton" onClick={() => navigate("/progress-report/1")}>Check Progress Report</button>
-        <button className="lbutton" onClick={() => navigate("/lessons")}>Go to Lessons</button>
+        <button className="pbutton" onClick={() => navigate("/progress-report/1")}>{t("goToPrpgressReport")}</button>
+        <button className="lbutton" onClick={() => navigate("/lessons")}>{t("goToLessons")}</button>
       </div>
       </div>
     </div>

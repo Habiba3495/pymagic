@@ -54,12 +54,23 @@
   "profileEdit": "Edit",
   "profilePoints": "points",
   "profilePointsEarned": "points earned",
-  "profileUnitCompleted": "Unit {unitId} completed",
-  "profileUnitCompletedGeneric": "Unit completed",
+  "unit":"Unit",
+  "lesson":"Lesson",
+  "quiz":"Quiz",
+  "profileUnitCompleted": "Unit Quiz completed",
+  "profileUnitCompletedGeneric": "Unit Quiz completed",
+  "lessonQuizCompleted": "Lesson Quiz completed",
   "startQuiz": "Start Quiz",
   "checkAnswer": "Check Answer",
   "correctAnswer": "Correct Answer",
   "wrongAnswer": "Wrong Answer",
-  "next": "Next"
+  "next": "Next",
+  "continue": "Continue",
+  "review": "Review",
+  "quizReview": "Quiz Review",
+  "goToLessons": "Go to Lessons",
+  "goToPrpgressReport": "Check Progress Report",
+  "askPythonWizard": "Ask Your Magical Python Wizard",
+  "face": "Faces"
 
 }

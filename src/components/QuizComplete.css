@@ -133,7 +133,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column
+    flex-direction: column;
+    width: 230px;
 }
 
 .points-icon {
@@ -164,18 +165,22 @@
     font-weight: bold;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     font-size: 16px;
-    width: 48%;
+    width: 44%;
+    margin: 0px 9px;
 }
 
 /* .quiz-complete-container button:hover {
     transform: scale(1.1);
     box-shadow: 0 4px 10px rgba(255, 215, 0, 0.6);
 } */
-.score-points{
-    display: flex; /* يجعل العناصر بجانب بعض */
-    justify-content: center; /* توسيط العناصر أفقيًا */
-    align-items: center; /* توسيط العناصر عموديًا */
-    gap: 80px;
+.score-points {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 61px;
+    align-content: center;
+    flex-direction: row;
+    padding: 0px 45px;
 }
 .motivation-text{
     font-weight: bold;
