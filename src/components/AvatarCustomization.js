@@ -4,14 +4,14 @@ import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
 import { useNavigate } from "react-router-dom";
 import points from "./images/points.svg";
-import { useTranslation } from "react-i18next"; // Add useTranslation
+import { useTranslation } from "react-i18next";
 
 const AvatarCustomization = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [assets, setAssets] = useState([]);
   const [ownedAssets, setOwnedAssets] = useState([]);
-  const { t } = useTranslation(); // Add useTranslation hook
+  const { t } = useTranslation();
 
   // Define default assets as a constant for reuse
   const defaultAssets = {
@@ -36,13 +36,12 @@ const AvatarCustomization = () => {
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => {
-        setMessage(""); // مسح الرسالة بعد ثانيتين
+        setMessage("");
       }, 1000);
-      return () => clearTimeout(timer); // تنظيف المؤقت عند إلغاء المكون
+      return () => clearTimeout(timer);
     }
   }, [message]);
 
-  
   const handleBuyClick = (asset) => {
     setSelectedAsset(asset);
     setShowConfirmation(true);
@@ -52,7 +51,7 @@ const AvatarCustomization = () => {
     if (selectedAsset) {
       handlePurchase(selectedAsset.id, selectedAsset.price, selectedAsset.image_url, selectedAsset.type);
     }
-    setShowConfirmation(false); // إغلاق النافذة بعد الشراء
+    setShowConfirmation(false);
   };
  
   const cancelPurchase = () => {
@@ -73,7 +72,6 @@ const AvatarCustomization = () => {
         setAssets(assetsRes?.data || []);
         setOwnedAssets(ownedAssetsRes?.data || []);
 
-        // If preferences exist, merge them with defaults to ensure no null values
         if (preferencesRes.data) {
           setEquippedAssets({
             face: preferencesRes.data.face || defaultAssets.face,
@@ -85,7 +83,6 @@ const AvatarCustomization = () => {
             headdress: preferencesRes.data.headdress || defaultAssets.headdress,
           });
         } else {
-          // If no preferences exist (new user), explicitly set the default assets
           setEquippedAssets(defaultAssets);
         }
 
@@ -93,19 +90,18 @@ const AvatarCustomization = () => {
           setUserPoints(userProfileRes.data.user.points || 0);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
-        // In case of an error, ensure defaults are applied
+        console.error(t("fetchError"), error);
         setEquippedAssets(defaultAssets);
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, [userId]);
+  }, [userId, t]);
 
   const handlePurchase = async (assetId, price, imageUrl, type) => {
     if (ownedAssets.some((asset) => asset.id === assetId)) {
-      setMessage("You already own this item!");
+      setMessage(t("alreadyOwned"));
       return;
     }
 
@@ -115,12 +111,12 @@ const AvatarCustomization = () => {
       if (response.data.success) {
         setOwnedAssets((prev) => [...prev, response.data.asset]);
         setUserPoints(response.data.updatedPoints);
-        setMessage("Item purchased successfully!");
+        setMessage(t("purchaseSuccess"));
       } else {
-        setMessage(response.data.message || "Error purchasing item");
+        setMessage(response.data.message || t("purchaseError"));
       }
     } catch (error) {
-      setMessage(error.response?.data?.message || "Error purchasing item");
+      setMessage(error.response?.data?.message || t("purchaseError"));
     }
   };
 
@@ -145,11 +141,11 @@ const AvatarCustomization = () => {
         headdress: equippedAssets.headdress,
       })
       .then((response) => {
-        setMessage("Successfully saved!");
+        setMessage(t("SuccessfullySaved!"));
       })
       .catch((error) => {
-        setMessage("Error saving preferences");
-        console.error("Error saving preferences:", error);
+        setMessage(t("saveError"));
+        console.error(t("saveError"), error);
       });
   };
 
@@ -185,71 +181,71 @@ const AvatarCustomization = () => {
   ];
   
   return (
-    
     <div className="avatar-customization-container">
       <div className="Aheader">
-     
-          <span className="username">{user.name}</span>
-          <img src={points} alt="points icon" className="userpoints" />
-          <span  className="user_points" > {userPoints}  points</span>
-         
-        </div>
-    
+        <span className="username">{user.name}</span>
+        <img src={points} alt={t("pointsIcon")} className="userpoints" />
+        <span className="user_points">{userPoints} {t("points")}</span>
+      </div>
 
-  <div className="main-content">
-
-<div className="asset-section">
-  {/* شريط الاختيار */}
-  <div className="Anavigation-tabs">
-    {assetTypes.map(({ type, icon }) => (
-      <button
-        key={type}
-        onClick={() => setSelectedTab(type)}
-        className={selectedTab === type ? "active" : ""}
-      >
-        <img src={`/icons/${icon}`} alt={type} />
-      </button>
-    ))}
-  </div>
-
-
-  <h2 className="assetoptionname">{selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1)}s</h2>
-  <div className="asset-content">
-
-    <div className="asset-grid">
-      {assets
-        .filter((asset) => asset.type === selectedTab)
-        .map((asset) => (
-          <div key={asset.id} className="asset-card">
-            <img src={asset.image_url} alt={asset.name} />
-            {ownedAssets.some((owned) => asset.price !== 0 && owned.id === asset.id) ? (
-              <span className="owned-label">OWNED</span>
-            ) : asset.price > 0 ? (
-              <div>
-                <p className="pointsname"><img src={points} alt="points icon" className="userpointstow" /> {asset.price} points</p>
-                <button className="buy_button" onClick={() => handleBuyClick(asset)}>
-                 Buy
-                </button>
-
-              </div>
-            ) : null}
-            {(ownedAssets.some((owned) => owned.id === asset.id) || asset.price === 0) && (
-              <button onClick={() => handleEquip(asset.image_url, asset.type)}>Equip</button>
-            )}
-            {equippedAssets[asset.type] === asset.image_url && (
-              <button onClick={() => handleUnequip(asset.type)}>Unequip</button>
-            )}
+      <div className="main-content">
+        <div className="asset-section">
+          <div className="Anavigation-tabs">
+            {assetTypes.map(({ type, icon }) => (
+              <button
+                key={type}
+                onClick={() => setSelectedTab(type)}
+                className={selectedTab === type ? "active" : ""}
+              >
+                <img src={`/icons/${icon}`} alt={t(`${type}Icon`)} />
+              </button>
+            ))}
           </div>
-        ))}
-    </div>
-  </div>
-</div>
-    
-        <div className="avatar-preview">
+
+          <h2 className="assetoptionname">
+          {selectedTab === "headdress" ? t("headdresses") : t(`${selectedTab}s`)}
+
+            </h2>
+          <div className="asset-content">
+            <div className="asset-grid">
+              {assets
+                .filter((asset) => asset.type === selectedTab)
+                .map((asset) => (
+                  <div key={asset.id} className="asset-card">
+                    <img src={asset.image_url} alt={asset.name} />
+                    {ownedAssets.some((owned) => asset.price !== 0 && owned.id === asset.id) ? (
+                      <span className="owned-label">{t("owned")}</span>
+                    ) : asset.price > 0 ? (
+                      <div>
+                        <p className="pointsname">
+                          <img src={points} alt={t("pointsIcon")} className="userpointstow" /> 
+                          {asset.price} {t("points")}
+                        </p>
+                        <button className="buy_button" onClick={() => handleBuyClick(asset)}>
+                          {t("buy")}
+                        </button>
+                      </div>
+                    ) : null}
+                    {(ownedAssets.some((owned) => owned.id === asset.id) || asset.price === 0) && (
+                      <button onClick={() => handleEquip(asset.image_url, asset.type)}>
+                        {t("equip")}
+                      </button>
+                    )}
+                    {equippedAssets[asset.type] === asset.image_url && (
+                      <button onClick={() => handleUnequip(asset.type)}>
+                        {t("unequip")}
+                      </button>
+                    )}
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
         
+        <div className="avatar-preview">
           <div style={{ position: "relative", width: "300px", height: "350px", margin: "0 auto" }}>
             {equippedAssets.face && (
-              <img src={equippedAssets.face} alt="Equipped face" style={getStyleForType("face")} />
+              <img src={equippedAssets.face} alt={t("faceAlt")} style={getStyleForType("face")} />
             )}
             {Object.keys(equippedAssets).map((type, index) => {
               if (type !== "face" && equippedAssets[type]) {
@@ -257,7 +253,7 @@ const AvatarCustomization = () => {
                   <img
                     key={index}
                     src={equippedAssets[type]}
-                    alt={`Equipped ${type}`}
+                    alt={t(`${type}Alt`)}
                     style={getStyleForType(type)}
                   />
                 );
@@ -266,38 +262,33 @@ const AvatarCustomization = () => {
             })}
           </div>
         </div>
-        </div>
-  
+      </div>
+
       <div className="action-buttons">
         <button className="save-button" onClick={handleSave}>
-          Save
+          {t("save")}
         </button>
       </div>
-    
-      {/* {message && <p>{message}</p>} */}
 
       {message && (
-  <div className="message-modal_overlay">
-    <div className="message-modal">
-      <p>{message}</p>
-    </div>
-  </div>
-)}
-
+        <div className="message-modal_overlay">
+          <div className="message-modal">
+            <p>{message}</p>
+          </div>
+        </div>
+      )}
 
       {showConfirmation && (
-         <div className="confirmation-modal-overlay">
-  <div className="confirmation-modal">
-    <p>Are you sure you want to buy this item for {selectedAsset.price} points?</p>
-    <button onClick={confirmPurchase}>Yes</button>
-    <button onClick={cancelPurchase}>No</button>
-  </div>
-  </div>
-)}
-
+        <div className="confirmation-modal-overlay">
+          <div className="confirmation-modal">
+            <p>{t("confirmPurchase", { price: selectedAsset.price })}</p>
+            <button onClick={confirmPurchase}>{t("yes")}</button>
+            <button onClick={cancelPurchase}>{t("no")}</button>
+          </div>
+        </div>
+      )}
     </div>
   );
-
 };
 
 export default AvatarCustomization;
