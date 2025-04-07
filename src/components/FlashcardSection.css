@@ -163,3 +163,19 @@
     margin-left: 0%;
     margin-right: 16%;
   }
+
+
+  .flashcard-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .lesson-number {
+    position: absolute;
+    top: 60px; /* تقدرِ تظبطي الرقم حسب المسافة اللي تريحك */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 30px;
+    font-weight: bold;
+    color: #000; /* غيري اللون حسب التصميم */
+  }

@@ -6,7 +6,8 @@ import { useTranslation } from "react-i18next"; // Add useTranslation
 import points from "./images/points.svg"; // Points icon for progress
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
-import { FiLogOut } from 'react-icons/fi'; // Using react-icons for the logout icon
+import { FiSettings } from 'react-icons/fi';
+
 
 const ProfilePage = () => {
   const { user, logout } = useAuth();
@@ -118,16 +119,16 @@ const ProfilePage = () => {
     fetchAvatarPreferences();
   }, [userId, t]); // Add t as a dependency to re-fetch if language changes
 
-  const handleLogout = async () => {
-    try {
-      logout();
-      navigate('/HomePage');
-    } catch (error) {
-      console.error("Error logging out:", error);
-      logout();
-      navigate('/HomePage');
-    }
-  };
+  // const handleLogout = async () => {
+  //   try {
+  //     logout();
+  //     navigate('/HomePage');
+  //   } catch (error) {
+  //     console.error("Error logging out:", error);
+  //     logout();
+  //     navigate('/HomePage');
+  //   }
+  // };
 
   const getStyleForType = (type) => {
     switch (type) {
@@ -155,9 +156,14 @@ const ProfilePage = () => {
       <div className="sidebar-container">
         <Lsidebar active="Profile" />
       </div>
-      <button className="logout-button" onClick={handleLogout}>
+      {/* <button className="logout-button" onClick={handleLogout}>
         <FiLogOut size={24} />
+      </button> */}
+
+      <button className="settings-button" onClick={() => navigate("/setting")}>
+      <FiSettings size={24} />
       </button>
+
       <div className="profile-content">
         <div className="profile-header">
           <div className="profile-avatar-container">

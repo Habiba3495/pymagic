@@ -1,212 +1,212 @@
 /* General Profile Container */
 .profile-container {
-    background-color: #f3e8ff;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 24px;
-    margin-left: 16.5%; /* Adjusted for sidebar */
-  }
-
-  /* .profile-content{
-    margin-left: 16.5%;
-  } */
-  .profile-name{
-    color: #6b21a8;
-    font-family: Germania One;
-    font-size: 20px;
-    margin-left: 30px;
-  }
-  
-  /* Profile Header */
-  .profile-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 640px;
-    gap: 16px;
-  }
-  
-  /* Avatar Box */
-  .profile-avatar-container {
-    position: relative;
-    background: white;
-    padding: 16px;
-    border-radius: 16px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
-    width: 600px;
-    margin-bottom: 30px;
-    height: 300px;
-  }
-  
-  /* Avatar Styling */
-  .profile-avatar {
-    width: 80px;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-  }
-  
-  /* Edit Button */
-  .edit-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(107, 33, 168, 0.7); /* Transparent purple */
-    color: #facc15; /* Yellow text */
-    padding: 6px 12px;
-    border-radius: 8px;
-    border: 2px solid #facc15; /* Yellow border */
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s, transform 0.2s;
-  }
-  
-  .edit-button:hover {
-    background: rgba(76, 29, 149, 0.9); /* Darker purple */
-    transform: scale(1.1);
-  }
-  
-  /* Name and Points Box */
-  .profile-name-container {
-    background: white;
-    padding: 16px;
-    border-radius: 16px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
-    display: flex;
-    justify-content: space-between; /* Name on right, points on left */
-    align-items: center;
-  }
-  
-  .profile-points {
-    color: #6b7280;
-    margin-right: 30px; /* Push points to the left */
-  }
-  
-  /* Section Styling */
-  .section {
-    background: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 16px;
-    padding: 24px;
-    max-width: 600px;
-    margin-top: 24px;
-  }
-  
-  /* Section Titles with Purple Rectangle */
-  .section-title {
-    background: #6b21a8; /* Purple background */
-    color: white; /* White text */
-    padding: 8px 16px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    width: 560px;
-  }
-  
-  /* Achievements Grid */
-  .achievements-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-top: 16px;
-  }
-  
-  .achievement-card {
-    background: #e9d5ff;
-    padding: 12px;
-    border-radius: 8px;
-    text-align: center;
-  }
-  
-  .achievement-title {
-    font-weight: bold;
-    font-size: 16px;
-  }
-  
-  .achievement-description {
-    font-size: 12px;
-    color: #6b7280;
-  }
-  
-  /* Progress Report Grid */
-  .progress-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-top: 16px;
-  }
-  
-  .progress-card {
-    background: #e9d5ff;
-    padding: 12px;
-    border-radius: 8px;
-    text-align: center;
-  }
-  
-  .progress-score {
-    font-weight: bold;
-    font-size: 16px;
-  }
-  
-  .progress-description {
-    font-size: 12px;
-    color: #6b7280;
-  }
-  
-  /* View All Button */
-  .view-all-button {
-    margin-top: 16px;
-    background: #facc15;
-    padding: 8px;
-    border-radius: 8px;
-    width: 100%;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .view-all-button:hover {
-    background: #eab308;
-  }
-
-
-
-
-  /* Style for the logout button */
-.logout-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #6b21a8;
+  background-color: #f3e8ff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  margin-left: 16.5%; /* Adjusted for sidebar */
 }
 
-.logout-button:hover {
-  color: #822cc9; 
+/* .profile-content{
+  margin-left: 16.5%;
+} */
+.profile-name{
+  color: #6b21a8;
+  font-family: Germania One;
+  font-size: 20px;
+  margin-left: 30px;
+}
+
+/* Profile Header */
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 640px;
+  gap: 16px;
+}
+
+/* Avatar Box */
+.profile-avatar-container {
+  position: relative;
+  background: white;
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  width: 600px;
+  margin-bottom: 30px;
+  height: 300px;
+}
+
+/* Avatar Styling */
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+/* Edit Button */
+.edit-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(107, 33, 168, 0.7); /* Transparent purple */
+  color: #facc15; /* Yellow text */
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 2px solid #facc15; /* Yellow border */
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.edit-button:hover {
+  background: rgba(76, 29, 149, 0.9); /* Darker purple */
+  transform: scale(1.1);
+}
+
+/* Name and Points Box */
+.profile-name-container {
+  background: white;
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-between; /* Name on right, points on left */
+  align-items: center;
+}
+
+.profile-points {
+  color: #6b7280;
+  margin-right: 30px; /* Push points to the left */
+}
+
+/* Section Styling */
+.section {
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 600px;
+  margin-top: 24px;
+}
+
+/* Section Titles with Purple Rectangle */
+.section-title {
+  background: #6b21a8; /* Purple background */
+  color: white; /* White text */
+  padding: 8px 16px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 560px;
+}
+
+/* Achievements Grid */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.achievement-card {
+  background: #e9d5ff;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.achievement-title {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.achievement-description {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Progress Report Grid */
+.progress-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.progress-card {
+  background: #e9d5ff;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.progress-score {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.progress-description {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* View All Button */
+.view-all-button {
+  margin-top: 16px;
+  background: #facc15;
+  padding: 8px;
+  border-radius: 8px;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.view-all-button:hover {
+  background: #eab308;
+}
+
+
+
+
+/* Style for the logout button */
+.settings-button {
+position: absolute;
+top: 20px;
+right: 20px;
+background: none;
+border: none;
+cursor: pointer;
+color: #6b21a8;
+}
+
+.settings-button:hover {
+color: #822cc9; 
 }
 
 [dir="rtl"] .profile-container {
-  margin-right: 16.5%;
-  margin-left: 0;
+margin-right: 16.5%;
+margin-left: 0;
 
 }
 
-[dir="rtl"] .logout-button {
-  left: 20px;
-  right: auto;
+[dir="rtl"] .settings-button {
+left: 20px;
+right: auto;
 
 }

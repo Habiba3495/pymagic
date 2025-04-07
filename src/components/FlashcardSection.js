@@ -3,8 +3,8 @@ import Lsidebar from "./Lsidebar";
 import "./FlashcardSection.css";
 import cardBack from "./images/Flashcard_black.svg";
 import cardFront from "./images/Flashcard_color.svg";
-import apiClient from '../services';
-import { useAuth } from '../context/AuthContext';
+import apiClient from "../services";
+import { useAuth } from "../context/AuthContext";
 
 const FlashCardSection = () => {
   const { user } = useAuth();
@@ -16,7 +16,7 @@ const FlashCardSection = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await apiClient.get('/sections/1/flashcards');
+        const response = await apiClient.get("/sections/1/flashcards");
         const data = response.data;
 
         if (data.units && data.units.length > 0) {
@@ -59,16 +59,40 @@ const FlashCardSection = () => {
             unitId: 1,
             unitName: "Unit 1: default 1",
             flashcards: [
-              { lessonId: 1, lessonName: "Lesson 1", lessonNumber: 1, flashCard: "This is a default flashcard 1.", isPassed: false },
-              { lessonId: 2, lessonName: "Lesson 2", lessonNumber: 2, flashCard: "This is a default flashcard 2.", isPassed: false },
+              {
+                lessonId: 1,
+                lessonName: "Lesson 1",
+                lessonNumber: 1,
+                flashCard: "This is a default flashcard 1.",
+                isPassed: false,
+              },
+              {
+                lessonId: 2,
+                lessonName: "Lesson 2",
+                lessonNumber: 2,
+                flashCard: "This is a default flashcard 2.",
+                isPassed: false,
+              },
             ],
           },
           {
             unitId: 2,
             unitName: "Unit 2: default 2",
             flashcards: [
-              { lessonId: 3, lessonName: "Lesson 3", lessonNumber: 1, flashCard: "This is a default flashcard 3.", isPassed: false },
-              { lessonId: 4, lessonName: "Lesson 4", lessonNumber: 2, flashCard: "This is a default flashcard 4.", isPassed: false },
+              {
+                lessonId: 3,
+                lessonName: "Lesson 3",
+                lessonNumber: 1,
+                flashCard: "This is a default flashcard 3.",
+                isPassed: false,
+              },
+              {
+                lessonId: 4,
+                lessonName: "Lesson 4",
+                lessonNumber: 2,
+                flashCard: "This is a default flashcard 4.",
+                isPassed: false,
+              },
             ],
           },
         ],
@@ -120,7 +144,7 @@ const FlashCardSection = () => {
       <div className="content">
         <div className="fheader"></div>
 
-        {sections.map((section) =>
+        {/*  {sections.map((section) =>
           section.units.map((unit) => (
             <div key={unit.unitId} className="section-container">
               <h2 className="section-title">{unit.unitName}</h2>
@@ -133,7 +157,28 @@ const FlashCardSection = () => {
                       className={`flashcard ${card.isPassed ? "passed" : ""}`}
                       onClick={() => handleCardClick(unit.unitId, index)}
                     />
-                    {/* <span className="lesson-number">{card.lessonNumber}</span> */}
+                     <span className="lesson-number">{card.lessonNumber}</span> 
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        )}*/}
+
+        {sections.map((section) =>
+          section.units.map((unit) => (
+            <div key={unit.unitId} className="section-container">
+              <h2 className="section-title">{unit.unitName}</h2>
+              <div className="cards-container">
+                {unit.flashcards.map((card, index) => (
+                  <div key={index} className="flashcard-wrapper">
+                    <span className="lesson-number">{card.lessonNumber}</span>
+                    <img
+                      src={card.isPassed ? cardFront : cardBack}
+                      alt="Flash Card"
+                      className={`flashcard ${card.isPassed ? "passed" : ""}`}
+                      onClick={() => handleCardClick(unit.unitId, index)}
+                    />
                   </div>
                 ))}
               </div>
@@ -144,7 +189,10 @@ const FlashCardSection = () => {
         {errorMessage && (
           <div className="Emodal-overlay">
             <div className="Emodal-window">
-              <button className="Eclose-button" onClick={() => setErrorMessage(null)}>
+              <button
+                className="Eclose-button"
+                onClick={() => setErrorMessage(null)}
+              >
                 ✖
               </button>
               <h2 className="Emodal-title">Error</h2>
@@ -156,14 +204,23 @@ const FlashCardSection = () => {
         {modalOpen && selectedCard !== null && (
           <div className="modal-overlay">
             <div className="modal-window">
-              <button className="close-button" onClick={() => setModalOpen(false)}>
+              <button
+                className="close-button"
+                onClick={() => setModalOpen(false)}
+              >
                 ✖
               </button>
               <h2 className="modal-title">
-                {findFlashcard(selectedCard.unitId, selectedCard.index)?.lessonName}
+                {
+                  findFlashcard(selectedCard.unitId, selectedCard.index)
+                    ?.lessonName
+                }
               </h2>
               <p className="modal-text">
-                {findFlashcard(selectedCard.unitId, selectedCard.index)?.flashCard}
+                {
+                  findFlashcard(selectedCard.unitId, selectedCard.index)
+                    ?.flashCard
+                }
               </p>
             </div>
           </div>

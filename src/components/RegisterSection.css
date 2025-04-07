@@ -4,10 +4,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90vh; /* يأخذ معظم الشاشة */
+  height: 93vh;
   display: flex;
   flex-direction: column;
-  
 }
 
 .Rform-container {

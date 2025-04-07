@@ -48,7 +48,8 @@
 }
 
 .Anavigation-tabs button {
-  background-color: #e6e6fa; 
+  background-color: #e6e6fa;
+  width: 85px; 
   border: none;
   padding: 10px;
   border-radius: 10px;
@@ -56,7 +57,7 @@
 }
 
 .Anavigation-tabs button.active {
-  background-color: #5B287C;
+  background-color: #FFC145;
 }
 
 .main-content {
@@ -176,7 +177,7 @@
 }
 
 .save-button {
-  background-color: #ffd700;
+  background-color: #FFC145;
   color: #5B287C;
   padding: 10px 20px;
   border: none;
@@ -187,7 +188,7 @@
 }
 
 .buy_button{
-  background-color: #ffd700;
+  background-color: #FFC145;
   color: #5B287C;
   cursor: pointer;
   font-family: Germania One;
@@ -204,7 +205,7 @@ button:hover {
 }
 
 .save-button:hover {
-  background-color: #e6c200; /* Slightly darker yellow for hover */
+  background-color: #FFC145; /* Slightly darker yellow for hover */
 }
 
 .assetoptionname{

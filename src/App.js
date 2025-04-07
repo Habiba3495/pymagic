@@ -19,6 +19,8 @@ import UnitQuizComplete from "./components/UnitQuizComplete";
 import ProgressReport from "./components/ProgressReport";
 import AchievementsPage from "./components/AchievementsPage";
 import AvatarCustomization from "./components/AvatarCustomization";
+import Setting from "./components/setting";
+import EditProfile from "./components/EditProfile";
 import "./i18n"; // Import your i18n configuration
 const App = () => {
   const { user } = useAuth();
@@ -50,6 +52,7 @@ const App = () => {
             <Route path="/Flashcards" element={<Flashcards />} />
             <Route path="/Chatbot" element={<Chatbot />} />
             <Route path="/Profile" element={<Profile />} />
+            <Route path="/EditProfile" element={<EditProfile />} />
             <Route path="/Game" element={<Game />} />
             <Route path="/lesson/:unitId/:lessonId" element={<Video />} />
             <Route path="/quiz/:unitId/:lessonId" element={<Quiz />} />
@@ -60,6 +63,7 @@ const App = () => {
             <Route path="/progress-report/:user_id" element={<ProgressReport />} />
             <Route path="/achievements" element={<AchievementsPage />} />
             <Route path="/profile/avatar" element={<AvatarCustomization />} />
+            <Route path="/setting" element={<Setting />} />
           </>
         ) : (
           <Route path="*" element={<Navigate to="/" replace />} />

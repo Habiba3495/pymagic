@@ -6,6 +6,16 @@ import { useNavigate } from "react-router-dom";
 import points from "./images/points.svg";
 import { useTranslation } from "react-i18next";
 
+
+// Import SVG icons as React components
+import FacesIcon from "./images/faces.svg";
+import HairstylesIcon from "./images/hairstyles.svg";
+import Headdress from "./images/headdress.svg";
+import BrowsIcon from "./images/brows.svg";
+import EyesIcon from "./images/eyes.svg";
+import LipsIcon from "./images/lips.svg";
+import NoseIcon from "./images/nose.svg";
+
 const AvatarCustomization = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -171,13 +181,13 @@ const AvatarCustomization = () => {
   };
 
   const assetTypes = [
-    { type: "face", icon: "person.svg" },
-    { type: "hairstyle", icon: "comb.svg" },
-    { type: "headdress", icon: "hat.svg" },
-    { type: "brow", icon: "brow.svg" },
-    { type: "eye", icon: "eye.svg" },
-    { type: "lip", icon: "lip.svg" },
-    { type: "nose", icon: "nose.svg" },
+    { type: "face", icon: FacesIcon },
+    { type: "hairstyle", icon: HairstylesIcon },
+    { type: "headdress", icon: Headdress },
+    { type: "brow", icon: BrowsIcon },
+    { type: "eye", icon: EyesIcon },
+    { type: "lip", icon: LipsIcon },
+    { type: "nose", icon: NoseIcon }
   ];
   
   return (
@@ -190,17 +200,21 @@ const AvatarCustomization = () => {
 
       <div className="main-content">
         <div className="asset-section">
-          <div className="Anavigation-tabs">
-            {assetTypes.map(({ type, icon }) => (
-              <button
-                key={type}
-                onClick={() => setSelectedTab(type)}
-                className={selectedTab === type ? "active" : ""}
-              >
-                <img src={`/icons/${icon}`} alt={t(`${type}Icon`)} />
-              </button>
-            ))}
-          </div>
+        <div className="Anavigation-tabs">
+        {assetTypes.map(({ type, icon }) => (
+          <button 
+            key={type}
+            onClick={() => setSelectedTab(type)}
+            className={selectedTab === type ? "active" : ""}
+          >
+            <img 
+              src={icon} 
+              alt={t(`${type}Icon`)}
+              className="nav-icon"
+            />
+          </button>
+        ))}
+      </div>
 
           <h2 className="assetoptionname">
           {selectedTab === "headdress" ? t("headdresses") : t(`${selectedTab}s`)}

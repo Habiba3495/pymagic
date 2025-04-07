@@ -99,5 +99,33 @@
   "purchaseSuccess": "تم شراء العنصر بنجاح!",
   "purchaseError": "خطأ في شراء العنصر",
   "SuccessfullySaved!": "تم الحفظ بنجاح!",
-  "saveError": "خطأ في حفظ التفضيلات"
+  "saveError": "خطأ في حفظ التفضيلات",
+  "confirmLogout": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+  "editProfile": {
+    "title": "تعديل الملف الشخصي",
+    "nameLabel": "الاسم الكامل",
+    "emailLabel": "البريد الإلكتروني",
+    "parentEmailLabel": "بريد الوالدين (اختياري)",
+    "passwordSectionTitle": "تغيير كلمة المرور",
+    "passwordInstructions": "اتركه فارغًا إذا كنت لا تريد تغيير كلمة المرور",
+    "currentPasswordLabel": "كلمة المرور الحالية",
+    "newPasswordLabel": "كلمة المرور الجديدة",
+    "confirmPasswordLabel": "تأكيد كلمة المرور الجديدة",
+    "saveButton": "حفظ التغييرات",
+    "cancelButton": "إلغاء",
+    "saving": "جاري الحفظ...",
+    "successMessage": "تم تحديث الملف الشخصي بنجاح!",
+    "errors": {
+      "nameRequired": "الاسم مطلوب",
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "invalidEmail": "الرجاء إدخال بريد إلكتروني صحيح",
+      "invalidParentEmail": "الرجاء إدخال بريد إلكتروني صحيح للوالدين",
+      "currentPasswordRequired": "كلمة المرور الحالية مطلوبة لتغيير كلمة المرور",
+      "passwordTooShort": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+      "passwordsDontMatch": "كلمات المرور غير متطابقة",
+      "incorrectPassword": "كلمة المرور الحالية غير صحيحة",
+      "updateFailed": "فشل تحديث الملف الشخصي. يرجى المحاولة مرة أخرى.",
+      "networkError": "خطأ في الشبكة. يرجى التحقق من اتصالك."
+    }
+  }
 }
