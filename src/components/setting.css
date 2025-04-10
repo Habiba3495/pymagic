@@ -1,11 +1,13 @@
 SettingsPage.css
 
 .settings-container {
-    min-height: 100vh;
-    background: linear-gradient(to bottom right, #1e144f, #3c2373);
-    color: white;
-    padding: 1.5rem;
-  }
+  height: 100vh; /* لتحديد ارتفاع ثابت */
+  width: 100%;   /* لتحديد العرض */
+  background: linear-gradient(to bottom right, #1e144f, #3c2373);
+  color: white;
+  padding: 1.5rem;
+}
+
   
   .settings-title {
     text-align: center;
@@ -33,7 +35,7 @@ SettingsPage.css
   }
   
   .settings-card:hover {
-    box-shadow: 0 0 15px #facc15;
+    box-shadow: 0 0 15px #f2ddff;
   }
   
   .settings-icon {
@@ -146,7 +148,7 @@ SettingsPage.css
     margin-top: 10px;
   }
   
-  .confirmation-popup {
+  /* .confirmation-popup {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -182,5 +184,78 @@ SettingsPage.css
   }
   
   .popup-buttons button:not(.cancel) {
-    background-color: #f44336;
-  }
+    background-color: #5B287C;
+    color: #FFC145;
+  } */
+
+  /* Dark background for the entire screen */
+.confirmation-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);  /* Dark background for the screen */
+  z-index: 999; /* Ensure this overlay is on top of other content */
+}
+
+/* Popup styling */
+.confirmation-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #5B287C;  /* Dark purple background for the message box */
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+  z-index: 1000; /* Make sure popup is on top of the overlay */
+}
+
+/* Title style */
+.popup-title {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+/* Buttons container */
+.popup-buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* Button styling */
+.popup-buttons button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Confirm button style */
+.popup-buttons button:not(.cancel) {
+  background-color: #FFC145; /* Yellow for the confirm button */
+  color: black;
+}
+
+/* Cancel button style */
+.popup-buttons button.cancel {
+  background-color: white; /* White for the cancel button */
+  color: black;
+  border: 1px solid #ccc; /* Optional border for the cancel button */
+}
+ 
+  .language-switcher-box {
+    position: fixed; /* يجعل الصندوق ثابت في الصفحة */
+    top: 50%; /* تحديد المسافة من أعلى الصفحة */
+    left: 50%; /* تحديد المسافة من يسار الصفحة */
+    transform: translate(-50%, -50%); /* يتم نقل الصندوق لتوسيطه تمامًا في الصفحة */
+    padding: 20px; /* إضافة مساحة حول المحتوى */
+    border-radius: 8px; /* لتنعيم الحواف */
+    z-index: 1000; /* التأكد من أن الصندوق يظهر فوق باقي العناصر */
+  } 
+  
+    

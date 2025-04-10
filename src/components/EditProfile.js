@@ -116,7 +116,7 @@ const EditProfile = () => {
       });
       
       setSuccessMessage(t('editProfile.successMessage'));
-      setTimeout(() => setSuccessMessage(''), 5000);
+      setTimeout(() => setSuccessMessage(''), 1000);
       
       // Clear password fields if update was successful
       setFormData(prev => ({
@@ -144,11 +144,12 @@ const EditProfile = () => {
   };
 
   return (
+    <div className='background_edit-profile-container'>
     <div className="edit-profile-container">
       <h2>{t('editProfile.title')}</h2>
       
       {errors.form && <div className="error-message">{errors.form}</div>}
-      {successMessage && <div className="success-message">{successMessage}</div>}
+      {successMessage && <div className='success-messag-overlay'><div className="success-message">{successMessage}</div></div>}
       
       <form onSubmit={handleSubmit} className="edit-profile-form">
         <div className="form-group">
@@ -242,13 +243,14 @@ const EditProfile = () => {
           </button>
           <button 
             type="submit" 
-            className="save-button"
+            className="save-buttonn"
             disabled={isLoading}
           >
             {isLoading ? t('editProfile.saving') : t('editProfile.saveButton')}
           </button>
         </div>
       </form>
+    </div>
     </div>
   );
 };
