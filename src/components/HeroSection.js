@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const HeroSection = () => {
-  const { t } = useTranslation(); // Hook to access translations
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (

@@ -3,23 +3,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
 
 .footer {
-  background-color: #ffcc00; /* لون الخلفية */
-  color: #4b0082; /* لون النص */
+  background-color: #ffcc00;
+  color: #5B287C;
   padding: 20px 40px;
   text-align: left;
   font-size: 14px;
 }
 
-/* تقسيم الفوتر إلى جزأين */
 .footer-container {
   display: flex;
-  flex-direction: row; /* Change to row for better layout control */
+  flex-direction: row;
   justify-content: space-between;
   max-width: 1000px;
   margin: auto;
 }
 
-/* القسم الأيسر */
 .footer-left {
   max-width: 500px;
 }
@@ -36,9 +34,8 @@
   font-family: 'Fredoka', sans-serif;
 }
 
-/* القسم الأيمن */
 .footer-right {
-  margin-top: 0; /* Remove negative margin */
+  margin-top: 0;
   font-family: 'Germania One', cursive;
 }
 
@@ -49,7 +46,7 @@
 }
 
 .social-links a {
-  color: #4b0082;
+  color: #5B287C;
   text-decoration: none;
   font-weight: bold;
 }
@@ -58,7 +55,6 @@
   text-decoration: underline;
 }
 
-/* قائمة الروابط */
 .footer-right ul {
   list-style: none;
   padding: 0;
@@ -69,7 +65,7 @@
 }
 
 .footer-right ul li a {
-  color: #4b0082;
+  color: #5B287C;
   text-decoration: none;
 }
 
@@ -77,44 +73,40 @@
   text-decoration: underline;
 }
 
-/* قسم حقوق النشر */
 .footer-bottom {
   margin-top: 20px;
   text-align: center;
   font-size: 12px;
 }
 
-/* RTL Adjustments */
 [dir="rtl"] .footer {
   text-align: right;
 }
 
 [dir="rtl"] .footer-container {
-  flex-direction: row-reverse; /* Reverse the layout for RTL */
+  flex-direction: row-reverse;
 }
 
-[dir="rtl"] .footer-left {
-  text-align: right;
-}
-
-[dir="rtl"] .footer-right {
+[dir="rtl"] .footer-left, [dir="rtl"] .footer-right {
   text-align: right;
 }
 
 [dir="rtl"] .social-links {
-  flex-direction: row-reverse; /* Reverse the order of social links */
+  flex-direction: row-reverse;
 }
 
-[dir="rtl"] .footer-right ul {
-  text-align: right;
+[dir="rtl"] .social-links a {
+  margin-left: 10px;
 }
 
-/* Ensure Arabic text uses an appropriate font */
+[dir="rtl"] .social-links span {
+  margin-left: 10px;
+}
+
 [dir="rtl"] .footer * {
   font-family: 'Noto Sans Arabic', sans-serif;
 }
 
-/* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
   .footer-container {
     flex-direction: column;
@@ -127,4 +119,8 @@
   [dir="rtl"] .footer-container {
     flex-direction: column;
   }
+}
+
+.social-links a:hover {
+  opacity: 0.5;
 }

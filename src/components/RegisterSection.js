@@ -1,3 +1,246 @@
+// // import React, { useState } from "react";
+// // import "./RegisterSection.css";
+// // import { useNavigate } from "react-router-dom";
+// // import { useTranslation } from "react-i18next";
+// // import apiClient from '../services';
+
+// // const RegisterSection = () => {
+// //   const navigate = useNavigate();
+// //   const { t } = useTranslation();
+// //   const [formData, setFormData] = useState({
+// //     name: "",
+// //     age: "",
+// //     email: "",
+// //     parentEmail: "",
+// //     password: "",
+// //     confirmPassword: "",
+// //   });
+
+// //   const handleChange = (e) => {
+// //     setFormData({ ...formData, [e.target.name]: e.target.value });
+// //   };
+
+// //   const handleSubmit = async (e) => {
+// //     e.preventDefault();
+
+// //     if (formData.password !== formData.confirmPassword) {
+// //       alert(t("passwordMismatch"));  //////////
+// //       return;
+// //     }
+
+// //     try {
+// //       const { confirmPassword, ...registrationData } = {
+// //         ...formData,
+// //         age: parseInt(formData.age),
+// //       };
+
+// //       const response = await apiClient.post("/api/users/register", registrationData);
+      
+// //       if (response.status === 201) {
+// //         alert(t("registrationSuccess")); /////////////
+// //         navigate("/Login");
+// //       }
+// //     } catch (error) {
+// //       alert(error.response?.data?.error || t("registrationFailed")); ////////////
+// //       console.error("Registration Error:", error); 
+// //     }
+// //   };
+
+// //   return (
+// //     <section className="register-section">
+// //       <h2>{t("registerTitle")}</h2>
+// //       <div className="Rform-container">
+// //         <form onSubmit={handleSubmit} className="Rform">
+// //           <label>{t("nameLabel")}</label>
+// //           <input
+// //             type="text"
+// //             name="name"
+// //             placeholder={t("nameLabel")}
+// //             onChange={handleChange}
+// //             required
+// //           />
+
+// //           <label>{t("ageLabel")}</label>
+// //           <input
+// //             type="number"
+// //             name="age"
+// //             placeholder={t("ageLabel")}
+// //             min="1"
+// //             onChange={handleChange}
+// //             required
+// //           />
+
+// //           <label>{t("userEmailLabel")}</label>
+// //           <input
+// //             type="email"
+// //             name="email"
+// //             placeholder={t("userEmailLabel")}
+// //             onChange={handleChange}
+// //             required
+// //           />
+
+// //           <label>{t("parentEmailLabel")}</label>
+// //           <input
+// //             type="email"
+// //             name="parentEmail"
+// //             placeholder={t("parentEmailLabel")}
+// //             onChange={handleChange}
+// //             required
+// //           />
+
+// //           <label>{t("RpasswordLabel")}</label>
+// //           <input
+// //             type="password"
+// //             name="password"
+// //             placeholder={t("RpasswordLabel")}
+// //             onChange={handleChange}
+// //             required
+// //           />
+
+// //           <label>{t("confirmPasswordLabel")}</label>
+// //           <input
+// //             type="password"
+// //             name="confirmPassword"
+// //             placeholder={t("confirmPasswordLabel")}
+// //             onChange={handleChange}
+// //             required
+// //           />
+
+// //           <button className="Rbutton" type="submit">
+// //             {t("registerButton")}
+// //           </button>
+// //         </form>
+// //       </div>
+// //     </section>
+// //   );
+// // };
+
+// // export default RegisterSection;
+
+// import React, { useState } from "react";
+// import "./RegisterSection.css";
+// import { useNavigate } from "react-router-dom";
+// import { useTranslation } from "react-i18next";
+// import apiClient from '../services';
+
+// const RegisterSection = () => {
+//   const navigate = useNavigate();
+//   const { t } = useTranslation();
+//   const [error, setError] = useState(null); // State to store error message
+//   const [formData, setFormData] = useState({
+//     name: "",
+//     age: "",
+//     email: "",
+//     parentEmail: "",
+//     password: "",
+//     confirmPassword: "",
+//   });
+
+//   const handleChange = (e) => {
+//     setFormData({ ...formData, [e.target.name]: e.target.value });
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setError(null); // Clear previous errors
+
+//     // Validate password match
+//     if (formData.password !== formData.confirmPassword) {
+//       setError(t("passwordMismatch"));
+//       return;
+//     }
+
+//     try {
+//       const { confirmPassword, ...registrationData } = {
+//         ...formData,
+//         age: parseInt(formData.age),
+//       };
+
+//       const response = await apiClient.post("/api/users/register", registrationData);
+      
+//       if (response.status === 201) {
+//         alert(t("registrationSuccess"));
+//         navigate("/Login");
+//       }
+//     } catch (error) {
+//       console.error("Registration Error:", error);
+//       setError(error.response?.data?.error || t("registrationFailed")); // Display error in UI
+//     }
+//   };
+
+//   return (
+//     <section className="register-section">
+//       <h2>{t("registerTitle")}</h2>
+//       <div className="Rform-container">
+//         <form onSubmit={handleSubmit} className="Rform">
+//           <label>{t("nameLabel")}</label>
+//           <input
+//             type="text"
+//             name="name"
+//             placeholder={t("nameLabel")}
+//             onChange={handleChange}
+//             required
+//           />
+
+//           <label>{t("ageLabel")}</label>
+//           <input
+//             type="number"
+//             name="age"
+//             placeholder={t("ageLabel")}
+//             min="1"
+//             onChange={handleChange}
+//             required
+//           />
+
+//           <label>{t("userEmailLabel")}</label>
+//           <input
+//             type="email"
+//             name="email"
+//             placeholder={t("userEmailLabel")}
+//             onChange={handleChange}
+//             required
+//           />
+
+//           <label>{t("parentEmailLabel")}</label>
+//           <input
+//             type="email"
+//             name="parentEmail"
+//             placeholder={t("parentEmailLabel")}
+//             onChange={handleChange}
+//             required
+//           />
+
+//           <label>{t("RpasswordLabel")}</label>
+//           <input
+//             type="password"
+//             name="password"
+//             placeholder={t("RpasswordLabel")}
+//             onChange={handleChange}
+//             required
+//           />
+
+//           <label>{t("confirmPasswordLabel")}</label>
+//           <input
+//             type="password"
+//             name="confirmPassword"
+//             placeholder={t("confirmPasswordLabel")}
+//             onChange={handleChange}
+//             required
+//           />
+
+//           {error && <div className="error-message">{error}</div>} {/* Display error if exists */}
+
+//           <button className="Rbutton" type="submit">
+//             {t("registerButton")}
+//           </button>
+//         </form>
+//       </div>
+//     </section>
+//   );
+// };
+
+// export default RegisterSection;
+
 import React, { useState } from "react";
 import "./RegisterSection.css";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +249,7 @@ import apiClient from '../services';
 
 const RegisterSection = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation(); // Add useTranslation hook
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -15,6 +258,7 @@ const RegisterSection = () => {
     password: "",
     confirmPassword: "",
   });
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,14 +266,14 @@ const RegisterSection = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null); // Clear previous errors
 
     if (formData.password !== formData.confirmPassword) {
-      alert(t("passwordMismatch"));
+      setError(t("passwordMismatch"));
       return;
     }
 
     try {
-      // Convert age to number and remove confirmPassword before sending
       const { confirmPassword, ...registrationData } = {
         ...formData,
         age: parseInt(formData.age),
@@ -42,7 +286,7 @@ const RegisterSection = () => {
         navigate("/Login");
       }
     } catch (error) {
-      alert(error.response?.data?.error || t("registrationFailed"));
+      setError(error.response?.data?.error || t("registrationFailed"));
       console.error("Registration Error:", error);
     }
   };
@@ -57,6 +301,7 @@ const RegisterSection = () => {
             type="text"
             name="name"
             placeholder={t("nameLabel")}
+            value={formData.name}
             onChange={handleChange}
             required
           />
@@ -66,7 +311,7 @@ const RegisterSection = () => {
             type="number"
             name="age"
             placeholder={t("ageLabel")}
-            min="1"
+            value={formData.age}
             onChange={handleChange}
             required
           />
@@ -76,6 +321,7 @@ const RegisterSection = () => {
             type="email"
             name="email"
             placeholder={t("userEmailLabel")}
+            value={formData.email}
             onChange={handleChange}
             required
           />
@@ -85,6 +331,7 @@ const RegisterSection = () => {
             type="email"
             name="parentEmail"
             placeholder={t("parentEmailLabel")}
+            value={formData.parentEmail}
             onChange={handleChange}
             required
           />
@@ -94,6 +341,7 @@ const RegisterSection = () => {
             type="password"
             name="password"
             placeholder={t("RpasswordLabel")}
+            value={formData.password}
             onChange={handleChange}
             required
           />
@@ -103,9 +351,12 @@ const RegisterSection = () => {
             type="password"
             name="confirmPassword"
             placeholder={t("confirmPasswordLabel")}
+            value={formData.confirmPassword}
             onChange={handleChange}
             required
           />
+
+          {error && <div className="error-message">{error}</div>}
 
           <button className="Rbutton" type="submit">
             {t("registerButton")}

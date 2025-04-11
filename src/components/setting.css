@@ -212,6 +212,7 @@ SettingsPage.css
   text-align: center;
   width: 300px;
   z-index: 1000; /* Make sure popup is on top of the overlay */
+  border:2px solid #FFC145;
 }
 
 /* Title style */

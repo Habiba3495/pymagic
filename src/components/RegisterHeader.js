@@ -1,6 +1,6 @@
 import React from "react";
 import "./RegisterHeader.css";
-import logo from "../components/images/logo.svg" // تأكد من وضع اللوجو الصحيح
+import logo from "../components/images/logo.svg"
 
 const RegisterHeader = () => {
   return (

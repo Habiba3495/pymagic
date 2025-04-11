@@ -1,30 +1,34 @@
-@import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
 
 .register-section {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 93vh;
+  height: 90.5vh;
   display: flex;
   flex-direction: column;
 }
 
+h2 {
+  color: #4e2678e1;
+  font-family: 'Germania One', cursive;
+  font-size: 30px;
+} 
 .Rform-container {
   background-color: #4e2678e1;
-  padding: 30px;
+  padding: 10px;
   border-radius: 10px;
   color: #ffb400;
   width: 350px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  margin-top: 100px;
+  margin-top: 7px;
  
-
 }
 
 .Rform {
   display: flex;
   flex-direction: column;
-  margin-right: 25px;
+  margin-right: 45px;
   margin-left: 30px;
   font-family: 'Germania One', cursive;
 }
@@ -35,10 +39,10 @@ input {
   margin: 5px 0 15px;
   border: none;
   border-radius: 5px;
-  font-family: 'Fredoka', sans-serif;
+
 }
 input::placeholder {
-  color: #ffcc66; 
+  color: #B8B8D1 !important; 
   opacity: 0.8;
 }
 .Rbutton {
@@ -58,13 +62,103 @@ input::placeholder {
   font-family: 'Germania One', cursive;
 }
 
+
+[dir="rtl"] .register-section {
+  text-align: right;
+}
+
+[dir="rtl"] .Rh2 {
+  text-align: center; 
+}
+
+[dir="rtl"] .Rform label {
+  text-align: right;
+}
+
+
+[dir="rtl"] .Rform-container * {
+  font-family: 'Germania One', cursive;
+} */
+
+@import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
+
+.register-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90.5vh;
+  flex-direction: column;
+}
+
+h2 {
+  color: #4e2678e1;
+  font-family: 'Germania One', cursive;
+  font-size: 30px;
+  margin-bottom: 20px;
+} 
+
+.Rform-container {
+  background-color: #4e2678e1;
+  padding: 10px;
+  border-radius: 10px;
+  color: #ffb400;
+  width: 350px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-top: 7px;
+}
+
+.Rform {
+  display: flex;
+  flex-direction: column;
+  margin-right: 45px;
+  margin-left: 30px;
+  font-family: 'Germania One', cursive;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 15px;
+  border: none;
+  border-radius: 5px;
+}
+
+input::placeholder {
+  color: #B8B8D1 !important;
+  opacity: 0.8;
+}
+
+.Rbutton {
+  background-color: #ffb400;
+  color: #6B21A8;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  font-family: 'Germania One', cursive;
+  margin-top: 15px;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.Rh2 {
+  color: #4e2678;
+  margin-top: 150px;
+  font-family: 'Germania One', cursive;
+}
+
 /* RTL Adjustments */
 [dir="rtl"] .register-section {
   text-align: right;
 }
 
 [dir="rtl"] .Rh2 {
-  text-align: center; /* Keep centered for consistency */
+  text-align: center;
 }
 
 [dir="rtl"] .Rform label {

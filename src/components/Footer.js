@@ -15,10 +15,18 @@ const Footer = () => {
         <div className="footer-right">
           <div className="social-links">
             <span>{t("followUs")}</span>
-            <a href="#">{t("facebook")}</a>
-            <a href="#">{t("twitter")}</a>
-            <a href="#">{t("instagram")}</a>
-            <a href="#">{t("linkedin")}</a>
+            <a href="#">
+              <i className="bi bi-facebook" style={{ fontSize: '20px', margin: '10px' }}></i>
+            </a>
+            <a href="#">
+              <i className="bi bi-twitter" style={{ fontSize: '20px', margin: '10px' }}></i>
+            </a>
+            <a href="#">
+              <i className="bi bi-instagram" style={{ fontSize: '20px', margin: '10px' }}></i>
+            </a>
+            <a href="#">
+              <i className="bi bi-linkedin" style={{ fontSize: '20px', margin: '10px' }}></i>
+            </a>
           </div>
           <ul>
             <li><a href="#">{t("helpCenter")}</a></li>
