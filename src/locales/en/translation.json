@@ -101,6 +101,10 @@
   "SuccessfullySaved!": "Successfully saved!",
   "saveError": "Error saving preferences",
   "confirmLogout": "Are you sure you want to log out?",
+  "feedbackTitle":"How was your experience?",
+  "feedbackCommentPlaceholder":"Add your comment here...",
+  "skip":"Skip",
+  "submit":"Submit",
   "editProfile": {
     "title": "Edit Profile",
     "nameLabel": "Full Name",

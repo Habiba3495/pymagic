@@ -101,6 +101,10 @@
   "SuccessfullySaved!": "تم الحفظ بنجاح!",
   "saveError": "خطأ في حفظ التفضيلات",
   "confirmLogout": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+    "feedbackTitle": "كيف كانت تجربتك؟",
+    "feedbackCommentPlaceholder": "أضف تعليقك هنا...",
+    "skip": "تخطي",
+    "submit": "إرسال",
   "editProfile": {
     "title": "تعديل الملف الشخصي",
     "nameLabel": "الاسم الكامل",

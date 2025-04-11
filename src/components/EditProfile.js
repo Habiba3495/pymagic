@@ -82,6 +82,67 @@ const EditProfile = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (!validateForm()) return;
+    
+  //   setIsLoading(true);
+  //   setSuccessMessage('');
+    
+  //   try {
+  //     const payload = {
+  //       name: formData.name,
+  //       email: formData.email,
+  //       parentEmail: formData.parentEmail,
+        
+  //     };
+      
+  //     const response = await apiClient.put('/api/users/Editprofile', payload);
+
+
+  //     // Only include password fields if they're being changed
+  //     if (formData.currentPassword) {
+  //       payload.currentPassword = formData.currentPassword;
+  //       payload.newPassword = formData.newPassword;
+  //     }
+      
+      
+  //     // Update auth context with new user data
+  //     updateUser({
+  //       ...user,
+  //       name: formData.name,
+  //       email: formData.email,
+  //       parent_email: formData.parentEmail
+  //     });
+      
+  //     setSuccessMessage(t('editProfile.successMessage'));
+  //     setTimeout(() => setSuccessMessage(''), 1000);
+      
+  //     // Clear password fields if update was successful
+  //     setFormData(prev => ({
+  //       ...prev,
+  //       currentPassword: '',
+  //       newPassword: '',
+  //       confirmPassword: ''
+  //     }));
+  //   } catch (error) {
+  //     console.error('Update failed:', error);
+  //     if (error.response) {
+  //       if (error.response.status === 401) {
+  //         setErrors({ currentPassword: t('editProfile.errors.incorrectPassword') });
+  //       } else if (error.response.data?.error) {
+  //         setErrors({ form: error.response.data.error });
+  //       } else {
+  //         setErrors({ form: t('editProfile.errors.updateFailed') });
+  //       }
+  //     } else {
+  //       setErrors({ form: t('editProfile.errors.networkError') });
+  //     }
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -94,18 +155,15 @@ const EditProfile = () => {
         name: formData.name,
         email: formData.email,
         parentEmail: formData.parentEmail,
-        
       };
       
-      const response = await apiClient.put('/api/users/Editprofile', payload);
-
-
       // Only include password fields if they're being changed
       if (formData.currentPassword) {
         payload.currentPassword = formData.currentPassword;
         payload.newPassword = formData.newPassword;
       }
       
+      const response = await apiClient.put('/api/users/Editprofile', payload);
       
       // Update auth context with new user data
       updateUser({
@@ -126,9 +184,14 @@ const EditProfile = () => {
         confirmPassword: ''
       }));
     } catch (error) {
-      console.error('Update failed:', error);
+      // Only log unexpected errors
+      if (!error.response || error.response.status !== 401) {
+        console.error('Update failed:', error);
+      }
+      
       if (error.response) {
         if (error.response.status === 401) {
+          // Expected case: incorrect current password
           setErrors({ currentPassword: t('editProfile.errors.incorrectPassword') });
         } else if (error.response.data?.error) {
           setErrors({ form: error.response.data.error });
