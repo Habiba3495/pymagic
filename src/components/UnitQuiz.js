@@ -113,12 +113,12 @@ const UnitQuiz = () => {
         });
   
         const data = response.data;
-        console.log("Unit quiz submission response:", data);
-  
+        console.log("UnitQuiz response data:", data); // Debug server response
         if (data.success) {
           navigate("/unit-quiz-complete", {
             state: {
               quizData: data,
+              studentQuizId: data.student_quiz_id, // Adjust based on actual field
               total_user_points: data.total_user_points,
               achievements: data.achievements || [],
             },

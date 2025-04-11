@@ -56,6 +56,10 @@
     height: 150px;
 } */
 
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
+
 .quizcomplete {
     background: url("../components/images/Score\ bg.svg") no-repeat center center fixed;
     font-family: 'Poppins', sans-serif;
@@ -184,4 +188,61 @@
 }
 .motivation-text{
     font-weight: bold;
+}
+
+.feedback-modal-overlay{
+    background: #2b1a47;
+    border-radius: 15px;
+    width: 470px;
+    /* height: 300px; */
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.feedback-modal h3 {
+    font-family: 'Germania One', cursive;
+
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+
+
+span.emoji {
+    font-size: 3rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+span .emoji:hover {
+    transform: scale(1.2);
+}
+
+div .feedback-modal {
+    background: #2b1a47;
+    border-radius: 15px;
+    padding: 30px;
+    width: 525px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.feedback-comment {
+    width: 100%;
+    max-width: 466px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #2b1a47;
+    border-radius: 5px;
+    resize: vertical;
+    font-size: 14px;
+    background-color: #faebd7e0;
+}
+
+div .emoji-container {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 20px;
 }
