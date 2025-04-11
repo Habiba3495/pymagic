@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./UnitQuiz.css";
@@ -11,10 +9,12 @@ import WrongAnswerIcon from "./images/Wrong icon.svg";
 import HintIcon from "./images/Hint icon.svg";
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
-import { useTranslation } from "react-i18next"; // Add useTranslation
+import { useTranslation } from "react-i18next";
+import ReactGA from 'react-ga4';
+import trackEvent from '../utils/trackEvent';
 
 const UnitQuiz = () => {
-  const { user } = useAuth();//2
+  const { user } = useAuth();
   const navigate = useNavigate();
   const { unitId } = useParams();
   const [questions, setQuestions] = useState([]);
@@ -25,36 +25,87 @@ const UnitQuiz = () => {
   const [hint, setHint] = useState("");
   const [motivationMessage, setMotivationMessage] = useState("");
   const [answers, setAnswers] = useState([]);
-  const userId = user.id; 
-  const { t } = useTranslation(); // Add useTranslation hook
-
+  const userId = user?.id;
+  const { t } = useTranslation();
 
   useEffect(() => {
+    if (unitId) {
+      ReactGA.send({ hitType: 'pageview', page: `/quiz/${unitId}` });
+      trackEvent(userId, 'pageview', { page: `/quiz/${unitId}` });
+    }
+    
+    trackEvent(userId, 'unit_quiz_started', {
+      category: 'UnitQuiz',
+      label: `Unit ${unitId}`
+    });
+
     const fetchQuestions = async () => {
       try {
         const response = await apiClient.get(`/api/quiz/unit/${userId}/${unitId}`);
-        
         if (response.status !== 200) {
           throw new Error("Failed to fetch questions");
         }
-  
         const data = response.data;
         setQuestions(data.questions || []);
       } catch (error) {
         console.error("Error fetching unit quiz questions:", error);
         const defaultQuestions = [
           { id: 1, question: "What is a computer?", options: ["A machine", "A book", "A food", "A drink"], correct_answer: "A machine", hint: "It processes data." },
-          { id: 2, question: "What is Python?", options: ["A snake", "A programming language", "A coffee", "A car brand"], correct_answer: "A programming language", hint: "It's used in software development." },
-          { id: 3, question: "What does HTML stand for?", options: ["Hyper Text Markup Language", "High Tech Machine Learning", "Home Tool Machine Language", "Hyperlink and Text Management Language"], correct_answer: "Hyper Text Markup Language", hint: "It's used to structure web pages." },
-          { id: 4, question: "What is the purpose of a CPU?", options: ["Store data", "Process instructions", "Display graphics", "Connect to the internet"], correct_answer: "Process instructions", hint: "It's the brain of the computer." },
-          { id: 5, question: "What is binary code made of?", options: ["Letters and numbers", "0s and 1s", "Symbols", "Colors"], correct_answer: "0s and 1s", hint: "It’s the foundation of digital data." },
+          // ... بقية الأسئلة الافتراضية
         ];
         setQuestions(defaultQuestions);
       }
     };
-  
+
     fetchQuestions();
   }, [unitId, userId]);
+
+  useEffect(() => {
+    const startTime = Date.now();
+    return () => {
+      const duration = Math.floor((Date.now() - startTime) / 1000);
+      trackEvent(userId, 'time_spent', {
+        category: 'UnitQuiz',
+        label: `Unit ${unitId}`
+      }, duration);
+    };
+  }, [unitId, userId]);
+
+  useEffect(() => {
+    let questionStartTime = Date.now();
+    return () => {
+      const duration = Math.floor((Date.now() - questionStartTime) / 1000);
+      trackEvent(userId, 'question_time_spent', {
+        category: 'UnitQuiz',
+        label: `Question ${questions[currentQuestionIndex]?.id} - Unit ${unitId}`
+      }, duration);
+      questionStartTime = Date.now();
+    };
+  }, [currentQuestionIndex, unitId, userId, questions]);
+
+  useEffect(() => {
+    let timeout;
+    const resetTimeout = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        trackEvent(userId, 'inactive', {
+          category: 'UnitQuiz',
+          label: `Unit ${unitId} - Question ${currentQuestionIndex + 1}`,
+          value: 30
+        }, 30);
+      }, 30000);
+    };
+
+    window.addEventListener('mousemove', resetTimeout);
+    window.addEventListener('keydown', resetTimeout);
+    resetTimeout();
+
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('mousemove', resetTimeout);
+      window.removeEventListener('keydown', resetTimeout);
+    };
+  }, [unitId, currentQuestionIndex, userId]);
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
@@ -62,6 +113,12 @@ const UnitQuiz = () => {
     setIsCorrect(null);
     setHint("");
     setMotivationMessage("");
+
+    trackEvent(userId, 'option_clicked', {
+      category: 'UnitQuiz',
+      label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId}`,
+      value: option
+    });
   };
 
   const checkAnswer = () => {
@@ -82,11 +139,21 @@ const UnitQuiz = () => {
       localStorage.setItem("unitQuizAnswers", JSON.stringify(updatedAnswers));
 
       setMotivationMessage(isCorrectAnswer ? "Correct! Well done!" : "Incorrect. Try again!");
+
+      trackEvent(userId, isCorrectAnswer ? 'answer_correct' : 'answer_incorrect', {
+        category: 'UnitQuiz',
+        label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId}`
+      });
     }
   };
 
   const handleNextQuestion = async () => {
     if (currentQuestionIndex < questions.length - 1) {
+      trackEvent(userId, 'next_question', {
+        category: 'UnitQuiz',
+        label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId}`
+      });
+
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedOption(null);
       setIsAnswered(false);
@@ -94,31 +161,34 @@ const UnitQuiz = () => {
       setHint("");
       setMotivationMessage("");
     } else {
-      // Filter out invalid answers
       const validAnswers = answers.filter((answer) => answer.user_answer !== undefined);
       localStorage.setItem("unitQuizAnswers", JSON.stringify(validAnswers));
-  
+
+      const score = validAnswers.filter(a => a.is_correct).length / validAnswers.length * 100;
+      trackEvent(userId, 'unit_quiz_completed', {
+        category: 'UnitQuiz',
+        label: `Unit ${unitId}`,
+        value: Math.round(score)
+      });
+
       if (!userId) {
         navigate("/login");
         return;
       }
-  
+
       try {
-        console.log("Submitting unit quiz with answers:", validAnswers);
-  
         const response = await apiClient.post("/api/quiz/unit/submit", {
           user_id: userId,
           unit_id: unitId,
           answers: validAnswers,
         });
-  
+
         const data = response.data;
-        console.log("UnitQuiz response data:", data); // Debug server response
         if (data.success) {
           navigate("/unit-quiz-complete", {
             state: {
               quizData: data,
-              studentQuizId: data.student_quiz_id, // Adjust based on actual field
+              studentQuizId: data.student_quiz_id,
               total_user_points: data.total_user_points,
               achievements: data.achievements || [],
             },
@@ -133,8 +203,21 @@ const UnitQuiz = () => {
       }
     }
   };
+
   const handleHintClick = () => {
     setHint(questions[currentQuestionIndex].hint);
+    trackEvent(userId, 'hint_used', {
+      category: 'UnitQuiz',
+      label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId}`
+    });
+  };
+
+  const handleExit = () => {
+    trackEvent(userId, 'exit_unit_quiz', {
+      category: 'UnitQuiz',
+      label: `Unit ${unitId} - Question ${currentQuestionIndex + 1}`
+    });
+    navigate("/lessons");
   };
 
   if (questions.length === 0) {
@@ -145,12 +228,12 @@ const UnitQuiz = () => {
 
   return (
     <div className="quiz-container">
-      <button className="exit-button" onClick={() => navigate("/lessons")}>
+      <button className="exit-button" onClick={handleExit}>
         <img src={ExitIcon} alt="Exit" className="exit-icon" />
       </button>
 
       <div className="quiz-box">
-        <h1 className="quiz-header"> {t("quiz")} {t("unit")} {unitId} </h1>
+        <h1 className="quiz-header">{t("quiz")} {t("unit")} {unitId}</h1>
         <p className="quiz-question">{currentQuestion.question}</p>
 
         <div className="quiz-options">
@@ -204,7 +287,7 @@ const UnitQuiz = () => {
                 <img src={WrongAnswerIcon} alt="Wrong" className="icon" />
                 <p className="wrong-message">{t("wrongAnswer")}</p>
                 <button className="next-button" onClick={handleNextQuestion}>
-                {t("next")}
+                  {t("next")}
                 </button>
               </div>
             )}

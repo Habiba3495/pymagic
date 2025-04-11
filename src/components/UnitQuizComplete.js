@@ -5,7 +5,8 @@ import pointsIcon from "./images/points.svg";
 import "./QuizComplete.css";
 import apiClient from '../services';
 import { useTranslation } from "react-i18next";
-import { useAuth } from '../context/AuthContext'; // Add this import
+import { useAuth } from '../context/AuthContext';
+import trackEvent from '../utils/trackEvent';
 
 const UnitQuizComplete = () => {
   const { state } = useLocation();
@@ -15,11 +16,19 @@ const UnitQuizComplete = () => {
   const [motivationalMessage, setMotivationalMessage] = useState("Keep going, wizard!");
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [feedbackScore, setFeedbackScore] = useState(null);
-  const [feedbackComment, setFeedbackComment] = useState(""); // New state for comment
+  const [feedbackComment, setFeedbackComment] = useState("");
+  const [nextAction, setNextAction] = useState(null); // 'review' or 'continue'
   const { t } = useTranslation();
-  const { user } = useAuth(); // Get authenticated user
+  const { user } = useAuth();
 
   useEffect(() => {
+    if (user?.id) {
+      trackEvent(user.id, 'pageview', { 
+        page: '/quiz-complete',
+        category: 'Navigation'
+      });
+    }
+
     console.log("UnitQuizComplete state:", state);
     const fetchQuizData = async () => {
       if (!quizData) {
@@ -35,14 +44,34 @@ const UnitQuizComplete = () => {
           };
           setQuizData(newQuizData);
           await fetchMotivationalMessage(score, answers.length);
+          
+          if (user?.id) {
+            trackEvent(user.id, 'quiz_completed', {
+              category: 'Quiz',
+              label: 'Local Storage Quiz',
+              value: score,
+              total_questions: answers.length,
+              is_passed: newQuizData.is_passed
+            });
+          }
         }
       } else {
         await fetchMotivationalMessage(quizData.score, quizData.total_questions || quizData.answers.length);
+        
+        if (user?.id) {
+          trackEvent(user.id, 'quiz_completed', {
+            category: 'Quiz',
+            label: 'Unit Quiz',
+            value: quizData.score,
+            total_questions: quizData.total_questions || quizData.answers.length,
+            is_passed: quizData.is_passed
+          });
+        }
       }
     };
 
     fetchQuizData();
-  }, [quizData, state]);
+  }, [quizData, state, user]);
 
   const fetchMotivationalMessage = async (score, total) => {
     try {
@@ -61,13 +90,46 @@ const UnitQuizComplete = () => {
     }
   };
 
-  const handleReview = async () => {
+  const handleReviewClick = () => {
+    setNextAction('review');
+    setShowFeedbackModal(true);
+    
+    if (user?.id) {
+      trackEvent(user.id, 'quiz_review_initiated', {
+        category: 'Quiz',
+        label: 'Review Button Clicked'
+      });
+    }
+  };
+
+  const handleContinueClick = () => {
+    setNextAction('continue');
+    setShowFeedbackModal(true);
+    
+    if (user?.id) {
+      trackEvent(user.id, 'quiz_continue_clicked', {
+        category: 'Navigation',
+        label: 'Continue Button Clicked'
+      });
+    }
+  };
+
+  const proceedAfterFeedback = () => {
+    if (nextAction === 'review') {
+      performReview();
+    } else {
+      navigate("/lessons");
+    }
+  };
+
+  const performReview = async () => {
     setLoading(true);
     try {
       const studentQuizId = state?.studentQuizId;
       if (!studentQuizId) {
         throw new Error("Student Quiz ID is missing for review");
       }
+      
       const response = await apiClient.get(`/api/quiz/review/${studentQuizId}`);
       if (response.status !== 200) {
         throw new Error("Failed to fetch review data");
@@ -75,12 +137,26 @@ const UnitQuizComplete = () => {
 
       const data = response.data;
       if (data.success) {
+        if (user?.id) {
+          trackEvent(user.id, 'quiz_review_accessed', {
+            category: 'Quiz',
+            label: 'Review Data Loaded',
+            question_count: data.reviewData?.answers?.length || 0
+          });
+        }
         navigate("/quiz-review", { state: { quizData: data.reviewData } });
       } else {
         navigate("/quiz-review", { state: { quizData: createFallbackReviewData(quizData) } });
       }
     } catch (error) {
       console.error("Error fetching review data:", error);
+      if (user?.id) {
+        trackEvent(user.id, 'quiz_review_error', {
+          category: 'Error',
+          label: 'Review Data Error',
+          error: error.message
+        });
+      }
       navigate("/quiz-review", { state: { quizData: createFallbackReviewData(quizData) } });
     } finally {
       setLoading(false);
@@ -102,10 +178,6 @@ const UnitQuizComplete = () => {
     })),
   });
 
-  const handleContinue = () => {
-    setShowFeedbackModal(true);
-  };
-
   const submitFeedback = async () => {
     if (!feedbackScore) {
       alert("Please select a feedback score!");
@@ -115,16 +187,12 @@ const UnitQuizComplete = () => {
     const studentQuizId = state?.studentQuizId;
     if (!studentQuizId) {
       alert("Student Quiz ID is missing. Please try again.");
-      console.error("Student Quiz ID is undefined.", {
-        stateStudentQuizId: state?.studentQuizId,
-        quizData: quizData,
-        fullState: state,
-      });
+      console.error("Student Quiz ID is undefined.");
       navigate("/lessons");
       return;
     }
 
-    const userId = user?.id; // Use authenticated user ID
+    const userId = user?.id;
     if (!userId) {
       console.error("User is not authenticated");
       navigate("/login");
@@ -132,33 +200,50 @@ const UnitQuizComplete = () => {
     }
 
     try {
+      trackEvent(userId, 'quiz_feedback_submitted', {
+        category: 'Feedback',
+        label: 'Quiz Feedback Submitted',
+        value: feedbackScore,
+        comment_length: feedbackComment.length,
+        next_action: nextAction // Track whether this was before review or continue
+      });
+
       const response = await apiClient.post('/api/feedback/submit', {
         user_id: userId,
         student_quiz_id: studentQuizId,
         feedback_score: feedbackScore,
-        comment: feedbackComment || '', // Include comment in payload
+        comment: feedbackComment || '',
       });
 
       if (response.data.success) {
         setShowFeedbackModal(false);
-        navigate("/lessons");
+        proceedAfterFeedback();
       } else {
         console.error("Failed to submit feedback:", response.data.message);
-        navigate("/lessons");
+        proceedAfterFeedback();
       }
     } catch (error) {
-if (error.response) {
-        console.error("Error submitting feedback:", error.response.data); // Log server response
-      } else {
-        console.error("Error submitting feedback:", error.message);
+      if (user?.id) {
+        trackEvent(user.id, 'quiz_feedback_error', {
+          category: 'Error',
+          label: 'Feedback Submission Error',
+          error: error.response?.data?.message || error.message
+        });
       }
-       navigate("/lessons");
+      proceedAfterFeedback();
     }
   };
 
   const skipFeedback = () => {
+    if (user?.id) {
+      trackEvent(user.id, 'quiz_feedback_skipped', {
+        category: 'Feedback',
+        label: 'Feedback Skipped',
+        next_action: nextAction
+      });
+    }
     setShowFeedbackModal(false);
-    navigate("/lessons");
+    proceedAfterFeedback();
   };
 
   if (!quizData) return <div>Loading...</div>;
@@ -183,14 +268,14 @@ if (error.response) {
         <div className="buttons-container">
           <button 
             className="review-btn" 
-            onClick={handleReview}
+            onClick={handleReviewClick}
             disabled={loading}
           >
             {t("review")}
           </button>
           <button 
             className="continue-btn" 
-            onClick={handleContinue}
+            onClick={handleContinueClick}
           >
             {t("continue")}
           </button>
@@ -206,7 +291,16 @@ if (error.response) {
                 <span
                   key={score}
                   className={`emoji ${feedbackScore === score ? 'selected' : ''}`}
-                  onClick={() => setFeedbackScore(score)}
+                  onClick={() => {
+                    setFeedbackScore(score);
+                    if (user?.id) {
+                      trackEvent(user.id, 'quiz_feedback_score_selected', {
+                        category: 'Feedback',
+                        label: 'Feedback Score Selected',
+                        value: score
+                      });
+                    }
+                  }}
                 >
                   {score === 1 && "😢"}
                   {score === 2 && "🙁"}

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./AchievementsPage.css";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next"; // Add useTranslation
+import { useTranslation } from "react-i18next";
 import Exit from "./images/Exit iconsvg.svg";
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
+import trackEvent from '../utils/trackEvent';
 
 const AchievementsPage = () => {
   const { user } = useAuth();
@@ -12,17 +13,22 @@ const AchievementsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const userId = user.id;
-  const { t } = useTranslation(); // Add useTranslation hook
+  const { t } = useTranslation();
 
   useEffect(() => {
+    // Track page view
+    if (user?.id) {
+      trackEvent(user.id, 'pageview', { 
+        page: '/achievements',
+        category: 'Navigation'
+      });
+    }
+
     const fetchAchievements = async () => {
       setLoading(true);
       setError(null);
       try {
-        console.log("Fetching achievements for userId:", userId);  
-
-        const response = await apiClient.get(`/api/achievements/${userId}`);  
+        const response = await apiClient.get(`/api/achievements/${user.id}`);  
         if (response.status !== 200) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -30,14 +36,27 @@ const AchievementsPage = () => {
         const data = response.data;
   
         if (data.success) {
-          setAchievements(data.achievements || []); // Ensure achievements is an array
+          setAchievements(data.achievements || []);
+          // Track successful achievements load
+          trackEvent(user.id, 'achievements_loaded', {
+            category: 'Achievements',
+            label: 'Achievements Data Loaded',
+            count: data.achievements?.length || 0
+          });
         } else {
           throw new Error(data.message || "Failed to load achievements");
         }
       } catch (error) {
         console.error("Error fetching achievements:", error);
-        setError(error.message);  
-        setAchievements([
+        setError(error.message);
+        //Track error and fallback to dummy data
+        // trackEvent(user.id, 'achievements_error', {
+        //   category: 'Error',
+        //   label: 'Achievements Data Error',
+        //   error: error.message
+        // });
+
+        const dummyAchievements = [
           {
             id: 1,
             title: "Spellbook Scholar",
@@ -56,26 +75,59 @@ const AchievementsPage = () => {
             description: "Unlocked at 100 points",
             image: `${apiClient.defaults.baseURL}/images/treasure_hunter.svg`,
           },
-        ]);
+        ];
+        setAchievements(dummyAchievements);
+        // Track dummy data usage
+    
       } finally {
         setLoading(false);
       }
     };
   
     fetchAchievements();
-  }, [userId]);
+  }, [user]);
+
+  const handleBackClick = () => {
+    // Track back button click
+    trackEvent(user.id, 'back_button_clicked', {
+      category: 'Navigation',
+      label: 'Back to Profile'
+    });
+    navigate("/profile");
+  };
+
+  const handleAchievementClick = (achievement) => {
+    // Track achievement click
+    trackEvent(user.id, 'achievement_clicked', {
+      category: 'Achievements',
+      label: 'Achievement Viewed',
+      achievement_id: achievement.id,
+      achievement_title: achievement.title
+    });
+  };
 
   if (loading) {
-    return <div className="loading">Loading achievements...</div>;
+    return (
+      <div className="achievements-bg">
+        <div className="loading-indicator">Loading achievements...</div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="error">Error: {error}</div>;
+    return (
+      <div className="achievements-bg">
+        <div className="error-message">
+          Error loading achievements: {error}
+          <button onClick={() => window.location.reload()}>Try Again</button>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="achievements-bg">
-      <button className="back-button" onClick={() => navigate("/profile")}>
+      <button className="back-button" onClick={handleBackClick}>
         <img src={Exit} alt="Back" className="back-icon" />
       </button>
       <div className="achievements-container">
@@ -83,31 +135,57 @@ const AchievementsPage = () => {
         <div className="achievements-grid">
           {achievements.length > 0 ? (
             achievements.map((achievement) => (
-              <div key={achievement.id} className="achievement-card">
+              <div 
+                key={achievement.id} 
+                className="achievement-card"
+                onClick={() => handleAchievementClick(achievement)}
+              >
                 {achievement.image && (
                   <img
                     src={achievement.image.startsWith("http") ? achievement.image : `${apiClient.defaults.baseURL}${achievement.image}`}
                     alt={achievement.title}
                     className="achievement-image"
                     onError={(e) => {
-                      console.error("Image failed to load:", {
-                        src: e.target.src,
-                        status: e.target.status || "Unknown",
-                        error: e
-                      });
-                      e.target.src = "https://via.placeholder.com/50"; // Fallback placeholder
+                      console.error("Image failed to load:", e.target.src);
+                      e.target.src = "https://via.placeholder.com/50";
                       e.target.alt = `${achievement.title} (Image not found)`;
+                      // Track image load error
+                      // trackEvent(user.id, 'image_load_error', {
+                      //   category: 'Error',
+                      //   label: 'Achievement Image Error',
+                      //   achievement_id: achievement.id,
+                      //   image_url: e.target.src
+                      // });
                     }}
-                    onLoad={(e) => console.log("Image loaded successfully:", e.target.src)} // Debug successful loads
-                    loading="lazy" // Lazy load images for performance
-                    crossOrigin="anonymous" // Ensure CORS for images
+                    onLoad={() => {
+                      // Track successful image load
+                      // trackEvent(user.id, 'image_loaded', {
+                      //   category: 'Achievements',
+                      //   label: 'Achievement Image Loaded',
+                      //   achievement_id: achievement.id
+                      // });
+                    }}
+                    loading="lazy"
+                    crossOrigin="anonymous"
                   />
                 )}
-                <p className="achievement-title">{achievement.title}</p>
+                <div className="achievement-details">
+                  <p className="achievement-title">{achievement.title}</p>
+                  {achievement.description && (
+                    <p className="achievement-description">{achievement.description}</p>
+                  )}
+                </div>
               </div>
             ))
           ) : (
-            <p className="no-achievements">No achievements yet. Earn points to unlock rewards!</p>
+            <div className="no-achievements">
+              <p>{t("noAchievementsYet")}</p>
+              {/* Track empty achievements view */}
+              {user?.id && trackEvent(user.id, 'empty_achievements_viewed', {
+                category: 'Achievements',
+                label: 'No Achievements Yet'
+              })}
+            </div>
           )}
         </div>
       </div>

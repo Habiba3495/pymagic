@@ -2,22 +2,20 @@ import React, { useEffect, useState } from "react";
 import "./ProfileSection.css";
 import Lsidebar from "./Lsidebar";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next"; // Add useTranslation
-import points from "./images/points.svg"; // Points icon for progress
+import { useTranslation } from "react-i18next";
+import points from "./images/points.svg";
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
 import { FiSettings } from 'react-icons/fi';
-
+import trackEvent from '../utils/trackEvent';
 
 const ProfilePage = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const { t } = useTranslation(); // Add useTranslation hook
+  const { t } = useTranslation();
   const [userProfile, setUserProfile] = useState({ name: "", points: 0 });
   const [progressData, setProgressData] = useState([]);
   const [achievements, setAchievements] = useState([]);
-
-  // Define default assets as a constant for reuse
   const defaultAssets = {
     face: "/assets/faces/boy_face_1.svg",
     brow: "/assets/brows/brows_1.svg",
@@ -27,11 +25,19 @@ const ProfilePage = () => {
     nose: "/assets/nose/nose_1.svg",
     headdress: null,
   };
-
   const [equippedAssets, setEquippedAssets] = useState(defaultAssets);
   const userId = user.id;
 
   useEffect(() => {
+    // Track page view
+    trackEvent(userId, 'pageview', { page: `/profile/${userId}` });
+    
+    // Track profile loaded event
+    trackEvent(userId, 'profile_loaded', {
+      category: 'Profile',
+      label: `User ${userId}`
+    });
+
     const fetchUserProfile = async () => {
       try {
         const response = await apiClient.get(`/api/users/profile/${userId}`);
@@ -61,11 +67,6 @@ const ProfilePage = () => {
         }
       } catch (error) {
         console.error("Error fetching progress data, using dummy data:", error);
-        // setProgressData([
-        //   { id: 1, score: 1, total_questions: 10, unit_id: "1", earned_points: 7 },
-        //   { id: 2, score: 1, total_questions: 10, unit_id: "1", earned_points: 5 },
-        //   { id: 3, score: 2, total_questions: 10, unit_id: "1", earned_points: 20 },
-        // ]);
       }
     };
 
@@ -80,11 +81,6 @@ const ProfilePage = () => {
         }
       } catch (error) {
         console.error("Error fetching achievements, using dummy data:", error);
-        // setAchievements([
-        //   { id: 1, title: t("achievementSpellbookScholar"), image: "./images/spellbook_scholar.svg" },
-        //   { id: 2, title: t("achievementDailyDedication"), image: "./images/daily_dedication.svg" },
-        //   { id: 3, title: t("achievementTreasureHunter"), image: "./images/treasure_hunter.svg" },
-        // ]);
       }
     };
 
@@ -92,7 +88,6 @@ const ProfilePage = () => {
       try {
         const response = await apiClient.get(`/user-preferences/${userId}`);
         if (response.data) {
-          // Merge backend response with defaults to avoid null values
           setEquippedAssets({
             face: response.data.face || defaultAssets.face,
             brow: response.data.brow || defaultAssets.brow,
@@ -103,12 +98,10 @@ const ProfilePage = () => {
             headdress: response.data.headdress || defaultAssets.headdress,
           });
         } else {
-          // If no preferences exist (new user), explicitly set the default assets
           setEquippedAssets(defaultAssets);
         }
       } catch (error) {
         console.error("Error fetching avatar preferences:", error);
-        // In case of an error, fall back to default assets
         setEquippedAssets(defaultAssets);
       }
     };
@@ -117,18 +110,42 @@ const ProfilePage = () => {
     fetchProgressData();
     fetchAchievements();
     fetchAvatarPreferences();
-  }, [userId, t]); // Add t as a dependency to re-fetch if language changes
+  }, [userId, t]);
 
-  // const handleLogout = async () => {
-  //   try {
-  //     logout();
-  //     navigate('/HomePage');
-  //   } catch (error) {
-  //     console.error("Error logging out:", error);
-  //     logout();
-  //     navigate('/HomePage');
-  //   }
-  // };
+  useEffect(() => {
+    const startTime = Date.now();
+    return () => {
+      const duration = Math.floor((Date.now() - startTime) / 1000);
+      trackEvent(userId, 'time_spent', {
+        category: 'Profile',
+        label: `User ${userId}`
+      }, duration);
+    };
+  }, [userId]);
+
+  useEffect(() => {
+    let timeout;
+    const resetTimeout = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        trackEvent(userId, 'inactive', {
+          category: 'Profile',
+          label: `User ${userId}`,
+          value: 30
+        }, 30);
+      }, 30000);
+    };
+
+    window.addEventListener('mousemove', resetTimeout);
+    window.addEventListener('keydown', resetTimeout);
+    resetTimeout();
+
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('mousemove', resetTimeout);
+      window.removeEventListener('keydown', resetTimeout);
+    };
+  }, [userId]);
 
   const getStyleForType = (type) => {
     switch (type) {
@@ -156,12 +173,18 @@ const ProfilePage = () => {
       <div className="sidebar-container">
         <Lsidebar active="Profile" />
       </div>
-      {/* <button className="logout-button" onClick={handleLogout}>
-        <FiLogOut size={24} />
-      </button> */}
 
-      <button className="settings-button" onClick={() => navigate("/setting")}>
-      <FiSettings size={24} />
+      <button
+        className="settings-button"
+        onClick={() => {
+          trackEvent(userId, 'settings_clicked', {
+            category: 'Profile',
+            label: `User ${userId}`
+          });
+          navigate("/setting");
+        }}
+      >
+        <FiSettings size={24} />
       </button>
 
       <div className="profile-content">
@@ -185,14 +208,23 @@ const ProfilePage = () => {
                 return null;
               })}
             </div>
-            <button className="edit-button" onClick={() => navigate("/profile/avatar")}>
+            <button
+              className="edit-button"
+              onClick={() => {
+                trackEvent(userId, 'edit_avatar_clicked', {
+                  category: 'Profile',
+                  label: `User ${userId}`
+                });
+                navigate("/profile/avatar");
+              }}
+            >
               {t("profileEdit")}
             </button>
           </div>
           <div className="profile-name-container">
             <h2 className="profile-name">{userProfile.name}</h2>
             <p className="profile-points">
-              <img src={points} alt="points icon" className="userpointstow" /> 
+              <img src={points} alt="points icon" className="userpointstow" />
               {userProfile.points} {t("profilePoints")}
             </p>
           </div>
@@ -208,7 +240,16 @@ const ProfilePage = () => {
               </div>
             ))}
           </div>
-          <button className="view-all-button" onClick={() => navigate("/achievements")}>
+          <button
+            className="view-all-button"
+            onClick={() => {
+              trackEvent(userId, 'view_all_achievements_clicked', {
+                category: 'Profile',
+                label: `User ${userId}`
+              });
+              navigate("/achievements");
+            }}
+          >
             {t("profileViewAll")}
           </button>
         </div>
@@ -222,12 +263,12 @@ const ProfilePage = () => {
                   {quiz.score} / {quiz.total_questions}
                 </div>
                 <p className="lesson-info">
-                {quiz.lesson_id && quiz.lesson_number
-                  ? `${t("unit")} ${quiz.unit_id}, ${t("lesson")} ${quiz.lesson_number}`
-                  : `${t("unit")} ${quiz.unit_id}`}
-              </p>
+                  {quiz.lesson_id && quiz.lesson_number
+                    ? `${t("unit")} ${quiz.unit_id}, ${t("lesson")} ${quiz.lesson_number}`
+                    : `${t("unit")} ${quiz.unit_id}`}
+                </p>
                 <p className="points-earned">
-                  <img src={points} alt="points icon" className="points" />{" "}
+                  <img src={points} alt="points icon" className="points" />
                   {quiz.earned_points} {t("profilePointsEarned")}
                 </p>
               </div>
@@ -235,7 +276,13 @@ const ProfilePage = () => {
           </div>
           <button
             className="view-all-button"
-            onClick={() => navigate(`/progress-report/${userId}`)}
+            onClick={() => {
+              trackEvent(userId, 'view_all_progress_clicked', {
+                category: 'Profile',
+                label: `User ${userId}`
+              });
+              navigate(`/progress-report/${userId}`);
+            }}
           >
             {t("profileViewAll")}
           </button>
