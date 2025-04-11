@@ -5,7 +5,7 @@ import apiClient from '../services';
 import { useNavigate } from "react-router-dom";
 import points from "./images/points.svg";
 import { useTranslation } from "react-i18next";
-
+import trackEvent from '../utils/trackEvent';
 
 // Import SVG icons as React components
 import FacesIcon from "./images/faces.svg";
@@ -22,8 +22,6 @@ const AvatarCustomization = () => {
   const [assets, setAssets] = useState([]);
   const [ownedAssets, setOwnedAssets] = useState([]);
   const { t } = useTranslation();
-
-  // Define default assets as a constant for reuse
   const defaultAssets = {
     face: "/assets/faces/boy_face_1.svg",
     brow: "/assets/brows/brows_1.svg",
@@ -33,7 +31,6 @@ const AvatarCustomization = () => {
     nose: "/assets/nose/nose_1.svg",
     headdress: null,
   };
-
   const [equippedAssets, setEquippedAssets] = useState(defaultAssets);
   const [userPoints, setUserPoints] = useState(0);
   const [message, setMessage] = useState("");
@@ -52,24 +49,16 @@ const AvatarCustomization = () => {
     }
   }, [message]);
 
-  const handleBuyClick = (asset) => {
-    setSelectedAsset(asset);
-    setShowConfirmation(true);
-  };
- 
-  const confirmPurchase = () => {
-    if (selectedAsset) {
-      handlePurchase(selectedAsset.id, selectedAsset.price, selectedAsset.image_url, selectedAsset.type);
-    }
-    setShowConfirmation(false);
-  };
- 
-  const cancelPurchase = () => {
-    setShowConfirmation(false);
-    setSelectedAsset(null);
-  };
-  
   useEffect(() => {
+    // Track page view
+    trackEvent(userId, 'pageview', { page: `/profile/avatar/${userId}` });
+    
+    // Track customization loaded event
+    trackEvent(userId, 'customization_loaded', {
+      category: 'AvatarCustomization',
+      label: `User ${userId}`
+    });
+
     const fetchData = async () => {
       try {
         const [assetsRes, ownedAssetsRes, preferencesRes, userProfileRes] = await Promise.all([
@@ -109,6 +98,68 @@ const AvatarCustomization = () => {
     fetchData();
   }, [userId, t]);
 
+  useEffect(() => {
+    const startTime = Date.now();
+    return () => {
+      const duration = Math.floor((Date.now() - startTime) / 1000);
+      trackEvent(userId, 'time_spent', {
+        category: 'AvatarCustomization',
+        label: `User ${userId}`
+      }, duration);
+    };
+  }, [userId]);
+
+  useEffect(() => {
+    let timeout;
+    const resetTimeout = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        trackEvent(userId, 'inactive', {
+          category: 'AvatarCustomization',
+          label: `User ${userId}`,
+          value: 30
+        }, 30);
+      }, 30000);
+    };
+
+    window.addEventListener('mousemove', resetTimeout);
+    window.addEventListener('keydown', resetTimeout);
+    resetTimeout();
+
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('mousemove', resetTimeout);
+      window.removeEventListener('keydown', resetTimeout);
+    };
+  }, [userId]);
+
+  const handleBuyClick = (asset) => {
+    setSelectedAsset(asset);
+    setShowConfirmation(true);
+    trackEvent(userId, 'buy_clicked', {
+      category: 'AvatarCustomization',
+      label: `${asset.type} - ${asset.id} - User ${userId}`,
+      value: asset.price
+    });
+  };
+
+  const confirmPurchase = () => {
+    if (selectedAsset) {
+      handlePurchase(selectedAsset.id, selectedAsset.price, selectedAsset.image_url, selectedAsset.type);
+      trackEvent(userId, 'purchase_confirmed', {
+        category: 'AvatarCustomization',
+        label: `${selectedAsset.type} - ${selectedAsset.id} - User ${userId}`,
+        value: selectedAsset.price
+      });
+    }
+    setShowConfirmation(false);
+  };
+
+  const cancelPurchase = () => {
+    setShowConfirmation(false);
+    setSelectedAsset(null);
+  };
+
   const handlePurchase = async (assetId, price, imageUrl, type) => {
     if (ownedAssets.some((asset) => asset.id === assetId)) {
       setMessage(t("alreadyOwned"));
@@ -132,10 +183,18 @@ const AvatarCustomization = () => {
 
   const handleEquip = (imageUrl, type) => {
     setEquippedAssets((prev) => ({ ...prev, [type]: imageUrl }));
+    trackEvent(userId, 'asset_equipped', {
+      category: 'AvatarCustomization',
+      label: `${type} - User ${userId}`
+    });
   };
 
   const handleUnequip = (type) => {
     setEquippedAssets((prev) => ({ ...prev, [type]: defaultAssets[type] || null }));
+    trackEvent(userId, 'asset_unequipped', {
+      category: 'AvatarCustomization',
+      label: `${type} - User ${userId}`
+    });
   };
 
   const handleSave = () => {
@@ -152,6 +211,10 @@ const AvatarCustomization = () => {
       })
       .then((response) => {
         setMessage(t("SuccessfullySaved!"));
+        trackEvent(userId, 'preferences_saved', {
+          category: 'AvatarCustomization',
+          label: `User ${userId}`
+        });
       })
       .catch((error) => {
         setMessage(t("saveError"));
@@ -187,9 +250,9 @@ const AvatarCustomization = () => {
     { type: "brow", icon: BrowsIcon },
     { type: "eye", icon: EyesIcon },
     { type: "lip", icon: LipsIcon },
-    { type: "nose", icon: NoseIcon }
+    { type: "nose", icon: NoseIcon },
   ];
-  
+
   return (
     <div className="avatar-customization-container">
       <div className="Aheader">
@@ -200,26 +263,31 @@ const AvatarCustomization = () => {
 
       <div className="main-content">
         <div className="asset-section">
-        <div className="Anavigation-tabs">
-        {assetTypes.map(({ type, icon }) => (
-          <button 
-            key={type}
-            onClick={() => setSelectedTab(type)}
-            className={selectedTab === type ? "active" : ""}
-          >
-            <img 
-              src={icon} 
-              alt={t(`${type}Icon`)}
-              className="nav-icon"
-            />
-          </button>
-        ))}
-      </div>
+          <div className="Anavigation-tabs">
+            {assetTypes.map(({ type, icon }) => (
+              <button
+                key={type}
+                onClick={() => {
+                  setSelectedTab(type);
+                  trackEvent(userId, 'tab_switched', {
+                    category: 'AvatarCustomization',
+                    label: `${type} - User ${userId}`
+                  });
+                }}
+                className={selectedTab === type ? "active" : ""}
+              >
+                <img
+                  src={icon}
+                  alt={t(`${type}Icon`)}
+                  className="nav-icon"
+                />
+              </button>
+            ))}
+          </div>
 
           <h2 className="assetoptionname">
-          {selectedTab === "headdress" ? t("headdresses") : t(`${selectedTab}s`)}
-
-            </h2>
+            {selectedTab === "headdress" ? t("headdresses") : t(`${selectedTab}s`)}
+          </h2>
           <div className="asset-content">
             <div className="asset-grid">
               {assets
@@ -232,7 +300,7 @@ const AvatarCustomization = () => {
                     ) : asset.price > 0 ? (
                       <div>
                         <p className="pointsname">
-                          <img src={points} alt={t("pointsIcon")} className="userpointstow" /> 
+                          <img src={points} alt={t("pointsIcon")} className="userpointstow" />
                           {asset.price} {t("points")}
                         </p>
                         <button className="buy_button" onClick={() => handleBuyClick(asset)}>
@@ -255,7 +323,7 @@ const AvatarCustomization = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="avatar-preview">
           <div style={{ position: "relative", width: "300px", height: "350px", margin: "0 auto" }}>
             {equippedAssets.face && (

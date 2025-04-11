@@ -22,17 +22,41 @@ import AvatarCustomization from "./components/AvatarCustomization";
 import Setting from "./components/setting";
 import EditProfile from "./components/EditProfile";
 import "./i18n"; // Import your i18n configuration
+import ReactGA from 'react-ga4';
+import TrackPageViews from './components/TrackPageViews';
+import TrackEngagement from './components/TrackEngagement';
+import TrackInactivity from './components/TrackInactivity';
+
+ReactGA.initialize('G-W0C0ZKC21L');
+
 const App = () => {
   const { user } = useAuth();
   const { i18n } = useTranslation();
+
+  
 
   useEffect(() => {
     document.documentElement.setAttribute("dir", i18n.language === "ar" ? "rtl" : "ltr");
     document.documentElement.setAttribute("lang", i18n.language);
   }, [i18n.language]);
 
+  useEffect(() => { //// To identify Breakpoints (where users leave the app, close pages, or stop interacting):
+    const handleBeforeUnload = () => {
+      ReactGA.event({
+        category: 'Session',
+        action: 'app_closed',
+        label: window.location.pathname,
+      });
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
+
   return (
     <Router>
+      <TrackPageViews />
+      <TrackEngagement />
+      <TrackInactivity />
       <Routes>
         <Route
           path="/"
@@ -48,6 +72,7 @@ const App = () => {
         />
         {user ? (
           <>
+
             <Route path="/lessons" element={<Lessons />} />
             <Route path="/Flashcards" element={<Flashcards />} />
             <Route path="/Chatbot" element={<Chatbot />} />
