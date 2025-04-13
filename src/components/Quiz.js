@@ -15,7 +15,7 @@ import trackEvent from '../utils/trackEvent';
 const Quiz = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { lessonId } = useParams();
+  const { unitId, lessonId } = useParams(); // Added unitId
   const { t } = useTranslation();
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -30,12 +30,12 @@ const Quiz = () => {
 
   useEffect(() => {
     // Track page view
-    trackEvent(userId, 'pageview', { page: `/quiz/${lessonId}` });
+    trackEvent(userId, 'pageview', { page: `/quiz/${unitId}/${lessonId}` });
     
     // Track quiz start
     trackEvent(userId, 'quiz_started', {
       category: "Quiz",
-      label: `Lesson ${lessonId}`
+      label: `Unit ${unitId} - Lesson ${lessonId}` // Updated label
     });
 
     const fetchQuestions = async () => {
@@ -74,7 +74,7 @@ const Quiz = () => {
     };
 
     fetchQuestions();
-  }, [lessonId, userId]);
+  }, [lessonId, unitId, userId]); // Added unitId to dependencies
 
   // Track time per question
   useEffect(() => {
@@ -84,11 +84,11 @@ const Quiz = () => {
       if (questions[currentQuestionIndex]?.id) {
         trackEvent(userId, 'question_time_spent', {
           category: 'Quiz',
-          label: `Question ${questions[currentQuestionIndex].id} - Lesson ${lessonId}`
+          label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId} - Lesson ${lessonId}` // Updated label
         }, duration);
       }
     };
-  }, [currentQuestionIndex, lessonId, userId, questions]);
+  }, [currentQuestionIndex, lessonId, unitId, userId, questions]); // Added unitId
 
   // Track inactivity
   useEffect(() => {
@@ -98,7 +98,7 @@ const Quiz = () => {
       timeout = setTimeout(() => {
         trackEvent(userId, 'inactive', {
           category: 'Quiz',
-          label: `Lesson ${lessonId} - Question ${currentQuestionIndex + 1}`,
+          label: `Unit ${unitId} - Lesson ${lessonId} - Question ${currentQuestionIndex + 1}`, // Updated label
           value: 30
         }, 30);
       }, 30000);
@@ -113,7 +113,7 @@ const Quiz = () => {
       window.removeEventListener('mousemove', resetTimeout);
       window.removeEventListener('keydown', resetTimeout);
     };
-  }, [lessonId, currentQuestionIndex, userId]);
+  }, [lessonId, unitId, currentQuestionIndex, userId]); // Added unitId
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
@@ -124,7 +124,7 @@ const Quiz = () => {
 
     trackEvent(userId, 'option_clicked', {
       category: 'Quiz',
-      label: `Question ${questions[currentQuestionIndex].id} - Lesson ${lessonId}`,
+      label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId} - Lesson ${lessonId}`, // Updated label
       value: option
     });
   };
@@ -150,7 +150,7 @@ const Quiz = () => {
     
     trackEvent(userId, isCorrectAnswer ? 'answer_correct' : 'answer_incorrect', {
       category: 'Quiz',
-      label: `Question ${questions[currentQuestionIndex].id} - Lesson ${lessonId}`
+      label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId} - Lesson ${lessonId}` // Updated label
     });
   };
 
@@ -158,7 +158,7 @@ const Quiz = () => {
     if (currentQuestionIndex < questions.length - 1) {
       trackEvent(userId, 'next_question', {
         category: 'Quiz',
-        label: `Question ${questions[currentQuestionIndex].id} - Lesson ${lessonId}`
+        label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId} - Lesson ${lessonId}` // Updated label
       });
 
       setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -171,7 +171,7 @@ const Quiz = () => {
       const score = answers.filter(a => a.is_correct).length / answers.length * 100;
       trackEvent(userId, 'quiz_completed', {
         category: 'Quiz',
-        label: `Lesson ${lessonId}`,
+        label: `Unit ${unitId} - Lesson ${lessonId}`, // Updated label
         value: Math.round(score)
       });
 
@@ -186,6 +186,7 @@ const Quiz = () => {
         const response = await apiClient.post('/api/quiz/submit', {
           user_id: userId,
           lesson_id: lessonId,
+          unit_id: unitId, // Added unit_id
           answers: answers,
         });
 
@@ -214,14 +215,14 @@ const Quiz = () => {
     setHint(questions[currentQuestionIndex].hint);
     trackEvent(userId, 'hint_used', {
       category: 'Quiz',
-      label: `Question ${questions[currentQuestionIndex].id} - Lesson ${lessonId}`
+      label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId} - Lesson ${lessonId}` // Updated label
     });
   };
 
   const handleExit = () => {
     trackEvent(userId, 'exit_quiz', {
       category: 'Quiz',
-      label: `Lesson ${lessonId} - Question ${currentQuestionIndex + 1}`
+      label: `Unit ${unitId} - Lesson ${lessonId} - Question ${currentQuestionIndex + 1}` // Updated label
     });
     navigate("/lessons");
   };
@@ -244,7 +245,7 @@ const Quiz = () => {
 
       <div className="quiz-box">
         <h1 className="quiz-header">
-          {t("quiz")} {t("lesson")} {lessonId}
+          {t("quiz")} {t("unit")} {unitId} - {t("lesson")} {lessonId} {/* Updated header */}
         </h1>
         
         <p className="quiz-question">{currentQuestion.question}</p>

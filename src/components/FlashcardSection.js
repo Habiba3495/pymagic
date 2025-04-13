@@ -14,6 +14,9 @@ const FlashCardSection = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [sectionId, setSectionId] = useState(user?.lastSectionId || 1);
+  const [sectionCount, setSectionCount] = useState(1);
+  
 
   useEffect(() => {
     // Track page view
@@ -26,7 +29,7 @@ const FlashCardSection = () => {
 
     const fetchData = async () => {
       try {
-        const response = await apiClient.get("/sections/1/flashcards");
+        const response = await apiClient.get(`/sections/${sectionId}/flashcards`);
         const data = response.data;
 
         if (data.units && data.units.length > 0) {
@@ -47,7 +50,10 @@ const FlashCardSection = () => {
               })),
             },
           ];
+            
           setSections(transformedSections);
+          setSectionCount(data.sectionCount);
+
           
           // Track successful data load
           trackEvent(user.id, 'flashcards_loaded', {
@@ -75,7 +81,7 @@ const FlashCardSection = () => {
     };
 
     fetchData();
-  }, [user]);
+  }, [user , sectionId]);
 
   const setDefaultData = () => {
     const defaultSections = [
@@ -217,6 +223,14 @@ const FlashCardSection = () => {
     setModalOpen(false);
   };
 
+  const getNextSection = () => {
+    setSectionId(sectionId + 1);
+  };
+
+  const getPreviousSection = () => {
+    setSectionId(sectionId - 1);
+  };
+
   if (loading) {
     return (
       <div className="page-container">
@@ -300,6 +314,17 @@ const FlashCardSection = () => {
             </div>
           </div>
         )}
+        <div>
+
+          {sectionCount !== sectionId && (
+            <button onClick={() => getNextSection()} >Next</button>
+          )}
+
+          {sectionId !== 1 && (
+            <button onClick={() => getPreviousSection()}>Previous</button>
+          )}
+
+        </div>
       </div>
     </div>
   );

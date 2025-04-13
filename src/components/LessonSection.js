@@ -14,11 +14,13 @@ const LessonSection = () => {
   const [error, setError] = useState(null);
   const [accessDeniedLessons, setAccessDeniedLessons] = useState(new Set());
   const [accessDeniedUnits, setAccessDeniedUnits] = useState(new Set());
+  const [nextSectionName, setNextSectionName] = useState("");
+  const [prevSectionName, setPrevSectionName] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
+  const [sectionId, setSectionId] = useState(user?.lastSectionId || 1);
 
   useEffect(() => {
-    // Track page view
     if (user?.id) {
       trackEvent(user.id, 'pageview', { 
         page: '/lessons',
@@ -27,21 +29,36 @@ const LessonSection = () => {
     }
 
     const fetchData = async () => {
-      try {
-        const response = await apiClient.get("/sections/1");
+      try {        
+        const response = await apiClient.get(`/sections/${sectionId}`);
         if (response.status !== 200) throw new Error("Failed to fetch data");
         
         setLessonData(response.data);
-        // Track successful lesson data load
+        
         trackEvent(user.id, 'lesson_data_loaded', {
           category: 'Lesson',
           label: 'Lesson Data Loaded',
           unit_count: response.data.units.length,
           lesson_count: response.data.units.reduce((sum, unit) => sum + unit.lessons.length, 0)
         });
+
+        // Fetch next section name if available
+        if (sectionId < response.data.sectionCount) {
+          const nextResponse = await apiClient.get(`/sections/${sectionId + 1}`);
+          if (nextResponse.data?.name) {
+            setNextSectionName(nextResponse.data.name);
+          }
+        }
+
+        // Fetch previous section name if available
+        if (sectionId > 1) {
+          const prevResponse = await apiClient.get(`/sections/${sectionId - 1}`);
+          if (prevResponse.data?.name) {
+            setPrevSectionName(prevResponse.data.name);
+          }
+        }
       } catch (error) {
         setError(error.message);
-        // Track error and fallback to dummy data
         trackEvent(user.id, 'lesson_data_error', {
           category: 'Error',
           label: 'Lesson Data Error',
@@ -49,6 +66,8 @@ const LessonSection = () => {
         });
         
         const dummyData = {
+          name: "Default Section",
+          sectionCount: 3,
           units: [
             { id: 1, name: "Default Unit 1", lessons: [{ id: 1, title: "Default Lesson 1.1" }, { id: 2, title: "Default Lesson 1.2" }] },
             { id: 2, name: "Default Unit 2", lessons: [{ id: 3, title: "Default Lesson 2.1" }, { id: 4, title: "Default Lesson 2.2" }] },
@@ -56,17 +75,14 @@ const LessonSection = () => {
           ],
         };
         setLessonData(dummyData);
-        // Track dummy data usage
-        trackEvent(user.id, 'lesson_dummy_data_used', {
-          category: 'Fallback',
-          label: 'Using Dummy Data'
-        });
+        setNextSectionName("Next Default Section");
+        setPrevSectionName("Previous Default Section");
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, [user]);
+  }, [user, sectionId]);
 
   const checkLessonAccess = async (lessonId) => {
     try {
@@ -77,7 +93,6 @@ const LessonSection = () => {
       return true;
     } catch (error) {
       setAccessDeniedLessons((prev) => new Set(prev).add(lessonId));
-      // Track access denied
       trackEvent(user.id, 'lesson_access_denied', {
         category: 'Access',
         label: 'Lesson Access Denied',
@@ -98,7 +113,6 @@ const LessonSection = () => {
       return true;
     } catch (error) {
       setAccessDeniedUnits((prev) => new Set(prev).add(unitId));
-      // Track unit quiz access denied
       trackEvent(user.id, 'unit_quiz_access_denied', {
         category: 'Access',
         label: 'Unit Quiz Access Denied',
@@ -111,7 +125,6 @@ const LessonSection = () => {
   };
 
   const handleLessonClick = async (unitId, lessonId, lessonNumber) => {
-    // Track lesson click attempt
     trackEvent(user.id, 'lesson_clicked', {
       category: 'Navigation',
       label: 'Lesson Clicked',
@@ -122,7 +135,6 @@ const LessonSection = () => {
 
     const hasAccess = await checkLessonAccess(lessonId);
     if (hasAccess) {
-      // Track successful lesson access
       trackEvent(user.id, 'lesson_accessed', {
         category: 'Lesson',
         label: 'Lesson Accessed',
@@ -134,7 +146,6 @@ const LessonSection = () => {
   };
 
   const handleUnitQuizClick = async (unitId) => {
-    // Track unit quiz click attempt
     trackEvent(user.id, 'unit_quiz_clicked', {
       category: 'Navigation',
       label: 'Unit Quiz Clicked',
@@ -143,7 +154,6 @@ const LessonSection = () => {
 
     const hasAccess = await checkUnitQuizAccess(unitId);
     if (hasAccess) {
-      // Track successful unit quiz access
       trackEvent(user.id, 'unit_quiz_accessed', {
         category: 'Quiz',
         label: 'Unit Quiz Accessed',
@@ -151,6 +161,15 @@ const LessonSection = () => {
       });
       navigate(`/unit-quiz/${unitId}`);
     }
+  };
+
+  const getNextSection = () => {
+    const nextId = sectionId + 1;
+    setSectionId(nextId);
+  };
+
+  const getPreviousSection = () => {
+    setSectionId(sectionId - 1);
   };
 
   if (loading) return <div className="loading-indicator">Loading lessons...</div>;
@@ -234,12 +253,34 @@ const LessonSection = () => {
             </div>
           );
         })}
+        <div className="section-navigation">
+          {sectionId !== 1 && (
+            <div className="nav-button-wrapper">
+              <button 
+                onClick={() => getPreviousSection()}
+                className="nav-button prev-button"
+              >
+                Previous: {prevSectionName}
+              </button>
+            </div>
+          )}
+          
+          {lessonData.sectionCount !== sectionId && (
+            <div className="nav-button-wrapper">
+              <button 
+                onClick={() => getNextSection()}
+                className="nav-button next-button"
+              >
+                Next: {nextSectionName}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-// Helper function to generate color based on ID
 const generateColor = (id) => {
   const hue = (id * 137) % 360;
   return `hsl(${hue}, 70%, 45%)`;

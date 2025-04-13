@@ -91,9 +91,9 @@
   text-align: right;
 }
 
-[dir="rtl"] .social-links {
+/* [dir="rtl"] .social-links {
   flex-direction: row-reverse;
-}
+} */
 
 [dir="rtl"] .social-links a {
   margin-left: 10px;
