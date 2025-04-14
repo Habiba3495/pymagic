@@ -19,7 +19,7 @@ const ChatbotSection = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    // Track page view
+
     if (user?.id) {
       trackEvent(user.id, 'pageview', { 
         page: '/chatbot',
@@ -131,9 +131,9 @@ const ChatbotSection = () => {
   if (error) {
     return (
       <div className="chatbot-wrapper">
-        <div className="error-message">
+        <div className="errormessage">
           {error}
-          <button onClick={() => window.location.reload()}>Try Again</button>
+          <button className = "tryagain" onClick={() => window.location.reload()}>{t("Try Again")}</button>
         </div>
       </div>
     );

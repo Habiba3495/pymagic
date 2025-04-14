@@ -169,3 +169,42 @@ input::placeholder {
 [dir="rtl"] .Rform-container * {
   font-family: 'Germania One', cursive;
 }
+
+/* تعيين الطبقة العلوية (overlay) */
+.error-overlay {
+  position: fixed; /* أو absolute إذا كنت تفضل وضعه داخل الـ form */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* background-color: rgba(0, 0, 0, 0.5);  */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* تأكد من أن الطبقة العلوية فوق كل العناصر */
+  margin-bottom: 630px;
+}
+
+/* تصميم صندوق الخطأ */
+.error-box {
+  background-color: #ffe6e6; /* لون خلفية فاتح للأخطاء */
+  border: 1px solid red; /* حدود حمراء */
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 300px;
+  width: 100%;
+  text-align: center;
+}
+
+/* تنسيق رسالة الخطأ */
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+/* لتنسيق الحقول عند وجود خطأ */
+input.error {
+  border-color: red;
+}
+

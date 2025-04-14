@@ -6,6 +6,8 @@ import unitquizicon from "../components/images/unitquizicon.svg";
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
 import trackEvent from '../utils/trackEvent';
+import PyMagicRunner from './Pymagic_runnergame'; 
+import { useTranslation } from "react-i18next";
 
 const LessonSection = () => {
   const { user } = useAuth();
@@ -19,6 +21,10 @@ const LessonSection = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [sectionId, setSectionId] = useState(user?.lastSectionId || 1);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+  const { t } = useTranslation();
+
 
   useEffect(() => {
     if (user?.id) {
@@ -42,7 +48,6 @@ const LessonSection = () => {
           lesson_count: response.data.units.reduce((sum, unit) => sum + unit.lessons.length, 0)
         });
 
-        // Fetch next section name if available
         if (sectionId < response.data.sectionCount) {
           const nextResponse = await apiClient.get(`/sections/${sectionId + 1}`);
           if (nextResponse.data?.name) {
@@ -50,7 +55,6 @@ const LessonSection = () => {
           }
         }
 
-        // Fetch previous section name if available
         if (sectionId > 1) {
           const prevResponse = await apiClient.get(`/sections/${sectionId - 1}`);
           if (prevResponse.data?.name) {
@@ -65,18 +69,6 @@ const LessonSection = () => {
           error: error.message
         });
         
-        const dummyData = {
-          name: "Default Section",
-          sectionCount: 3,
-          units: [
-            { id: 1, name: "Default Unit 1", lessons: [{ id: 1, title: "Default Lesson 1.1" }, { id: 2, title: "Default Lesson 1.2" }] },
-            { id: 2, name: "Default Unit 2", lessons: [{ id: 3, title: "Default Lesson 2.1" }, { id: 4, title: "Default Lesson 2.2" }] },
-            { id: 3, name: "Default Unit 3", lessons: [{ id: 5, title: "Default Lesson 3.1" }, { id: 6, title: "Default Lesson 3.2" }] },
-          ],
-        };
-        setLessonData(dummyData);
-        setNextSectionName("Next Default Section");
-        setPrevSectionName("Previous Default Section");
       } finally {
         setLoading(false);
       }
@@ -99,10 +91,13 @@ const LessonSection = () => {
         lesson_id: lessonId,
         error: error.message
       });
-      alert(error.message);
+
+      setPopupMessage(t("Unlocklessons"));
+      setPopupVisible(true);
       return false;
     }
-  };
+  };  
+  
 
   const checkUnitQuizAccess = async (unitId) => {
     try {
@@ -119,10 +114,13 @@ const LessonSection = () => {
         unit_id: unitId,
         error: error.message
       });
-      alert(error.message);
+  
+      setPopupMessage(t("Unlockunitquiz")); 
+      setPopupVisible(true);
       return false;
     }
   };
+  
 
   const handleLessonClick = async (unitId, lessonId, lessonNumber) => {
     trackEvent(user.id, 'lesson_clicked', {
@@ -172,8 +170,10 @@ const LessonSection = () => {
     setSectionId(sectionId - 1);
   };
 
+  ///////////////////// Photo in loading 
+
   if (loading) return <div className="loading-indicator">Loading lessons...</div>;
-  if (error) return <div className="error-message">Error: {error}</div>;
+  if (error) return <PyMagicRunner />;
 
   return (
     <div className="lesson-container-div">
@@ -182,7 +182,7 @@ const LessonSection = () => {
         {lessonData.units.map((unit) => {
           let globalIndex = 0;
           let isLeft = false;
-
+  
           return (
             <div key={unit.id} className="unit-container">
               <div className="unit-header" style={{ backgroundColor: generateColor(unit.id) }}>
@@ -192,11 +192,11 @@ const LessonSection = () => {
                 {unit.lessons.map((lesson, index) => {
                   globalIndex++;
                   if (globalIndex % 5 === 1) isLeft = !isLeft;
-
+  
                   const marginLeft = globalIndex % 5 === 2 || globalIndex % 5 === 4 ? "50px" : globalIndex % 5 === 3 ? "100px" : "0px";
                   const marginRight = globalIndex % 5 === 2 || globalIndex % 5 === 4 ? "50px" : globalIndex % 5 === 3 ? "100px" : "0px";
                   const margin = isLeft ? { marginLeft } : { marginRight };
-
+  
                   let quizMargin = null;
                   if (index === unit.lessons.length - 1) {
                     globalIndex++;
@@ -204,7 +204,7 @@ const LessonSection = () => {
                     const quizMarginValue = globalIndex % 5 === 2 || globalIndex % 5 === 4 ? "50px" : globalIndex % 5 === 3 ? "100px" : "0px";
                     quizMargin = isLeft ? { marginLeft: quizMarginValue } : { marginRight: quizMarginValue };
                   }
-
+  
                   const isActiveLesson = location.pathname === `/lesson/${unit.id}/${lesson.id}`;
                   const lessonQuiz = lesson.quizzes && lesson.quizzes.length > 0 ? lesson.quizzes[0] : null;
                   const isLessonPassed = lessonQuiz && lessonQuiz.is_passed;
@@ -212,7 +212,7 @@ const LessonSection = () => {
                   const isUnitQuizPassed = unitQuiz && unitQuiz.is_passed;
                   const isAccessDeniedLesson = accessDeniedLessons.has(lesson.id);
                   const isAccessDeniedUnit = accessDeniedUnits.has(unit.id);
-
+  
                   return (
                     <React.Fragment key={lesson.id}>
                       <button
@@ -229,7 +229,7 @@ const LessonSection = () => {
                       >
                         {index + 1}
                       </button>
-
+  
                       {index === unit.lessons.length - 1 && (
                         <button
                           className={`unit-button ${isUnitQuizPassed ? "passed-unit" : ""} ${
@@ -253,6 +253,7 @@ const LessonSection = () => {
             </div>
           );
         })}
+  
         <div className="section-navigation">
           {sectionId !== 1 && (
             <div className="nav-button-wrapper">
@@ -277,13 +278,34 @@ const LessonSection = () => {
           )}
         </div>
       </div>
+  
+      {popupVisible && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <p>{popupMessage}</p>
+            <button className="popup-close-btn" onClick={() => setPopupVisible(false)}>
+              {t("Ok")}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
+  
 };
 
+// const generateColor = (id) => {
+//   const hue = (id * 137) % 360;
+//   return `hsl(${hue}, 70%, 45%)`;
+// };
 const generateColor = (id) => {
-  const hue = (id * 137) % 360;
-  return `hsl(${hue}, 70%, 45%)`;
+  const colors = [
+    "#5B287C", 
+    "#FFC145",  
+    "#1F82A3", 
+    "#2B4858", 
+  ];
+  return colors[(id - 1) % colors.length];
 };
 
 export default LessonSection;

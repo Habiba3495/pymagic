@@ -71,6 +71,7 @@
   "goToLessons": "Go to Lessons",
   "goToPrpgressReport": "Check Progress Report",
   "askPythonWizard": "Ask Your Magical Python Wizard",
+  "askPythonQuestion":"Ask Python Question",
   "points": "points",
   "pointsIconAlt": "points icon",
   "faceIconAlt": "face icon",
@@ -105,6 +106,12 @@
   "feedbackCommentPlaceholder":"Add your comment here...",
   "skip":"Skip",
   "submit":"Submit",
+  "Unlocklessons": "Complete the previous lessons to unlock this lesson.",
+  "Ok": "Ok",
+  "Unlockunitquiz": "You need to complete all the lessons before taking the unit quiz",
+  "Try Again":"Try Again",
+
+
   "editProfile": {
     "title": "Edit Profile",
     "nameLabel": "Full Name",
@@ -130,6 +137,7 @@
       "incorrectPassword": "Current password is incorrect",
       "updateFailed": "Failed to update profile. Please try again.",
       "networkError": "Network error. Please check your connection."
+      
     }
   }
   

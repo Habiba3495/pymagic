@@ -1,0 +1,66 @@
+.game-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(to top, #1a1a2e, #16213e);
+    cursor: pointer;
+  }
+  
+  .wizard {
+    width: 50px;
+    height: 50px;
+    background-color: #fff;
+    position: absolute;
+    bottom: 50px;
+    left: 100px;
+    transition: bottom 0.3s;
+  }
+  
+  .jump {
+    animation: jump 0.6s ease-out;
+  }
+  
+  @keyframes jump {
+    0% { bottom: 50px; }
+    50% { bottom: 150px; }
+    100% { bottom: 50px; }
+  }
+  
+  .obstacle {
+    width: 40px;
+    height: 40px;
+    background-color: red;
+    position: absolute;
+    bottom: 50px;
+    right: -60px;
+    animation: moveLeft 2s linear infinite;
+  }
+  
+  .stopped {
+    animation-play-state: paused;
+  }
+  
+  @keyframes moveLeft {
+    0% { right: -60px; }
+    100% { right: 100%; }
+  }
+  
+  .ground {
+    position: absolute;
+    width: 100%;
+    height: 50px;
+    background-color: #444;
+    bottom: 0;
+  }
+  
+  .game-over {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 2rem;
+    font-family: 'Cursive';
+  }
+  

@@ -6,7 +6,7 @@
 .content {
     flex: 1;
     padding: 20px;
-    margin-left: 250px; /* تأكد من أنه يبدأ بعد الـ Sidebar */
+    margin-left: 250px;
     background-color: #f3e5f5;
 }
 
@@ -20,15 +20,20 @@
     background-color: #f3e5f5;
 }
 
-.section-title {
-    background: #6a0dad;
+.sectiontitle {
+    background: #5B287C;
     color: white;
-    padding: 10px;
-    border-radius: 8px;
+    padding: 33px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    margin-left: 150px;
     text-align: center;
-    width: 50%; /* جعل العنوان يأخذ نصف عرض المساحة المتاحة */
-    margin: 0 auto; /* توسيط العنوان في منتصف القسم */
-    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Germania One', sans-serif;
+    font-size: 28px;
+    margin-right: 100px;
 }
 
 
@@ -178,4 +183,18 @@
     font-size: 30px;
     font-weight: bold;
     color: #000; /* غيري اللون حسب التصميم */
+  }
+
+  .nextbutton{
+    padding: 20px 18px;
+    background-color: #ffc145;
+    color: #5b287c;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    margin-left: 70px;
+    font-family: 'Fredoka';
+    font-size: 18px;
   }

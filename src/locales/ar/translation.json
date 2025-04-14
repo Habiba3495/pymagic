@@ -71,6 +71,7 @@
   "goToLessons": "اذهب للدروس",
   "goToPrpgressReport": "اذهب لتقرير التقدم",
   "askPythonWizard": "اسأل ساحر بايثون السحري",
+  "askPythonQuestion":"اسأل فى بايثون",
   "points": "نقطة",
   "pointsIconAlt": "أيقونة النقاط",
   "faceIconAlt": "أيقونة الوجه",
@@ -105,6 +106,12 @@
     "feedbackCommentPlaceholder": "أضف تعليقك هنا...",
     "skip": "تخطي",
     "submit": "إرسال",
+    "Unlocklessons":"خلص الدروس اللي قبل كده عشان تقدر تفتح الدرس ده.",
+    "Ok":"تمام",
+    "Unlockunitquiz": "كمّل دروس الوحدة دي الأول علشان تفتح الاختبار ",
+    "Try Again":"حاول مره اخرى",
+
+
   "editProfile": {
     "title": "تعديل الملف الشخصي",
     "nameLabel": "الاسم الكامل",

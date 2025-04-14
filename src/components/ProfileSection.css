@@ -63,7 +63,7 @@
   color: #facc15; /* Yellow text */
   padding: 6px 12px;
   border-radius: 8px;
-  border: 2px solid #facc15; /* Yellow border */
+  border: 2px solid #facc15;
   cursor: pointer;
   font-weight: bold;
   transition: background 0.3s, transform 0.2s;

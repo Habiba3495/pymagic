@@ -1,3 +1,4 @@
+import PyMagicRunner from './Pymagic_runnergame'; // تأكد من المسار الصحيح للملف
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Quiz.css";
@@ -227,14 +228,24 @@ const Quiz = () => {
     navigate("/lessons");
   };
 
+  // if (isLoading) {
+  //   return <div className="quiz-loading">Loading quiz questions...</div>;
+  // }
+
   if (isLoading) {
-    return <div className="quiz-loading">Loading quiz questions...</div>;
+    // عند تحميل الأسئلة، يظهر PyMagicRunner
+    return <PyMagicRunner />;
   }
+  
+
+  // if (questions.length === 0) {
+  //   return <div className="quiz-error">No questions available for this quiz.</div>;
+  // }
 
   if (questions.length === 0) {
-    return <div className="quiz-error">No questions available for this quiz.</div>;
+    // عند تحميل الأسئلة، يظهر PyMagicRunner
+    return <PyMagicRunner />;
   }
-
   const currentQuestion = questions[currentQuestionIndex];
 
   return (

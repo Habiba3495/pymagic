@@ -1,55 +1,45 @@
-/* ChatbotSection.css */
 .chatbot-wrapper {
   display: flex;
   height: 100vh;
-  background-color: #f3e5f5; /* Light purple background for magic feel */
+  background-color: #f3e5f5;
 }
 
-/* .sidebar-container {
-  width: 15%;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
-} */
-
 .chatbot-container {
-  flex: 1;
+  margin-left: 15%;
+  width: 85%;
+  height: 100vh;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
   position: relative;
-  margin-left: 16.5%; /* Adjusted for sidebar */
 }
 
 .chat-section {
   background-color: white;
-  width: 90%;
-  max-width: 800px;
-  height: 100%;
-  max-height: 600px;
-  padding: 20px;
   border-radius: 15px;
-  margin-bottom: 100px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  align-items: center;
   overflow: hidden;
+  width: 80%;         /* بدل 90% */
+  max-width: 700px;   /* بدل 800px */
+  height: 500px;      /* بدل 600px */
+  padding: 15px;      /* بدل 20px */
 }
+
 
 .chat-header {
   background-color: #6a1b9a;
   color: white;
-  padding: 15px;
+  padding: 5px;
   border-radius: 10px;
   font-size: 18px;
   font-weight: bold;
   text-align: center;
   width: 100%;
-  font-family: 'Comic Sans MS', cursive; /* Fun, kid-friendly font */
+  font-family: 'Comic Sans MS', cursive;
 }
 
 .chat-messages {
@@ -83,77 +73,47 @@
   position: relative;
 }
 
-.message-text::after {
-  content: "✨";
-  position: absolute;
-  right: 5px;
-  top: 5px;
-  font-size: 12px;
-  color: #ffeb3b; /* Yellow sparkles */
-}
-
-.user .message-text {
-  background-color: #d1c4e9;
-}
-
 .avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   margin: 0 10px;
-}
+} 
 
-/* Input container styling */
 .input-container {
-  position: absolute;
-  bottom: 90px;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 40px;
-  width: 90%;
-  max-width: 830px;
-  padding: 10px;
   background-color: white;
   border-radius: 30px;
-  border: none;
-  margin-bottom: 20px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  width: 80%;         
+  max-width: 700px;   
+  padding: 1px 10px; 
+  margin-top: 10px;   
 }
 
 input {
   flex: 1;
-  padding: 10px;
+  padding: 8px;
   border: none;
   outline: none;
   font-size: 16px;
   font-family: 'Comic Sans MS', cursive;
 }
 
-button {
-  background: none;
-  border: none;
+input::placeholder {
   color: #6a1b9a;
-  font-size: 20px;
-  cursor: pointer;
-  margin-left: 10px;
 }
 
 .send-button img {
   width: 40px;
   height: 30px;
+  margin-left: 10px;
 }
-
-input::placeholder {
-  font-size: 16px;
-  font-family: 'Comic Sans MS', cursive;
-  color: #6a1b9a;
-}
-
-[dir="rtl"] .chatbot-container {
-  margin-right: 16.5%;
-  margin-left: 0;
-
+.send-button {
+  border: none;
+  outline: none;
+  background: transparent; /* أو لون الخلفية اللي انتي عايزاه */
+  cursor: pointer;
 }
