@@ -66,11 +66,22 @@
 }
 
 .message-text {
-  background-color: #e1bee7;
   padding: 10px;
   border-radius: 10px;
   max-width: 70%;
   position: relative;
+  font-family: 'fredoka' sans-serif;
+  font-weight: 500;
+}
+
+.message.user .message-text {
+  background-color: #F2DDFF; 
+  color: #6a1b9a;
+}
+
+.message.bot .message-text {
+  background-color: #B8B8D1; 
+  color: black;
 }
 
 .avatar {
