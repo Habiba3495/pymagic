@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from '../context/AuthContext';
 import ReactGA from 'react-ga4'; // Added for page views
 import trackEvent from '../utils/trackEvent';
+import PyMagicRunner from './Pymagic_runnergame'; 
 
 const Video = () => {
   const { unitId, lessonId } = useParams();
@@ -16,7 +17,7 @@ const Video = () => {
   const [lessonData, setLessonData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [unitColor] = useState("#6B21A8");
+  const [unitColor] = useState("#5B287C");
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -118,7 +119,7 @@ const Video = () => {
         </h1>
 
         <div className="video-container">
-          {loading ? (
+          {/* {loading ? (
             <p>Loading video...</p>
           ) : error ? (
             <>
@@ -127,8 +128,15 @@ const Video = () => {
                 <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
-            </>
-          ) : lessonData?.video_url ? (
+            </> */}
+            {loading ? (
+            <p>Loading video...</p>
+             ) : error ? (
+             <>
+              <p>Error: {error}</p>
+              <PyMagicRunner />
+               </>
+              ) : lessonData?.video_url ? (
             <video controls onPlay={handlePlay} onEnded={handleVideoEnd}>
               <source
                 src={`${apiClient.defaults.baseURL}${lessonData.video_url}`}
