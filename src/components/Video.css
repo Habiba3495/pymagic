@@ -22,6 +22,7 @@
     color: white;
     padding: 10px;
     border-radius: 5px;
+    font-family: 'Germania One', cursive;
 }
 
 .video-container {
@@ -41,13 +42,14 @@ video {
 
 .quiz-button {
     background-color: #FBBF24;
-    color: white;
+    color: #5B287C;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
     margin-left: 650px;
+    font-family: 'Germania One', cursive;
 }
 
 .quiz-button:hover {

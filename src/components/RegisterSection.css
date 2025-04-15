@@ -90,11 +90,10 @@ input::placeholder {
   flex-direction: column;
 }
 
-h2 {
+.register-section {
   color: #4e2678e1;
   font-family: 'Germania One', cursive;
-  font-size: 30px;
-  margin-bottom: 20px;
+  font-size: 20px;
 } 
 
 .Rform-container {
@@ -138,6 +137,7 @@ input::placeholder {
   font-weight: 500;
   font-family: 'Germania One', cursive;
   margin-top: 15px;
+  margin-left: 30px;
 }
 
 .error-message {

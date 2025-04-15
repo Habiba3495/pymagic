@@ -12,6 +12,8 @@ import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
 import { useTranslation } from "react-i18next";
 import trackEvent from '../utils/trackEvent';
+import correctSound from '../Sound/correct3-95630.mp3';
+import wrongSound from '../Sound/wronganswer-37702.mp3';
 
 const Quiz = () => {
   const { user } = useAuth();
@@ -28,17 +30,17 @@ const Quiz = () => {
   const [answers, setAnswers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const userId = user?.id;
+  const correctSoundEffect = new Audio(correctSound);
+  const wrongSoundEffect = new Audio(wrongSound);
 
+  //Fetching Questions
   useEffect(() => {
-    // Track page view
     trackEvent(userId, 'pageview', { page: `/quiz/${unitId}/${lessonId}` });
-    
-    // Track quiz start
     trackEvent(userId, 'quiz_started', {
       category: "Quiz",
-      label: `Unit ${unitId} - Lesson ${lessonId}` // Updated label
+      label: `Unit ${unitId} - Lesson ${lessonId}`
     });
-
+  
     const fetchQuestions = async () => {
       setIsLoading(true);
       try {
@@ -49,33 +51,14 @@ const Quiz = () => {
         setQuestions(response.data.questions);
       } catch (error) {
         console.error("Error fetching quiz questions:", error);
-        // Fallback to default questions
-        const defaultQuestions = [
-          {
-            id: 1,
-            question: "What is Python?",
-            options: [
-              "A snake",
-              "A programming language",
-              "A coffee",
-              "A car brand",
-            ],
-            correct_answer: "A programming language",
-            hint: "It's used in software development.",
-          },
-          // ... (include all your default questions here)
-        ];
-        const shuffledQuestions = defaultQuestions
-          .sort(() => 0.5 - Math.random())
-          .slice(0, 3);
-        setQuestions(shuffledQuestions);
+        setQuestions([]); // null to display PyMagicRunner
       } finally {
         setIsLoading(false);
       }
     };
-
+  
     fetchQuestions();
-  }, [lessonId, unitId, userId]); // Added unitId to dependencies
+  }, [lessonId, unitId, userId]);
 
   // Track time per question
   useEffect(() => {
@@ -100,7 +83,7 @@ const Quiz = () => {
         trackEvent(userId, 'inactive', {
           category: 'Quiz',
           label: `Unit ${unitId} - Lesson ${lessonId} - Question ${currentQuestionIndex + 1}`, // Updated label
-          value: 30
+          value: 30  //30 sec
         }, 30);
       }, 30000);
     };
@@ -116,6 +99,7 @@ const Quiz = () => {
     };
   }, [lessonId, unitId, currentQuestionIndex, userId]); // Added unitId
 
+ //Handle Option Click
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     setIsAnswered(false);
@@ -130,31 +114,82 @@ const Quiz = () => {
     });
   };
 
+ //Check Answer and what to do if correct or wrong
+
+  // const checkAnswer = () => {
+  //   if (!selectedOption) return;
+
+  //   const isCorrectAnswer = selectedOption === questions[currentQuestionIndex].correct_answer;
+  //   setIsCorrect(isCorrectAnswer);
+  //   setIsAnswered(true);
+
   const checkAnswer = () => {
     if (!selectedOption) return;
-
+  
     const isCorrectAnswer = selectedOption === questions[currentQuestionIndex].correct_answer;
     setIsCorrect(isCorrectAnswer);
     setIsAnswered(true);
-
+  
+    // تشغيل التأثيرات الحركية والصوت
+    if (isCorrectAnswer) {
+      // تشغيل صوت الإجابة الصحيحة
+      const correctSoundEffect = new Audio(correctSound);
+      correctSoundEffect.play().catch((error) => {
+        console.error("Error playing correct sound:", error);
+      });
+  
+      // تفعيل الرسوم المتحركة الخلفية
+      const background = document.querySelector('.background-animation');
+      background.classList.add('correct-animation');
+      // إنشاء الرموز التعبيرية ديناميكيًا
+      const emojis = ['👏', '🎉'];
+      for (let i = 0; i < 10; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('animation-particle');
+        particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        particle.style.left = `${Math.random() * 100}%`; // توزيع عشوائي أفقيًا
+        particle.style.animationDelay = `${Math.random() * 1}s`; // تأخير عشوائي
+        background.appendChild(particle);
+      }
+      // إزالة الرموز بعد انتهاء الأنيميشن
+      setTimeout(() => {
+        background.innerHTML = '';
+        background.classList.remove('correct-animation');
+      }, 4000); // مدة 4 ثوانٍ
+    } else {
+      // تشغيل صوت الإجابة الخاطئة
+      const wrongSoundEffect = new Audio(wrongSound);
+      wrongSoundEffect.play().catch((error) => {
+        console.error("Error playing wrong sound:", error);
+      });
+  
+      // اهتزاز الصندوق عند الإجابة الخاطئة
+      document.querySelector('.quiz-box').classList.add('wrong-animation');
+      setTimeout(() => {
+        document.querySelector('.quiz-box').classList.remove('wrong-animation');
+      }, 500);
+    }
+  
     const newAnswer = {
       question_id: questions[currentQuestionIndex].id,
       selected_answer: selectedOption,
       is_correct: isCorrectAnswer,
     };
-
+  
     const updatedAnswers = [...answers, newAnswer];
     setAnswers(updatedAnswers);
     localStorage.setItem("quizAnswers", JSON.stringify(updatedAnswers));
-
+  
     setMotivationMessage(isCorrectAnswer ? "Correct! Well done!" : "Incorrect. Try again!");
-    
+  
     trackEvent(userId, isCorrectAnswer ? 'answer_correct' : 'answer_incorrect', {
       category: 'Quiz',
-      label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId} - Lesson ${lessonId}` // Updated label
+      label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId} - Lesson ${lessonId}`
     });
   };
 
+
+   // next quastion
   const handleNextQuestion = async () => {
     if (currentQuestionIndex < questions.length - 1) {
       trackEvent(userId, 'next_question', {
@@ -211,7 +246,8 @@ const Quiz = () => {
       }
     }
   };
-
+ 
+  //hint
   const handleHintClick = () => {
     setHint(questions[currentQuestionIndex].hint);
     trackEvent(userId, 'hint_used', {
@@ -220,6 +256,7 @@ const Quiz = () => {
     });
   };
 
+  //exit quiz
   const handleExit = () => {
     trackEvent(userId, 'exit_quiz', {
       category: 'Quiz',
@@ -228,14 +265,17 @@ const Quiz = () => {
     navigate("/lessons");
   };
 
-  // if (isLoading) {
-  //   return <div className="quiz-loading">Loading quiz questions...</div>;
-  // }
-
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   if (isLoading) {
-    // عند تحميل الأسئلة، يظهر PyMagicRunner
-    return <PyMagicRunner />;
+    return <div className="quiz-loading">Loading quiz questions...</div>;
   }
+ 
+
+  // ////////// hn8erha
+  // if (isLoading) {
+  //   // عند تحميل الأسئلة، يظهر PyMagicRunner
+  //   return <PyMagicRunner />;
+  // }
   
 
   // if (questions.length === 0) {
@@ -250,17 +290,18 @@ const Quiz = () => {
 
   return (
     <div className="quiz-container">
+      <div className="background-animation"></div> {/* عنصر الخلفية الجديد */}
       <button className="exit-button" onClick={handleExit}>
         <img src={ExitIcon} alt="Exit" className="exit-icon" />
       </button>
-
+  
       <div className="quiz-box">
         <h1 className="quiz-header">
-          {t("quiz")} {t("unit")} {unitId} - {t("lesson")} {lessonId} {/* Updated header */}
+          {t("quiz")} {t("unit")} {unitId} - {t("lesson")} {lessonId}
         </h1>
         
         <p className="quiz-question">{currentQuestion.question}</p>
-
+  
         <div className="quiz-options">
           {currentQuestion.options.map((option, index) => (
             <button
@@ -276,7 +317,7 @@ const Quiz = () => {
             </button>
           ))}
         </div>
-
+  
         {!isAnswered ? (
           <div className="quiz-footer">
             <img
@@ -318,11 +359,12 @@ const Quiz = () => {
             )}
           </>
         )}
-
+  
         {hint && <p className="hint-text"><span>Hint:</span> {hint}</p>}
       </div>
     </div>
   );
+  
 };
 
 export default Quiz;

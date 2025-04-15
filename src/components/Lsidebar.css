@@ -42,7 +42,7 @@
   background: none;
   padding: 10px;
   font-size: 18px;
-  color: purple;
+  color: #B8B8D1;
   font-weight: normal;
   cursor: pointer;
   transition: font-weight 0.3s ease, color 0.3s ease;
@@ -52,7 +52,11 @@
 
 .menu-button.active {
   font-weight: bold;
-  color: #5B21B6;
+  color: #5B287C;
+}
+
+.menu-button :hover{
+  font-size: 20px;
 }
 
 .menu-button.active .menu-icon {
