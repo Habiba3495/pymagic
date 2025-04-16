@@ -1,23 +1,19 @@
 .quiz-review-container {
-  background-image: url("../components/images/video_bg.svg"); /* تأكدي أن المسار صحيح */
+  background-image: url("../components/images/video_bg.svg"); 
   background-color: #f2ddff;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed; /* اجعل الخلفية ثابتة عند التمرير */
-  
-  width: 100%; /* أو أي عرض ثابت يناسبك */
+  background-attachment: fixed;
+  width: 100%; 
   max-width: 100%; /* حتى لا يتجاوز عرض الشاشة */
-  
   min-height: 100vh; /* ليغطي الشاشة بالكامل في البداية */
   height: auto; /* للسماح بالتمرير عند الحاجة */
-  
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start; /* يبدأ المحتوى من الأعلى */
-  
-  padding: 30px;
+  padding: 10px;
   overflow-y: auto; /* تفعيل التمرير العمودي عند الحاجة */
 }
 
@@ -25,6 +21,7 @@
   color: #5B287C; /* Dark purple for title */
   font-size: 24px;
   margin-bottom: 20px;
+  font-family: 'Germania One', cursive;
 }
 
 .quiz-box-review {
@@ -49,8 +46,8 @@
   background-color: white;
   border-radius: 3px;
   align-items: center;
-  padding: 2px;
-  padding-left: 25px;
+  padding: 1px;
+  padding-left: 18px;
   padding-bottom: 10px;
 }
 
@@ -96,16 +93,24 @@
   background-color: #FFC145;
   color: #5B287C;
   cursor: pointer;
-  padding: 10px 20px;
+  padding: 15px 90px;
   border-radius: 5px;
+  font-family: 'Germania One', cursive;
+  /* border: none; */
+  outline: none;
+  font-size: 18px;
 }
 
 
 .pbutton {
-  padding: 10px 20px;
+  padding: 15px 70px;
   border: 2px solid #FFC145; /* تصحيح الحدود */
   border-radius: 5px;
   background-color: #5B287C; 
   color: #FFC145;
   cursor: pointer;
+  font-family: 'Germania One', cursive;
+  /* border: none; */
+  outline: none;
+  font-size: 18px;
 }

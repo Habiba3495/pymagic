@@ -1,3 +1,4 @@
+// <img src={points} alt="points icon" className="question points" />
 import PyMagicRunner from './Pymagic_runnergame'; // تأكد من المسار الصحيح للملف
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import trackEvent from '../utils/trackEvent';
 import correctSound from '../Sound/correct3-95630.mp3';
 import wrongSound from '../Sound/wronganswer-37702.mp3';
+import points from "./images/points.svg";
 
 const Quiz = () => {
   const { user } = useAuth();

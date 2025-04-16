@@ -7,6 +7,7 @@
   width: 100%;
   padding: 20px;
   position: relative;
+  box-sizing: border-box;
 }
 
 /* زر الرجوع */
@@ -43,10 +44,12 @@
   background: #5c2685; /* بنفسجي غامق */
   color: white;
   font-size: 24px;
-  font-weight: bold;
+  /* font-weight: bold; */
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 20px;
+  font-family: 'Germania One', cursive;
+  font-size: 30px;
 }
 
 /* الشبكة التي تحتوي على الكروت */
@@ -100,6 +103,10 @@
   font-size: 14px;
   color: #4b1665;
   font-weight: bold;
+  display: flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .points{

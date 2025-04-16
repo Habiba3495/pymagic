@@ -69,7 +69,7 @@
   "review": "Review",
   "quizReview": "Quiz Review",
   "goToLessons": "Go to Lessons",
-  "goToPrpgressReport": "Check Progress Report",
+  "goToProgressReport": "Check Progress Report",
   "askPythonWizard": "Ask Your Magical Python Wizard",
   "askPythonQuestion":"Ask Python Question",
   "points": "points",
@@ -136,7 +136,22 @@
       "passwordsDontMatch": "Passwords don't match",
       "incorrectPassword": "Current password is incorrect",
       "updateFailed": "Failed to update profile. Please try again.",
-      "networkError": "Network error. Please check your connection."
+      "networkError": "Network error. Please check your connection.",
+      "alertMessage": "Please select a feedback score!",
+
+      
+        "selectFeedbackScore": "Please select a feedback score!",
+        "missingQuizId": "Student Quiz ID is missing. Please try again.",
+        "ok": "OK",
+        "lessonQuizCompleted": "Lesson Quiz Completed",
+        "profilePointsEarned": "Points",
+        "review": "Review",
+        "continue": "Continue",
+        "feedbackTitle": "How was your experience?",
+        "feedbackCommentPlaceholder": "Add your comment here...",
+        "skip": "Skip",
+        "submit": "Submit"
+      
       
     }
   }

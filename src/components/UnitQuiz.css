@@ -157,6 +157,7 @@
     font-size: 18px;
     font-weight: bold;
     color: #5B287C;
+    font-family: 'Germania One', cursive;
   }
   
   .unit-correct-message {
@@ -175,8 +176,8 @@
     padding: 10px 15px;
     font-size: 16px;
     border: none;
-    background-color: #ffb400;
-    color: #5B287C;
+    background-color: #5B287C;
+    color: white;
     cursor: pointer;
     border-radius: 5px;
     font-weight: bold;
@@ -299,7 +300,7 @@
   font-size: 0.9rem;
 }
 
-.submit-btn {
+/* .submit-btn {
   background: #ff6f61;
   border: none;
   padding: 10px 20px;
@@ -311,7 +312,7 @@
 
 .submit-btn:hover {
   background: #e65a50;
-}
+} */
 
 /* خلفية الرسوم المتحركة */
 .background-animation {

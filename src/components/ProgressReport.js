@@ -164,10 +164,10 @@ const ProgressReport = () => {
                     ? `${t("unit")} ${quiz.unit_id}, ${t("lesson")} ${quiz.lesson_number}`
                     : `${t("unit")} ${quiz.unit_id}`}
                 </p>
-                <p className="points-earned">
-                  <img src={points} alt="points icon" className="points" />{" "}
+                <div className="points-earned">
+                  <img src={points} alt="points icon" className="points" />
                   {quiz.earned_points} {t("profilePointsEarned")}
-                </p>
+                </div>
               </div>
             ))}
           </div>

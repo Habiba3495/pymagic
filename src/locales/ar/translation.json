@@ -136,7 +136,21 @@
       "passwordsDontMatch": "كلمات المرور غير متطابقة",
       "incorrectPassword": "كلمة المرور الحالية غير صحيحة",
       "updateFailed": "فشل تحديث الملف الشخصي. يرجى المحاولة مرة أخرى.",
-      "networkError": "خطأ في الشبكة. يرجى التحقق من اتصالك."
+      "networkError": "خطأ في الشبكة. يرجى التحقق من اتصالك.",
+      "alertMessage":"من فضلك اختاري درجة التقييم!",
+    
+        "selectFeedbackScore": "من فضلك اختار درجة التقييم!",
+        "missingQuizId": "معرف الكويز غير موجود. من فضلك حاولي مرة أخرى.",
+        "ok": "موافق",
+        "lessonQuizCompleted": "تم إكمال كويز الدرس",
+        "profilePointsEarned": "نقاط",
+        "review": "مراجعة",
+        "continue": "متابعة",
+        "feedbackTitle": "كيف كانت تجربتك؟",
+        "feedbackCommentPlaceholder": "أضيفي تعليقك هنا...",
+        "skip": "تخطي",
+        "submit": "إرسال"
+      
     }
   }
 }
