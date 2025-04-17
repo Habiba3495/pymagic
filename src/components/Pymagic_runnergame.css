@@ -8,13 +8,14 @@
   }
   
   .wizard {
-    width: 50px;
-    height: 50px;
-    background-color: #fff;
+    width: 150px;
+    height: 150px;
     position: absolute;
     bottom: 50px;
     left: 100px;
-    transition: bottom 0.3s;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
   }
   
   .jump {
@@ -22,45 +23,71 @@
   }
   
   @keyframes jump {
-    0% { bottom: 50px; }
-    50% { bottom: 150px; }
-    100% { bottom: 50px; }
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-100px); }
+    100% { transform: translateY(0); }
   }
   
   .obstacle {
-    width: 40px;
-    height: 40px;
-    background-color: red;
+    width: 50px;
+    height: 50px;
     position: absolute;
     bottom: 50px;
-    right: -60px;
+    transform: translateX(100vw);
     animation: moveLeft 2s linear infinite;
-  }
-  
-  .stopped {
-    animation-play-state: paused;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
   }
   
   @keyframes moveLeft {
-    0% { right: -60px; }
-    100% { right: 100%; }
+    0% { transform: translateX(100vw); }
+    100% { transform: translateX(-50px); }
+  }
+    .runoverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7); /* زيادة الشفافية */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .game-over {
+      text-align: center;
+      color: #fff;
+      font-size: 2rem;
+      font-family: 'Cursive', 'Arial', sans-serif; /* خط بديل */
+      background: #222;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #ffcc00;
+    }
+  
+  .time-display,
+  .best-time-display {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: #ffcc00;
   }
   
-  .ground {
-    position: absolute;
-    width: 100%;
-    height: 50px;
-    background-color: #444;
-    bottom: 0;
+  .restart-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #ffcc00;
+    color: #222;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
   }
   
-  .game-over {
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #fff;
-    font-size: 2rem;
-    font-family: 'Cursive';
+  .restart-button:hover {
+    background-color: #e6b800;
   }
+    
   
