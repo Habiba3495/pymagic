@@ -54,3 +54,93 @@
     left: 42%;
     right: auto;
 }
+
+/* إضافة هذه التنسيقات الجديدة */
+.unity-game-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000; /* خلفية سوداء للعنصر الأب */
+  }
+  
+  .unity-canvas-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  #unity-canvas {
+    background: #000;
+    width: 100%;
+    height: 100%;
+    max-width: 960px;
+    max-height: 600px;
+  }
+  
+  /* تعديلات وضع ملء الشاشة */
+  .unity-game-container:fullscreen {
+    background: #000;
+  }
+  
+  .unity-game-container:fullscreen .unity-canvas-wrapper {
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  .unity-game-container:fullscreen #unity-canvas {
+    max-width: 100%;
+    max-height: 100%;
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  /* دعم للمتصفحات المختلفة */
+  .unity-game-container:-webkit-full-screen {
+    background: #000;
+  }
+  
+  .unity-game-container:-webkit-full-screen .unity-canvas-wrapper {
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  .unity-game-container:-moz-full-screen {
+    background: #000;
+  }
+  
+  .unity-game-container:-ms-fullscreen {
+    background: #000;
+  }
+  
+  /* تنسيق زر ملء الشاشة */
+  .fullscreen-btn {
+    position: fixed; /* تغيير من absolute إلى fixed */
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: 1px solid white;
+    border-radius: 4px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s ease;
+  }
+  
+  .fullscreen-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+    color: #000;
+  }
+
+  
+  .game-background {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }

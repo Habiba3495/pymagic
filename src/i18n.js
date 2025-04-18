@@ -21,8 +21,10 @@ i18n
   .use(LanguageDetector) // Detects the user's language
   .use(initReactI18next) // Passes i18n to react-i18next
   .init({
+    supportedLngs: ['en', 'ar'], // Only base language codes
     resources,
     fallbackLng: "en", // Default language if the user's language is not available
+    load: 'languageOnly', // Ignore region (e.g., 'en-US' becomes 'en')
     interpolation: {
       escapeValue: false, // React already escapes values
     },
