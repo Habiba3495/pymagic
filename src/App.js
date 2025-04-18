@@ -26,6 +26,7 @@ import ReactGA from 'react-ga4';
 import TrackPageViews from './components/TrackPageViews';
 import TrackEngagement from './components/TrackEngagement';
 import TrackInactivity from './components/TrackInactivity';
+import Loading from "./components/Loading";
 
 ReactGA.initialize('G-W0C0ZKC21L');
 
@@ -89,6 +90,7 @@ const App = () => {
             <Route path="/achievements" element={<AchievementsPage />} />
             <Route path="/profile/avatar" element={<AvatarCustomization />} />
             <Route path="/setting" element={<Setting />} />
+            <Route path="/Loading" element={<Loading />} />
           </>
         ) : (
           <Route path="*" element={<Navigate to="/" replace />} />

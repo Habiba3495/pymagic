@@ -6,6 +6,8 @@ import Exit from "./images/Exit iconsvg.svg";
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
 import trackEvent from '../utils/trackEvent';
+import Loading from "./Loading.js"; 
+import PyMagicRunner from "./Pymagic_runnergame.js"; 
 
 const AchievementsPage = () => {
   const { user } = useAuth();
@@ -14,6 +16,16 @@ const AchievementsPage = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+
+   useEffect(() => {
+   if (achievements.length === 0 && user?.id) {
+    trackEvent(user.id, 'empty_achievements_viewed', {
+      category: 'Achievements',
+      label: 'No Achievements Yet'
+     });
+    }
+    }, [achievements, user]);
 
   useEffect(() => {
     // Track page view
@@ -48,37 +60,7 @@ const AchievementsPage = () => {
         }
       } catch (error) {
         console.error("Error fetching achievements:", error);
-        setError(error.message);
-        //Track error and fallback to dummy data
-        // trackEvent(user.id, 'achievements_error', {
-        //   category: 'Error',
-        //   label: 'Achievements Data Error',
-        //   error: error.message
-        // });
-
-        const dummyAchievements = [
-          {
-            id: 1,
-            title: "Spellbook Scholar",
-            description: "Unlocked at 50 points",
-            image: `${apiClient.defaults.baseURL}/images/spellbook_scholar.svg`,
-          },
-          {
-            id: 2,
-            title: "Daily Dedication",
-            description: "Unlocked at 70 points",
-            image: `${apiClient.defaults.baseURL}/images/daily_dedication.svg`,
-          },
-          {
-            id: 3,
-            title: "Treasure Hunter",
-            description: "Unlocked at 100 points",
-            image: `${apiClient.defaults.baseURL}/images/treasure_hunter.svg`,
-          },
-        ];
-        setAchievements(dummyAchievements);
-        // Track dummy data usage
-    
+        setError(error.message);    
       } finally {
         setLoading(false);
       }
@@ -105,25 +87,10 @@ const AchievementsPage = () => {
       achievement_title: achievement.title
     });
   };
-
-  if (loading) {
-    return (
-      <div className="achievements-bg">
-        <div className="loading-indicator">Loading achievements...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="achievements-bg">
-        <div className="error-message">
-          Error loading achievements: {error}
-          <button onClick={() => window.location.reload()}>Try Again</button>
-        </div>
-      </div>
-    );
-  }
+  ///////////
+  if (loading) return <Loading />;
+    
+if (error) return <PyMagicRunner />;
 
   return (
     <div className="achievements-bg">
@@ -131,7 +98,7 @@ const AchievementsPage = () => {
         <img src={Exit} alt="Back" className="back-icon" />
       </button>
       <div className="achievements-container">
-        <h1 className="achievements-header">{t("profileAchievements")}</h1>
+        <p className="achievements-header">{t("profileAchievements")}</p>
         <div className="achievements-grid">
           {achievements.length > 0 ? (
             achievements.map((achievement) => (
@@ -178,13 +145,10 @@ const AchievementsPage = () => {
               </div>
             ))
           ) : (
-            <div className="no-achievements">
+            <div className="ano-achievements-wrapper">
+            <div className="ano-achievements">
               <p>{t("noAchievementsYet")}</p>
-              {/* Track empty achievements view */}
-              {user?.id && trackEvent(user.id, 'empty_achievements_viewed', {
-                category: 'Achievements',
-                label: 'No Achievements Yet'
-              })}
+            </div>
             </div>
           )}
         </div>

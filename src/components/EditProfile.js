@@ -234,7 +234,7 @@ const EditProfile = () => {
   return (
     <div className='background_edit-profile-container'>
       <div className="edit-profile-container">
-        <h2>{t('editProfile.title')}</h2>
+        {/* <p>{t('editProfile.title')}</p> */}
         
         {errors.form && (
           <div className="error-message">
@@ -287,9 +287,9 @@ const EditProfile = () => {
             />
             {errors.parentEmail && <span className="error-message">{errors.parentEmail}</span>}
           </div>
-          
+{/*           
           <h3 className="password-section-title">{t('editProfile.passwordSectionTitle')}</h3>
-          <p className="password-instructions">{t('editProfile.passwordInstructions')}</p>
+          <p className="password-instructions">{t('editProfile.passwordInstructions')}</p> */}
           
           <div className="form-group">
             <label htmlFor="currentPassword">{t('editProfile.currentPasswordLabel')}</label>

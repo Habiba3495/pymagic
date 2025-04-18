@@ -1,4 +1,3 @@
-/* General Profile Container */
 .profile-container {
   background-color: #f3e8ff;
   min-height: 100vh;
@@ -9,9 +8,6 @@
   margin-left: 16.5%; /* Adjusted for sidebar */
 }
 
-/* .profile-content{
-  margin-left: 16.5%;
-} */
 .profile-name{
   color: #6b21a8;
   font-family: Germania One;
@@ -19,7 +15,6 @@
   margin-left: 30px;
 }
 
-/* Profile Header */
 .profile-header {
   display: flex;
   flex-direction: column;
@@ -32,7 +27,7 @@
 /* Avatar Box */
 .profile-avatar-container {
   position: relative;
-  background: white;
+  background: url("../components/images/Avatar\ bg.svg" )no-repeat center center/cover;
   padding: 16px;
   border-radius: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -40,8 +35,8 @@
   flex-direction: column-reverse;
   align-items: center;
   width: 600px;
-  margin-bottom: 30px;
   height: 300px;
+  overflow: hidden; /* مهم لو الصورة أكبر */
 }
 
 /* Avatar Styling */
@@ -59,7 +54,7 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background: rgba(107, 33, 168, 0.7); /* Transparent purple */
+  background: #5B287C; /* Transparent purple */
   color: #facc15; /* Yellow text */
   padding: 6px 12px;
   border-radius: 8px;
@@ -69,15 +64,15 @@
   transition: background 0.3s, transform 0.2s;
 }
 
-.edit-button:hover {
-  background: rgba(76, 29, 149, 0.9); /* Darker purple */
+/* .edit-button:hover {
+  background: rgba(76, 29, 149, 0.9);
   transform: scale(1.1);
-}
+} */
 
 /* Name and Points Box */
 .profile-name-container {
   background: white;
-  padding: 16px;
+  /* padding: 16px; */
   border-radius: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
@@ -85,11 +80,13 @@
   display: flex;
   justify-content: space-between; /* Name on right, points on left */
   align-items: center;
+  min-width: 640px;
 }
 
 .profile-points {
-  color: #6b7280;
+  color: #FFC145;
   margin-right: 30px; /* Push points to the left */
+  font-family: 'Germania One', cursive;
 }
 
 /* Section Styling */
@@ -104,15 +101,17 @@
 
 /* Section Titles with Purple Rectangle */
 .section-title {
-  background: #6b21a8; /* Purple background */
+  background: #5B287C; /* Purple background */
   color: white; /* White text */
-  padding: 8px 16px;
+  padding: 15px 16px;
   border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   width: 560px;
+  font-family: 'Germania One', cursive;
+  font-size: 20px;
 }
 
 /* Achievements Grid */
@@ -123,16 +122,28 @@
   margin-top: 16px;
 }
 
-.achievement-card {
-  background: #e9d5ff;
-  padding: 12px;
+.pachievement-card {
+  background-color: #f3e8ff;;
+  padding: 12px 35px;
   border-radius: 8px;
   text-align: center;
+  justify-content: center;
+  display: flex;
+  align-items: center; 
+  flex-direction: column;
+}
+.achievement-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  margin-bottom: 12px;
+  border-radius: 8px;
 }
 
 .achievement-title {
-  font-weight: bold;
+  /* font-weight: bold; */
   font-size: 16px;
+  font-family: 'Germania One', cursive;
 }
 
 .achievement-description {
@@ -149,7 +160,7 @@
 }
 
 .progress-card {
-  background: #e9d5ff;
+  background-color: #f3e8ff;
   padding: 12px;
   border-radius: 8px;
   text-align: center;
@@ -168,21 +179,21 @@
 /* View All Button */
 .view-all-button {
   margin-top: 16px;
-  background: #facc15;
-  padding: 8px;
+  background: #FFC145;
+  padding: 10px;
   border-radius: 8px;
   width: 100%;
   border: none;
   cursor: pointer;
   transition: background 0.3s;
+  font-family: 'Germania One', cursive;
+  color: #5B287C;
+  font-size: 16px;
 }
 
 .view-all-button:hover {
   background: #eab308;
 }
-
-
-
 
 /* Style for the logout button */
 .settings-button {
@@ -210,3 +221,10 @@ left: 20px;
 right: auto;
 
 }
+.no-achievements {
+  text-align: center;
+  color: #888;
+  font-size: 18px;
+  grid-column: span 3;
+}
+

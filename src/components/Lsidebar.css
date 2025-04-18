@@ -48,6 +48,8 @@
   transition: font-weight 0.3s ease, color 0.3s ease;
   width: 100%;
   text-align: left;
+  border: none;
+  outline: none;
 }
 
 .menu-button.active {

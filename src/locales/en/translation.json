@@ -110,6 +110,10 @@
   "Ok": "Ok",
   "Unlockunitquiz": "You need to complete all the lessons before taking the unit quiz",
   "Try Again":"Try Again",
+  "noAchievementsYet" :" No Achievements Yet",
+  "selectFeedbackScore": "Please select a feedback score!",
+  "missingQuizId": "Student Quiz ID is missing. Please try again.",
+  "ok": "OK",
 
 
   "editProfile": {
@@ -137,23 +141,13 @@
       "incorrectPassword": "Current password is incorrect",
       "updateFailed": "Failed to update profile. Please try again.",
       "networkError": "Network error. Please check your connection.",
-      "alertMessage": "Please select a feedback score!",
+      "alertMessage": "Please select a feedback score!"
 
-      
-        "selectFeedbackScore": "Please select a feedback score!",
-        "missingQuizId": "Student Quiz ID is missing. Please try again.",
-        "ok": "OK",
-        "lessonQuizCompleted": "Lesson Quiz Completed",
-        "profilePointsEarned": "Points",
-        "review": "Review",
-        "continue": "Continue",
-        "feedbackTitle": "How was your experience?",
-        "feedbackCommentPlaceholder": "Add your comment here...",
-        "skip": "Skip",
-        "submit": "Submit"
-      
+    
       
     }
+  
   }
   
 }
+

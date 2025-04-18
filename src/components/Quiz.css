@@ -21,7 +21,6 @@
   background-color: #5B287C;
   color: white;
   font-size: 22px;
-  font-weight: bold;
   padding: 12px;
   border-radius: 8px;
   font-family: 'Germania One', cursive;
@@ -40,7 +39,7 @@
   color: #5B287C;
 }
 
-.option-button {
+.qoption-button {
   background-color: white;
   border: 2px solid #bdb6c3;
   border-radius: 6px;
@@ -49,10 +48,9 @@
   cursor: pointer;
   transition: 0.3s;
   color: black;
-  
 }
 
-.option-button:hover {
+.qoption-button:hover {
   background: #e9d5ff;
 }
 
@@ -120,25 +118,24 @@
   margin-top: 15px;
   font-size: 16px;
   color: #5B287C;
-  font-weight: bold;
   text-align: left;
   font-family: 'Germania One', cursive;
 }
  
-.option-button.selected {
+.qoption-button.selected {
   background-color: #5B287C !important; /* موف غامق */
   color: white;
   border-color: #5B287C;
 }
  
 
-.option-button.correct {
+.qoption-button.correct {
   background-color: #28a745 !important; 
   border-color: #1e7e34;
   color: white;
 }
 
-.option-button.wrong {
+.qoption-button.wrong {
   background-color: #dc3545 !important; 
   border-color: #c82333;
 }

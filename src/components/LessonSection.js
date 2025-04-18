@@ -6,7 +6,8 @@ import unitquizicon from "../components/images/unitquizicon.svg";
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
 import trackEvent from '../utils/trackEvent';
-import PyMagicRunner from './Pymagic_runnergame'; 
+import PyMagicRunner from "./Pymagic_runnergame.js"; 
+import Loading from "./Loading.js"; 
 import { useTranslation } from "react-i18next";
 
 const LessonSection = () => {
@@ -172,7 +173,7 @@ const LessonSection = () => {
 
   ///////////////////// Photo in loading 
 
-  if (loading) return <div className="loading-indicator">Loading lessons...</div>;
+  if (loading) return <Loading />;
   if (error) return <PyMagicRunner />;
 
   return (
@@ -186,7 +187,7 @@ const LessonSection = () => {
           return (
             <div key={unit.id} className="unit-container">
               <div className="unit-header" style={{ backgroundColor: generateColor(unit.id) }}>
-                <h3 className="unit-title">{unit.name}</h3>
+                <p className="unit-title">{unit.name}</p>
               </div>
               <div className="lesson-list">
                 {unit.lessons.map((lesson, index) => {

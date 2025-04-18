@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import points from "./images/points.svg";
 import { useTranslation } from "react-i18next";
 import trackEvent from '../utils/trackEvent';
+import Exit from "./images/Exit iconsvg.svg";
 
 // Import SVG icons as React components
 import FacesIcon from "./images/faces.svg";
@@ -255,6 +256,9 @@ const AvatarCustomization = () => {
 
   return (
     <div className="avatar-customization-container">
+            <button className="back-button" onClick={() => navigate("/profile")}>
+            <img src={Exit} alt="Back" className="back-icon" />
+            </button>
       <div className="Aheader">
         <span className="username">{user.name}</span>
         <img src={points} alt={t("pointsIcon")} className="userpoints" />
@@ -285,9 +289,9 @@ const AvatarCustomization = () => {
             ))}
           </div>
 
-          <h2 className="assetoptionname">
+          <p className="assetoptionname">
             {selectedTab === "headdress" ? t("headdresses") : t(`${selectedTab}s`)}
-          </h2>
+          </p>
           <div className="asset-content">
             <div className="asset-grid">
               {assets

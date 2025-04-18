@@ -298,9 +298,9 @@ const Quiz = () => {
       </button>
   
       <div className="quiz-box">
-        <h1 className="quiz-header">
+        <p className="quiz-header">
           {t("quiz")} {t("unit")} {unitId} - {t("lesson")} {lessonId}
-        </h1>
+        </p>
         
         <p className="quiz-question">{currentQuestion.question}</p>
   
@@ -308,7 +308,7 @@ const Quiz = () => {
           {currentQuestion.options.map((option, index) => (
             <button
               key={index}
-              className={`option-button 
+              className={`qoption-button 
                 ${selectedOption === option ? "selected" : ""} 
                 ${isAnswered && option === currentQuestion.correct_answer ? "correct" : ""} 
                 ${isAnswered && selectedOption === option && !isCorrect ? "wrong" : ""}`}

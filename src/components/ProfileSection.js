@@ -8,6 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
 import { FiSettings } from 'react-icons/fi';
 import trackEvent from '../utils/trackEvent';
+import Avatar_bg from "./images/Avatar bg.svg";
 
 const ProfilePage = () => {
   const { user, logout } = useAuth();
@@ -231,15 +232,26 @@ const ProfilePage = () => {
         </div>
 
         <div className="section achievements">
-          <h3 className="section-title">{t("profileAchievements")}</h3>
+          <p className="section-title">{t("profileAchievements")}</p>
           <div className="achievements-grid">
-            {achievements.map((achievement) => (
-              <div key={achievement.id} className="achievement-card">
-                {achievement.image && <img src={`http://localhost:5000${achievement.image}`} alt={achievement.title} className="achievement-image" />}
-                <p className="achievement-title">{achievement.title}</p>
-              </div>
-            ))}
-          </div>
+          {achievements.length > 0 ? (
+            achievements.map((achievement) => (
+              <div key={achievement.id} className="pachievement-card">
+              {achievement.image && (
+              <img
+             src={`http://localhost:5000${achievement.image}`}
+            alt={achievement.title}
+           className="achievement-image"
+           />
+          )}
+        <p className="achievement-title">{achievement.title}</p>
+       </div>
+            ))
+          ):(
+            <p className="no-achievements">{t("noAchievementsYet")}</p>
+          )}
+        </div>
+
           <button
             className="view-all-button"
             onClick={() => {
@@ -255,7 +267,7 @@ const ProfilePage = () => {
         </div>
 
         <div className="section progress-report">
-          <h3 className="section-title">{t("profileProgressReport")}</h3>
+          <p className="section-title">{t("profileProgressReport")}</p>
           <div className="progress-grid">
             {progressData.map((quiz) => (
               <div key={quiz.id} className="progress-card">

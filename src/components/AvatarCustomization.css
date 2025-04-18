@@ -14,6 +14,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  font-family: Germania One;
 }
 
 .user-info {
@@ -24,7 +25,7 @@
 
 .username {
   font-weight: bold;
-  font-size: 18px;
+  font-size: 15px;
 }
 
 .points {
@@ -38,6 +39,7 @@
   color: white;
   padding: 10px 20px;
   border-radius: 10px;
+  
 }
 
 .Anavigation-tabs {
@@ -185,6 +187,7 @@
   cursor: pointer;
   font-family: Germania One;
   margin-left: 1000px;
+  font-size: 23px;
 }
 
 .buy_button{
@@ -193,11 +196,15 @@
   cursor: pointer;
   font-family: Germania One;
   border-radius: 10px;
+  font-size: 20px;
 }
 button {
   border-radius: 10px;
   padding: 5px 10px;
   cursor: pointer;
+  font-family: Germania One;
+  border-radius: 10px;
+  font-size: 18px;
 }
 
 button:hover {
@@ -215,6 +222,8 @@ button:hover {
   padding: 5px 10px;
   border-radius: 10px;
   text-align: center;
+  font-family: Germania One;
+  font-size: 25px;
 }
 .username{
   font-family: Germania One;
@@ -249,8 +258,9 @@ button:hover {
 }
 
 .confirmation-modal p {
-  font-size: 18px;
+  font-size: 20px;
   margin-bottom: 20px;
+  font-family: Germania One;
 }
 
 .confirmation-modal button {
@@ -263,13 +273,13 @@ button:hover {
 }
 
 .confirmation-modal button:first-of-type {
-  background-color: #E75D5D; /* أحمر */
-  color: white;
+  background-color: #FFA500; /* برتقالي */
+  color: black;
 }
 
 .confirmation-modal button:last-of-type {
-  background-color: #FFA500; /* برتقالي */
-  color: black;
+  background-color: #E75D5D; /* أحمر */
+  color: white;
   font-weight: bold;
 }
 
