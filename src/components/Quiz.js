@@ -301,7 +301,18 @@ const Quiz = () => {
         <p className="quiz-header">
           {t("quiz")} {t("unit")} {unitId} - {t("lesson")} {lessonId}
         </p>
-        
+
+
+
+       {/* back */}
+
+
+       
+            <p className="quiz-points">
+           {t("question")} {currentQuestionIndex + 1} / {questions.length}
+             <img src={points} alt="points icon" className="userpointstow" />
+           </p>
+
         <p className="quiz-question">{currentQuestion.question}</p>
   
         <div className="quiz-options">
