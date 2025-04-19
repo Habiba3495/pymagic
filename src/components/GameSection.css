@@ -25,7 +25,7 @@
 .start-game-btn {
     position: absolute;
     top: 50%; /* رفع الزر للأعلى */
-    left: 58%;
+    left: 50.5%;
     transform: translateX(-50%);
     font-size: 28px;
     font-weight: bold;

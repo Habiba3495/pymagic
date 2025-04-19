@@ -308,10 +308,13 @@ const Quiz = () => {
 
 
        
-            <p className="quiz-points">
+            <div className="quiz-points">
            {t("question")} {currentQuestionIndex + 1} / {questions.length}
-             <img src={points} alt="points icon" className="userpointstow" />
-           </p>
+          <span className='qestion-points'>
+          {currentQuestion.points}
+          <img src={points} alt="points icon" className="userpointstow" />
+          </span>
+           </div>
 
         <p className="quiz-question">{currentQuestion.question}</p>
   

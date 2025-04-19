@@ -27,6 +27,44 @@ const LessonSection = () => {
   const { t } = useTranslation();
 
 
+  // useEffect(() => {
+  //   if (user?.id) {
+  //     trackEvent(user.id, 'pageview', { 
+  //       page: '/lessons',
+  //       category: 'Navigation'
+  //     });
+  //   }
+
+  //   const fetchData = async () => {
+  //     try {        
+  //       const response = await apiClient.get(`/sections/${sectionId}`);
+  //       if (response.status !== 200) throw new Error("Failed to fetch data");
+        
+  //       setLessonData(response.data);
+        
+  //       trackEvent(user.id, 'lesson_data_loaded', {
+  //         category: 'Lesson',
+  //         label: 'Lesson Data Loaded',
+  //         unit_count: response.data.units.length,
+  //         lesson_count: response.data.units.reduce((sum, unit) => sum + unit.lessons.length, 0)
+  //       });
+
+       
+  //     } catch (error) {
+  //       setError(error.message);
+  //       trackEvent(user.id, 'lesson_data_error', {
+  //         category: 'Error',
+  //         label: 'Lesson Data Error',
+  //         error: error.message
+  //       });
+        
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [user, sectionId]);
+
   useEffect(() => {
     if (user?.id) {
       trackEvent(user.id, 'pageview', { 
@@ -34,34 +72,28 @@ const LessonSection = () => {
         category: 'Navigation'
       });
     }
-
+  
     const fetchData = async () => {
-      try {        
+      try {
+        setLoading(true);
+  
+        // Fetch section data (includes prevSectionName and nextSectionName)
         const response = await apiClient.get(`/sections/${sectionId}`);
-        if (response.status !== 200) throw new Error("Failed to fetch data");
-        
-        setLessonData(response.data);
-        
+        if (response.status !== 200) throw new Error("Failed to fetch section data");
+  
+        const sectionData = response.data;
+        setLessonData(sectionData);
+        setPrevSectionName(sectionData.prevSectionName || ""); // Set previous section name
+        setNextSectionName(sectionData.nextSectionName || ""); // Set next section name
+  
+        // Track lesson data loaded event
         trackEvent(user.id, 'lesson_data_loaded', {
           category: 'Lesson',
           label: 'Lesson Data Loaded',
-          unit_count: response.data.units.length,
-          lesson_count: response.data.units.reduce((sum, unit) => sum + unit.lessons.length, 0)
+          unit_count: sectionData.units.length,
+          lesson_count: sectionData.units.reduce((sum, unit) => sum + unit.lessons.length, 0)
         });
-
-        if (sectionId < response.data.sectionCount) {
-          const nextResponse = await apiClient.get(`/sections/${sectionId + 1}`);
-          if (nextResponse.data?.name) {
-            setNextSectionName(nextResponse.data.name);
-          }
-        }
-
-        if (sectionId > 1) {
-          const prevResponse = await apiClient.get(`/sections/${sectionId - 1}`);
-          if (prevResponse.data?.name) {
-            setPrevSectionName(prevResponse.data.name);
-          }
-        }
+  
       } catch (error) {
         setError(error.message);
         trackEvent(user.id, 'lesson_data_error', {
@@ -69,11 +101,11 @@ const LessonSection = () => {
           label: 'Lesson Data Error',
           error: error.message
         });
-        
       } finally {
         setLoading(false);
       }
     };
+  
     fetchData();
   }, [user, sectionId]);
 
@@ -185,9 +217,9 @@ const LessonSection = () => {
           let isLeft = false;
   
           return (
-            <div key={unit.id} className="unit-container">
-              <div className="unit-header" style={{ backgroundColor: generateColor(unit.id) }}>
-                <p className="unit-title">{unit.name}</p>
+            <div key={unit.id} className="lesson-unit-container">
+              <div className="lesson-unit-header" style={{ backgroundColor: generateColor(unit.id) }}>
+                <p className="lesson-unit-title">{unit.name}</p>
               </div>
               <div className="lesson-list">
                 {unit.lessons.map((lesson, index) => {

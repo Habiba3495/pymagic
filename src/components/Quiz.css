@@ -48,6 +48,8 @@
   cursor: pointer;
   transition: 0.3s;
   color: black;
+  font-family: sans-serif;
+
 }
 
 .qoption-button:hover {
@@ -276,4 +278,22 @@
 
 .wrong-animation {
   animation: wrongAnimation 0.5s ease-in-out forwards;
+}
+
+.quiz-points {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.userpointstow{
+  padding-left: 8px;
+}
+
+.qestion-points{
+  display: flex;
+    align-items: center;
+    font-family: 'Germania One', cursive;
+    font-size: 19px;
+
 }
