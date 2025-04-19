@@ -125,7 +125,7 @@ const UnitQuizComplete = () => {
   const performReview = async () => {
     setLoading(true);
     try {
-      const studentQuizId = state?.studentQuizId;
+      const studentQuizId = quizData.studentQuizId; // Use quizData.studentQuizId
       if (!studentQuizId) {
         throw new Error("Student Quiz ID is missing for review");
       }
@@ -134,7 +134,7 @@ const UnitQuizComplete = () => {
       if (response.status !== 200) {
         throw new Error("Failed to fetch review data");
       }
-
+  
       const data = response.data;
       if (data.success) {
         if (user?.id) {
@@ -183,38 +183,38 @@ const UnitQuizComplete = () => {
       alert("Please select a feedback score!");
       return;
     }
-
-    const studentQuizId = state?.studentQuizId;
+  
+    const studentQuizId = quizData.studentQuizId; // Use quizData.studentQuizId
     if (!studentQuizId) {
       alert("Student Quiz ID is missing. Please try again.");
       console.error("Student Quiz ID is undefined.");
       navigate("/lessons");
       return;
     }
-
+  
     const userId = user?.id;
     if (!userId) {
       console.error("User is not authenticated");
       navigate("/login");
       return;
     }
-
+  
     try {
       trackEvent(userId, 'quiz_feedback_submitted', {
         category: 'Feedback',
         label: 'Quiz Feedback Submitted',
         value: feedbackScore,
         comment_length: feedbackComment.length,
-        next_action: nextAction // Track whether this was before review or continue
+        next_action: nextAction
       });
-
+  
       const response = await apiClient.post('/api/feedback/submit', {
         user_id: userId,
         student_quiz_id: studentQuizId,
         feedback_score: feedbackScore,
         comment: feedbackComment || '',
       });
-
+  
       if (response.data.success) {
         setShowFeedbackModal(false);
         proceedAfterFeedback();

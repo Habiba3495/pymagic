@@ -1,0 +1,90 @@
+.unity-game-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: #000;
+    overflow: hidden;
+  }
+  
+  #unity-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: #000;
+  }
+  
+  .unity-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 10, 10, 0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    color: #fff;
+    font-size: 1.2rem;
+  }
+  
+  .loading-progress-bar {
+    width: 80%;
+    height: 20px;
+    background-color: #444;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background-color: #2ecc71;
+    transition: width 0.3s ease-in-out;
+  }
+  
+  .loading-status {
+    color: #fff;
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  .exit-game-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    padding: 10px 15px;
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    z-index: 20;
+    transition: background 0.3s;
+  }
+  
+  .exit-game-btn:hover {
+    background-color: #c0392b;
+  }
+  
+  .fullscreen-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    /* background-color: #3498db; */
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 20;
+    transition: background 0.3s;
+  }
+  
+  .fullscreen-btn:hover {
+    background-color: #5B287C;
+  }
+  

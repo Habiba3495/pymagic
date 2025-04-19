@@ -827,16 +827,16 @@ const QuizComplete = () => {
   const performReview = async () => {
     setLoading(true);
     try {
-      const studentQuizId = state?.studentQuizId;
+      const studentQuizId = quizData.studentQuizId; // Use quizData.studentQuizId
       if (!studentQuizId) {
         throw new Error("Student Quiz ID is missing for review");
       }
       
       const response = await apiClient.get(`/api/quiz/review/${studentQuizId}`);
       if (response.status !== 200) {
-        return <PyMagicRunner />;
+        throw new Error("Failed to fetch review data");
       }
-
+  
       const data = response.data;
       if (data.success) {
         if (user?.id) {
@@ -880,64 +880,65 @@ const QuizComplete = () => {
     })),
   });
 
-  const submitFeedback = async () => {
-    if (!feedbackScore) {
-      setAlertMessage(t('selectFeedbackScore', { defaultValue: 'select Feedback Score '}));
-      setShowAlertPopup(true); // إظهار البوب أب
-      return;
-    }
+// QuizComplete.js
+const submitFeedback = async () => {
+  if (!feedbackScore) {
+    setAlertMessage(t('selectFeedbackScore', { defaultValue: 'select Feedback Score '}));
+    setShowAlertPopup(true);
+    return;
+  }
 
-    const studentQuizId = state?.studentQuizId;
-    if (!studentQuizId) {
-      setAlertMessage(t('missingQuizId', { defaultValue: 'معرف الكويز غير موجود. من فضلك حاولي مرة أخرى.' }));
-      setShowAlertPopup(true); // إظهار البوب أب
-      console.error("Student Quiz ID is undefined.");
-      navigate("/lessons");
-      return;
-    }
+  const studentQuizId = quizData.studentQuizId; // Use quizData.studentQuizId
+  if (!studentQuizId) {
+    setAlertMessage(t('missingQuizId', { defaultValue: 'معرف الكويز غير موجود. من فضلك حاولي مرة أخرى.' }));
+    setShowAlertPopup(true);
+    console.error("Student Quiz ID is undefined.");
+    navigate("/lessons");
+    return;
+  }
 
-    const userId = user?.id;
-    if (!userId) {
-      console.error("User is not authenticated");
-      navigate("/login");
-      return;
-    }
+  const userId = user?.id;
+  if (!userId) {
+    console.error("User is not authenticated");
+    navigate("/login");
+    return;
+  }
 
-    try {
-      trackEvent(userId, 'quiz_feedback_submitted', {
-        category: 'Feedback',
-        label: 'Quiz Feedback Submitted',
-        value: feedbackScore,
-        comment_length: feedbackComment.length,
-        has_comment: feedbackComment.length > 0,
-        next_action: nextAction
-      });
+  try {
+    trackEvent(userId, 'quiz_feedback_submitted', {
+      category: 'Feedback',
+      label: 'Quiz Feedback Submitted',
+      value: feedbackScore,
+      comment_length: feedbackComment.length,
+      has_comment: feedbackComment.length > 0,
+      next_action: nextAction
+    });
 
-      const response = await apiClient.post('/api/feedback/submit', {
-        user_id: userId,
-        student_quiz_id: studentQuizId,
-        feedback_score: feedbackScore,
-        comment: feedbackComment || '',
-      });
+    const response = await apiClient.post('/api/feedback/submit', {
+      user_id: userId,
+      student_quiz_id: studentQuizId,
+      feedback_score: feedbackScore,
+      comment: feedbackComment || '',
+    });
 
-      if (response.data.success) {
-        setShowFeedbackModal(false);
-        proceedAfterFeedback();
-      } else {
-        console.error("Failed to submit feedback:", response.data.message);
-        proceedAfterFeedback();
-      }
-    } catch (error) {
-      if (user?.id) {
-        trackEvent(user.id, 'quiz_feedback_error', {
-          category: 'Error',
-          label: 'Feedback Submission Error',
-          error: error.response?.data?.message || error.message
-        });
-      }
+    if (response.data.success) {
+      setShowFeedbackModal(false);
+      proceedAfterFeedback();
+    } else {
+      console.error("Failed to submit feedback:", response.data.message);
       proceedAfterFeedback();
     }
-  };
+  } catch (error) {
+    if (user?.id) {
+      trackEvent(user.id, 'quiz_feedback_error', {
+        category: 'Error',
+        label: 'Feedback Submission Error',
+        error: error.response?.data?.message || error.message
+      });
+    }
+    proceedAfterFeedback();
+  }
+};
 
   const skipFeedback = () => {
     if (user?.id) {

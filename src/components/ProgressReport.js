@@ -474,7 +474,7 @@ const ProgressReport = () => {
       score: quiz.score,
       is_passed: quiz.is_passed
     });
-
+  
     const quizData = {
       score: quiz.score || 0,
       answers: Array(quiz.total_questions || 10)
@@ -484,9 +484,10 @@ const ProgressReport = () => {
         })),
       earned_points: quiz.earned_points || 0,
       is_passed: quiz.is_passed || false,
-      id: quiz.id,
+      studentQuizId: quiz.id, // Explicitly include studentQuizId
+      total_questions: quiz.total_questions || 10, // Ensure total_questions is included
     };
-
+  
     if (quiz.lesson_id) {
       navigate("/quiz-complete", { state: { quizData } });
     } else if (quiz.unit_id) {
