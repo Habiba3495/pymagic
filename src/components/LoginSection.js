@@ -1,107 +1,10 @@
-// import React, { useState } from "react";
-// import "./LoginSection.css";
-// import { useNavigate } from "react-router-dom";
-// import { useAuth } from '../context/AuthContext';
-// import { useTranslation } from "react-i18next";
-// import apiClient from '../services';
-
-// const LoginSection = () => {
-//   const { login } = useAuth();
-//   const navigate = useNavigate();
-//   const { t } = useTranslation(); // Add useTranslation hook
-//   const [error, setError] = useState(null);
-//   const [formData, setFormData] = useState({
-//     email: "",
-//     password: "",
-//     rememberMe: false,
-//   });
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setError(null); // Clear previous errors
-  
-//     try {
-//       const response = await apiClient.post('/api/users/login', formData);
-  
-//       if (response.status !== 200 || !response.data?.token) {
-//         throw new Error(response.data?.error || t("loginError"));
-//       }
-
-//       const { token, user } = response.data;
-    
-//       // Store user information in context
-//       login(user, token);
-//       // Navigate to lessons page on successful login
-//       navigate("/lessons", { replace: true });
-//     } catch (err) {
-//       console.error('Login error:', err);
-//       setError(err.message || t("loginError"));
-//     }
-//   };
-
-//   const handleInputChange = (e) => {
-//     const { name, value, type, checked } = e.target;
-//     setFormData((prev) => ({
-//       ...prev,
-//       [name]: type === 'checkbox' ? checked : value,
-//     }));
-//   };
-
-//   return (
-//     <section className="Login-section">
-
-
-//       <div className="Lform-container">
-//         <form onSubmit={handleSubmit} className="Lform">
-//           <label>{t("emailLabel")}</label>
-//           <input
-//             type="email"
-//             name="email"
-//             placeholder={t("emailLabel")}
-//             value={formData.email}
-//             onChange={handleInputChange}
-//             required
-//           />
-
-//           <label>{t("LpasswordLabel")}</label>
-//           <input
-//             type="password"
-//             name="password"
-//             placeholder={t("LpasswordLabel")}
-//             value={formData.password}
-//             onChange={handleInputChange}
-//             required
-//           />
-
-//           <div className="remember-me">
-//             <input
-//               type="checkbox"
-//               name="rememberMe"
-//               checked={formData.rememberMe}
-//               onChange={handleInputChange}
-//             />
-//             <label>{t("rememberMe")}</label>
-//           </div>
-
-//           {error && <div className="error-message">{error}</div>}
-
-//           <button className="Lbutton" type="submit">
-//             {t("loginButton")}
-//           </button>
-//         </form>
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default LoginSection;
-
 import React, { useState } from "react";
 import "./LoginSection.css";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from "react-i18next";
 import apiClient from '../services';
+import logo from "../components/images/logo.svg" ;
 
 const LoginSection = () => {
   const { login } = useAuth();
@@ -120,9 +23,9 @@ const LoginSection = () => {
     const tempErrors = [];
 
     // ✅ التحقق من صحة البيانات
-    if (!formData.email.includes("@")) {
-      tempErrors.push(t("invalidEmail"));
-    }
+    // if (!formData.email.includes("@")) {
+    //   tempErrors.push(t("invalidEmail"));
+    // }
     if (formData.password.length < 6) {
       tempErrors.push(t("shortPassword"));
     }
@@ -136,7 +39,7 @@ const LoginSection = () => {
       const response = await apiClient.post('/api/users/login', formData);
 
       if (response.status !== 200 || !response.data?.token) {
-        throw new Error(response.data?.error || t("loginError"));
+        throw new Error(response.data?.error || t("login.loginError"));
       }
 
       const { token, user } = response.data;
@@ -146,11 +49,11 @@ const LoginSection = () => {
       const newErrors = [];
 
       if (err.response) {
-        newErrors.push(err.response.data?.error || t("loginError"));
+        newErrors.push(err.response.data?.error || t("login.loginError"));
       } else if (err.request) {
-        newErrors.push(t("networkError"));
+        newErrors.push(t("login.networkError"));
       } else {
-        newErrors.push(t("unexpectedError"));
+        newErrors.push(t("login.unexpectedError"));
       }
 
       setErrors(newErrors);
@@ -166,25 +69,28 @@ const LoginSection = () => {
   };
 
   return (
+    <>    <header className="Lheader">
+    <img src={logo} alt="PyMagic Logo" className="logo" />
+  </header>
     <section className="Login-section">
       <div className="Lform-container">
         <form onSubmit={handleSubmit} className="Lform">
-          <label>{t("emailLabel")}</label>
+          <label>{t("login.emailLabel")}</label>
           <input
             type="email"
             name="email"
-            placeholder={t("emailLabel")}
+            placeholder={t("login.emailLabel")}
             value={formData.email}
             onChange={handleInputChange}
             required
             className={errors.some(e => e.toLowerCase().includes("email")) ? "error" : ""}
           />
 
-          <label>{t("LpasswordLabel")}</label>
+          <label>{t("login.LpasswordLabel")}</label>
           <input
             type="password"
             name="password"
-            placeholder={t("LpasswordLabel")}
+            placeholder={t("login.LpasswordLabel")}
             value={formData.password}
             onChange={handleInputChange}
             required
@@ -198,11 +104,11 @@ const LoginSection = () => {
               checked={formData.rememberMe}
               onChange={handleInputChange}
             />
-            <label>{t("rememberMe")}</label>
+            <label>{t("login.rememberMe")}</label>
           </div>
 
           <button className="Lbutton" type="submit">
-            {t("loginButton")}
+            {t("login.loginButton")}
           </button>
         </form>
 
@@ -218,6 +124,7 @@ const LoginSection = () => {
         )}
       </div>
     </section>
+    </>
   );
 };
 

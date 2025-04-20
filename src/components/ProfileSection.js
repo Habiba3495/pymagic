@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./ProfileSection.css";
-import Lsidebar from "./Lsidebar";
+import Lsidebar from "./Sidebar";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import points from "./images/points.svg";

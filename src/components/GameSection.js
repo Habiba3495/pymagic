@@ -350,7 +350,7 @@
 // export default GameSection;
 
 import React, { useState } from "react";
-import Lsidebar from "./Lsidebar";
+import Lsidebar from "./Sidebar";
 import "./GameSection.css";
 import { useTranslation } from "react-i18next";
 import GamePage from "./GamePage"; // استيراد مكون الصفحة الجديدة

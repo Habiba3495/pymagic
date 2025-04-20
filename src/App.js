@@ -27,6 +27,7 @@ import TrackPageViews from './components/TrackPageViews';
 import TrackEngagement from './components/TrackEngagement';
 import TrackInactivity from './components/TrackInactivity';
 import Loading from "./components/Loading";
+import RegisterFailed from "./components/RegisterFailed";
 
 ReactGA.initialize('G-W0C0ZKC21L');
 
@@ -68,6 +69,10 @@ const App = () => {
           element={user ? <Navigate to="/lessons" replace /> : <RegisterPage />}
         />
         <Route
+          path="/RegisterFailed"
+          element={user ? <Navigate to="/RegisterFailed" replace /> : <RegisterFailed />}
+        />
+                <Route
           path="/Login"
           element={user ? <Navigate to="/lessons" replace /> : <LoginPage />}
         />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Lsidebar from "./Lsidebar";
+import Lsidebar from "./Sidebar";
 import "./FlashcardSection.css";
 import cardBack from "./images/Flashcard_black.svg";
 import cardFront from "./images/Flashcard_color.svg";

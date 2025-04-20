@@ -82,6 +82,17 @@ input::placeholder {
 
 @import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
 
+.Rheader {
+  display: flex;
+  justify-content: flex-start;
+  padding: 10px 20px;
+  background-color: transparent;
+}
+
+.logo {
+  height: 50px; 
+}
+
 .register-section {
   display: flex;
   justify-content: center;
@@ -104,13 +115,14 @@ input::placeholder {
   width: 350px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   margin-top: 7px;
+  
 }
 
 .Rform {
   display: flex;
   flex-direction: column;
   margin-right: 45px;
-  margin-left: 30px;
+  margin-left: 17px;
   font-family: 'Germania One', cursive;
 }
 

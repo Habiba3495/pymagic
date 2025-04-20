@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import "./Lsidebar.css";
+import "./Sidebar.css";
 import logoo from "./images/logo.svg";
 
 // gray icons

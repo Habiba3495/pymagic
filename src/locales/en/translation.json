@@ -1,36 +1,48 @@
 {
-  "welcome": "Welcome to PyMagic, Young Wizard!",
-  "unleash": "Unleash Your Inner Wizard! Learn Python, Unlock <br /> Secrets, and Find Hidden Treasures!",
-  "getStarted": "Get Started",
-  "alreadyHaveAccount": "I already have an account",
-  "whyLearn": "why to learn with us",
-  "learnPython": "Learn Python Magic Spells Through Stories!",
-  "learnPythonDesc": "Dive into enchanting video lessons where Pax will guide you through the secrets of Python. Each lesson is a magical tale that makes coding fun and easy to understand. Watch, learn, and start casting your own coding spells!",
-  "embarkAdventure": "Embark on an Epic Adventure with Pax!",
-  "embarkAdventureDesc": "Join Pax at the Academy of Mystic Code! Explore magical realms, defeat dark magic, and uncover hidden treasures using Python coding spells. Every quest takes you closer to becoming a Master Wizard of Code!",
-  "enchantAvatar": "Enchant Your Avatar with Magical Rewards!",
-  "enchantAvatarDesc": "Earn magical rewards as you complete quests and use them to customize your wizard avatar with exciting outfits and accessories. Make your wizard truly unique as you master the art of coding!",
-  "magicalChatbot": "Your Magical Coding Chatbot Guide",
-  "magicalChatbotDesc": "Ask questions, get hints, and uncover secrets as you journey through the world of Python. Always ready to help you on your adventure!",
-  "backToTop": "Back To Top",
-  "aboutUs": "About Us",
-  "aboutUsDesc": "PyMagic is an interactive platform that makes learning Python fun for kids. Through a blend of storytelling and hands-on coding, we turn programming into an exciting adventure, fostering problem-solving skills and creativity in young learners.",
-  "followUs": "Follow us:",
-  "facebook": "Facebook",
-  "twitter": "Twitter",
-  "instagram": "Instagram",
-  "linkedin": "LinkedIn",
-  "helpCenter": "Help Center",
-  "contactUs": "Contact Us",
-  "termsConditions": "Terms & Conditions",
-  "privacyPolicy": "Privacy Policy",
-  "haveQuestions": "Have questions? Reach out to us at <strong>PyMagic@gmail.com</strong>",
-  "footerBottom": "© 2024 PyMagic. All spells reserved.",
-  "emailLabel": "Email",
-  "LpasswordLabel": "Password",
-  "rememberMe": "Remember Me",
-  "loginButton": "Log In",
-  "loginError": "Login failed",
+  "home": {
+    "welcome": "Welcome to PyMagic, Young Wizard!",
+    "unleash": "Unleash Your Inner Wizard! Learn Python, Unlock <br /> Secrets, and Find Hidden Treasures!",
+    "getStarted": "Get Started",
+     "alreadyHaveAccount": "I already have an account",
+     "whyLearn": "why to learn with us",
+     "learnPython": "Learn Python Magic Spells Through Stories!",
+     "learnPythonDesc": "Dive into enchanting video lessons where Pax will guide you through the secrets of Python. Each lesson is a magical tale that makes coding fun and easy to understand. Watch, learn, and start casting your own coding spells!",
+     "embarkAdventure": "Embark on an Epic Adventure with Pax!",
+     "embarkAdventureDesc": "Join Pax at the Academy of Mystic Code! Explore magical realms, defeat dark magic, and uncover hidden treasures using Python coding spells. Every quest takes you closer to becoming a Master Wizard of Code!",
+     "enchantAvatar": "Enchant Your Avatar with Magical Rewards!",
+     "enchantAvatarDesc": "Earn magical rewards as you complete quests and use them to customize your wizard avatar with exciting outfits and accessories. Make your wizard truly unique as you master the art of coding!",
+     "magicalChatbot": "Your Magical Coding Chatbot Guide",
+     "magicalChatbotDesc": "Ask questions, get hints, and uncover secrets as you journey through the world of Python. Always ready to help you on your adventure!",
+     "backToTop": "Back To Top",
+     "followUs": "Follow us:",
+     "aboutUs": "About Us",
+     "aboutUsDesc": "PyMagic is an interactive platform that makes learning Python fun for kids. Through a blend of storytelling and hands-on coding, we turn programming into an exciting adventure, fostering problem-solving skills and creativity in young learners.",
+     "helpCenter": "Help Center",
+     "contactUs": "Contact Us",
+     "termsConditions": "Terms & Conditions",
+     "privacyPolicy": "Privacy Policy",
+     "footerBottom": "© 2024 PyMagic. All spells reserved.",
+     "haveQuestions": "Have questions? Reach out to us at <strong>PyMagic@gmail.com</strong>"
+
+
+  },
+
+  "register": {
+    "validAgeRequired": "Age Required: atleast 8 ages",
+    "passwordMismatch": "Passwords do not match",
+    "emailExists": "Email already exist",
+    "parentEmailExists": "Parent email already exist"
+  },
+
+  "login":{
+    "loginError": "Login failed",
+    "emailLabel": "Email",
+    "LpasswordLabel": "Password",
+    "rememberMe": "Remember Me",
+    "loginButton": "Log In"
+
+  },
+
   "registerTitle": "Join us at the Academy of Mystic Code and Arts",
   "nameLabel": "Name",
   "ageLabel": "Age",
@@ -39,7 +51,6 @@
   "RpasswordLabel": "Password",
   "confirmPasswordLabel": "Confirm Password",
   "registerButton": "Register",
-  "passwordMismatch": "Passwords do not match",
   "registrationSuccess": "Registration successful",
   "registrationFailed": "Registration failed",
   "sidebarLessons": "Lessons",
@@ -114,6 +125,7 @@
   "selectFeedbackScore": "Please select a feedback score!",
   "missingQuizId": "Student Quiz ID is missing. Please try again.",
   "ok": "OK",
+  "Something went wrong. Please try again later.": "Something went wrong. Please try again later.",
 
 
   "editProfile": {
@@ -130,6 +142,7 @@
     "cancelButton": "Cancel",
     "saving": "Saving...",
     "successMessage": "Profile updated successfully!",
+
     "errors": {
       "nameRequired": "Name is required",
       "emailRequired": "Email is required",
@@ -150,4 +163,5 @@
   }
   
 }
+
 

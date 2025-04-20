@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Lsidebar from "./Lsidebar";
+import Lsidebar from "./Sidebar";
 import "./ChatbotSection.css";
 import userAvatar from "./images/Profile.svg";
 import botAvatar from "./images/Chatbot.svg";

@@ -9,12 +9,12 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-left">
-          <h2>{t("aboutUs")}</h2>
-          <p>{t("aboutUsDesc")}</p>
+          <h2>{t("home.aboutUs")}</h2>
+          <p>{t("home.aboutUsDesc")}</p>
         </div>
         <div className="footer-right">
           <div className="social-links">
-            <span>{t("followUs")}</span>
+            <span>{t("home.followUs")}</span>
             <a href="#">
               <i className="bi bi-facebook" style={{ fontSize: '20px', margin: '10px' }}></i>
             </a>
@@ -29,16 +29,16 @@ const Footer = () => {
             </a>
           </div>
           <ul>
-            <li><a href="#">{t("helpCenter")}</a></li>
-            <li><a href="#">{t("contactUs")}</a></li>
-            <li><a href="#">{t("termsConditions")}</a></li>
-            <li><a href="#">{t("privacyPolicy")}</a></li>
+            <li><a href="#">{t("home.helpCenter")}</a></li>
+            <li><a href="#">{t("home.contactUs")}</a></li>
+            <li><a href="#">{t("home.termsConditions")}</a></li>
+            <li><a href="#">{t("home.privacyPolicy")}</a></li>
           </ul>
-          <p dangerouslySetInnerHTML={{ __html: t("haveQuestions") }} />
+          <p dangerouslySetInnerHTML={{ __html: t("home.haveQuestions") }} />
         </div>
       </div>
       <div className="footer-bottom">
-        {t("footerBottom")}
+        {t("home.footerBottom")}
       </div>
     </footer>
   );

@@ -1,6 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
 
+.Lheader {
+  display: flex;
+  justify-content: flex-start;
+  padding: 10px 20px;
+  background-color: transparent;
+}
+
+.logo {
+  height: 50px; /* حجم مناسب للوجو */
+}
+
 .Login-section {
     display: flex;
     justify-content: center;
@@ -18,7 +29,7 @@
     width: 350px;
     max-width: 400px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    margin-top: 450px;
+    margin-top: 210px;
   }
   
   .Lform {

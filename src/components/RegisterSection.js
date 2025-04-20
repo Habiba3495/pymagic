@@ -532,11 +532,15 @@ import "./RegisterSection.css";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import apiClient from '../services';
+import RegisterFailed from "./RegisterFailed"; 
+import logo from "../components/images/logo.svg";
 
 const RegisterSection = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [errors, setErrors] = useState([]); // ⬅️ مصفوفة للأخطاء
+  const [apiError, setApiError] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -555,24 +559,24 @@ const RegisterSection = () => {
     const validationErrors = [];
     const age = parseInt(formData.age);
 
-    if (!formData.name.trim()) {
-      validationErrors.push(t("nameRequired"));
+    // if (!formData.name.trim()) {
+    //   validationErrors.push(t("nameRequired"));
+    // }
+
+    if (isNaN(age) || age <= 7) {
+      validationErrors.push(t("register.validAgeRequired"));
     }
 
-    if (isNaN(age) || age <= 8) {
-      validationErrors.push(t("validAgeRequired"));
-    }
+    // if (!formData.email.includes("@")) {
+    //   validationErrors.push(t("validEmailRequired"));
+    // }
 
-    if (!formData.email.includes("@")) {
-      validationErrors.push(t("validEmailRequired"));
-    }
-
-    if (!formData.parentEmail.includes("@")) {
-      validationErrors.push(t("validParentEmailRequired"));
-    }
+    // if (!formData.parentEmail.includes("@")) {
+    //   validationErrors.push(t("validParentEmailRequired"));
+    // }
 
     if (formData.password !== formData.confirmPassword) {
-      validationErrors.push(t("passwordMismatch"));
+      validationErrors.push(t("register.passwordMismatch"));
     }
 
     return validationErrors;
@@ -600,17 +604,81 @@ const RegisterSection = () => {
         alert(t("registrationSuccess"));
         navigate("/Login");
       }
-    } catch (error) {
-      console.error("Registration Error:", error);
-      setErrors([error.response?.data?.error || t("registrationFailed")]);
-    }
-  };
 
+  // } catch (error) {
+  //   console.error("Registration Error:", error);
+  //   console.log("🔥 Error Response Data:", error.response?.data);
+  
+  //   if (
+  //     !error.response ||                      // السيرفر مش رد
+  //     error.response.status >= 500           // أو رد بخطأ داخلي
+  //   ) {
+  //     setApiError(true);                      // نعرض PyMagicRunner
+  //   } else {
+  //     setErrors([error.response?.data?.error || t("registrationFailed")]);
+  //   }
+  // }
+
+// } catch (error) {
+//   console.error("Registration Error:", error);
+//   console.log("🔥 Error Response Data:", error.response?.data);
+
+//   if (!error.response || error.response.status >= 500) {
+//     setApiError(true);                     
+//   } else {
+//     const errorMsg = error.response?.data?.error || error.response?.data?.message;
+
+//     // // هنا نتحقق من رسالة "Email already exists"
+//     // if (errorMsg === "Email already exists") {
+//     //   setErrors([t("register.emailExists")]); 
+
+//     // } else {
+//     //   setErrors([errorMsg || t("registrationFailed")]);
+//     // }
+//     if (errorMsg === "Email already exists") {
+//       setErrors([t("register.emailExists")]);
+//     } else if (errorMsg === "Parent email already exists") {
+//       setErrors([t("register.parentEmailExists")]);
+//     } else {
+//       setErrors([errorMsg || t("registrationFailed")]);
+//     }
+    
+//   }
+
+} catch (error) {
+  console.error("Registration Error:", error);
+  console.log("🔥 Error Response Data:", error.response?.data);
+
+  const errorMsg = error.response?.data?.error || error.response?.data?.message;
+  
+  // تحقق من الرسالة التي تأتي من السيرفر
+  console.log("Backend Error Message:", errorMsg);
+
+  if (errorMsg === "Email already exists") {
+    setErrors([t("register.emailExists")]);
+  } else if (errorMsg === "Parent email already exists") {
+    setErrors([t("register.parentEmailExists")]);
+  } else {
+    setErrors([errorMsg || t("registrationFailed")]);
+  }
+
+}
+
+  };
+  if (apiError) {
+    return <RegisterFailed/>;
+  }
+  
   return (
+    <>
+    <header className="Rheader">
+    <img src={logo} alt="PyMagic Logo" className="logo" />
+    </header>
+
     <section className="register-section">
       <h2>{t("registerTitle")}</h2>
 
-      {/* عرض الأخطاء كـ overlay */}
+      {/* error overlay */}
       {errors.length > 0 && (
         <div className="error-overlay">
           <div className="error-box">
@@ -684,6 +752,7 @@ const RegisterSection = () => {
         </form>
       </div>
     </section>
+    </>
   );
 };
 

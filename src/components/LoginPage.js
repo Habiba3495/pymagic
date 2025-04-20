@@ -1,13 +1,28 @@
+// import React from "react";
+// import LoginSection from "./LoginSection";
+// import "./LoginPage.css";
+
+
+// const LoginPage = () => {
+//   return (
+//     <div className="Llogin-page">
+//       <LoginSection />
+//     </div>
+//   );
+// };
+
+// export default LoginPage;
 import React from "react";
-import LoginHeader from "./LoginHeader";
 import LoginSection from "./LoginSection";
 import "./LoginPage.css";
-
+import { useTranslation } from "react-i18next";
 
 const LoginPage = () => {
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
+
   return (
-    <div className="Llogin-page">
-      <LoginHeader />
+    <div className={isArabic ? "Llogin-page-ar" : "Llogin-page"}>
       <LoginSection />
     </div>
   );

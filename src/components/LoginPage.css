@@ -1,10 +1,30 @@
-.Llogin-page {
-    background-image: url("../components/images/login_bg.svg"); /* استبدل بالمسار الصحيح */
+/* .Llogin-page {
+    background-image: url("../components/images/Login\ bgsvg.svg"); 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: scroll; /* هذا يجعل الخلفية تتحرك مع الصفحة */
-    z-index: -1; 
+    background-attachment: scroll;
     width: 100%;
-    height: 140vh;
+    height: 100%;
+  } */
+
+  .Llogin-page {
+    background-image: url("../components/images/Login bgsvg.svg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    width: 100%;
+    height: 100%;
   }
+  
+  .Llogin-page-ar {
+    background-image: url("../components/images/LoginArabic.svg"); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    width: 100%;
+    height: 100%;
+  }
+  
