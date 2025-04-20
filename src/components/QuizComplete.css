@@ -41,6 +41,17 @@
     font-family: 'Germania One', cursive;
 }
 
+[dir="rtl"] .quiz-complete-container h1 {
+    font-family: 'Marhey', cursive;
+}
+[dir="rtl"]  .review-btn{
+    font-family: 'Marhey', cursive;
+}
+[dir="rtl"]  .continue-btn{
+    font-family: 'Marhey', cursive;
+  
+  }
+  
 .quiz-complete-container p {
     font-size: 18px;
     margin: 10px 0;
@@ -190,6 +201,10 @@ div .emoji-container {
     font-family: 'Germania One', cursive;
   }
   
+  [dir="rtl"]  .submit-btn{
+    font-family: 'Marhey', cursive;
+  
+  }
   .alert-popup-content {
     animation: fadeIn 0.3s ease-in;
   }

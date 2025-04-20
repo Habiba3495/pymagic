@@ -24,11 +24,11 @@ const LSidebar = () => {
   const { t } = useTranslation(); 
 
   const menuItems = useMemo(() => [
-    { id: "lessons", label: t("sidebarLessons"), icon: l, activeIcon: lActive, path: "/lessons" },
-    { id: "flashcards", label: t("sidebarFlashCards"), icon: fc, activeIcon: fcActive, path: "/flashcards" },
-    { id: "game", label: t("sidebarGame"), icon: g, activeIcon: gActive, path: "/game" },
-    { id: "chatbot", label: t("sidebarChatbot"), icon: cb, activeIcon: cbActive, path: "/chatbot" },
-    { id: "profile", label: t("sidebarProfile"), icon: p, activeIcon: pActive, path: "/profile" },
+    { id: "lessons", label: t("sidebar.sidebarLessons"), icon: l, activeIcon: lActive, path: "/lessons" },
+    { id: "flashcards", label: t("sidebar.sidebarFlashCards"), icon: fc, activeIcon: fcActive, path: "/flashcards" },
+    { id: "game", label: t("sidebar.sidebarGame"), icon: g, activeIcon: gActive, path: "/game" },
+    { id: "chatbot", label: t("sidebar.sidebarChatbot"), icon: cb, activeIcon: cbActive, path: "/chatbot" },
+    { id: "profile", label: t("sidebar.sidebarProfile"), icon: p, activeIcon: pActive, path: "/profile" },
   ], [t]); 
 
   return (

@@ -1,9 +1,12 @@
-.unity-game-container {
-    position: relative;
-    width: 100%;
-    height: 100vh;
+  .unity-game-container {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100vw;    /* عرض الشاشة بالكامل */
+    height: 100vh;   /* ارتفاع الشاشة بالكامل */
     background: #000;
     overflow: hidden;
+    z-index: 999;    /* عشان تظهر فوق العناصر التانية */
   }
   
   #unity-canvas {
@@ -52,7 +55,7 @@
   
   .exit-game-btn {
     position: absolute;
-    top: 15px;
+    bottom: 15px;
     left: 15px;
     padding: 10px 15px;
     background-color: #e74c3c;

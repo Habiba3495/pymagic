@@ -370,7 +370,7 @@ const GameSection = () => {
         <div className="game-door">
           {!gameStarted ? (
             <button className="start-game-btn" onClick={startGame}>
-              {t("gamebutton")}
+              {t("game.gamebutton")}
             </button>
           ) : (
             <GamePage onExit={() => setGameStarted(false)} />

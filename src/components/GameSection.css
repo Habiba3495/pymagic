@@ -1,54 +1,44 @@
 .Gpagecontainer {
-    display: flex;
-    height: 100vh;
-    width: 100%;
-    overflow: hidden; /* يمنع السكرول عشان الصورة تبقى كاملة */
-    
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
 }
 
-/* الخلفية تحتوي على صورة الباب */
 .game-background {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-image: url('./images/gameu.svg'); /* تأكد من المسار */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    margin-left: 15%; /* نفس عرض الـ sidebar */
-    width: 85%; /* تأكدي من أن العرض يأخذ باقي الصفحة */
-    padding: 20px; /* يعطي مساحة داخلية جميلة */
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('./images/gameu.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 20px;
+  background-color: #f3e5f5;
+  margin-left: 250px;
 }
 
-/* زر Start Game */
 .start-game-btn {
-    position: absolute;
-    top: 50%; /* رفع الزر للأعلى */
-    left: 50.5%;
-    transform: translateX(-50%);
-    font-size: 28px;
-    font-weight: bold;
-    color: #54216d;
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-    transition: transform 0.2s ease-in-out;
+  font-size: 28px;
+  font-weight: bold;
+  color: #54216d;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease-in-out;
 }
+
 
 .start-game-btn:hover {
-    transform: translateX(-50%) scale(1.1);
+    font-size: 30px;
 }
-
-/* [dir="rtl"] .Gpagecontainer {
-    margin-right: 16%;
-  } */
 
 [dir="rtl"] .game-background {
-        margin-left: 0; /* إزالة الهامش الأيسر */
-        margin-right: 15%; /* إضافة الهامش الأيمن */
+  margin-left: 0;
+  margin-right: 250px;
 }
+
 
 [dir="rtl"] .start-game-btn {
     left: 42%;
@@ -136,11 +126,4 @@
   .fullscreen-btn:hover {
     background: rgba(255, 255, 255, 0.9);
     color: #000;
-  }
-
-  
-  .game-background {
-    width: 100%;
-    height: 100%;
-    position: relative;
   }

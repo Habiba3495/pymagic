@@ -23,8 +23,6 @@
      "privacyPolicy": "Privacy Policy",
      "footerBottom": "© 2024 PyMagic. All spells reserved.",
      "haveQuestions": "Have questions? Reach out to us at <strong>PyMagic@gmail.com</strong>"
-
-
   },
 
   "register": {
@@ -40,9 +38,69 @@
     "LpasswordLabel": "Password",
     "rememberMe": "Remember Me",
     "loginButton": "Log In"
-
   },
 
+  "sidebar":{
+    "sidebarLessons": "Lessons",
+    "sidebarFlashCards": "Flash Cards",
+    "sidebarGame": "Game",
+    "sidebarChatbot": "Chatbot",
+    "sidebarProfile": "Profile"
+  },
+
+  "lesson":{
+  "Next":"Next",
+  "Ok": "Ok",
+  "Previous":"Previous"
+  },
+
+  "flashcard":{
+  "accessError":"Watch the lesson first, and then the card will magically open!",
+  "next":"Next",
+  "previous":"Previous",
+  "noFlashcardsAvailable":"No Flashcards Available"
+  },
+
+  "game":{
+  "gamebutton": "Start Game",
+  "exitGame":"exit"
+  },
+
+  "video":{
+  "unit":"Unit",
+  "startQuiz": "Start Quiz"
+  },
+
+  "quiz":{
+  "quiz":"Quiz",
+  "lesson":"lesson",
+  "question":"question",
+  "checkAnswer": "Check Answer",
+  "next":"Next",
+  "Hint":"Hint:",
+  "correctAnswer": "Correct Answer",
+  "wrongAnswer": "Wrong Answer"
+  },
+
+  "quizcomplete":{
+    "selectFeedbackScore": "Please select a feedback score!",
+    "LessonCompleted":"Lesson Completed!",
+    "profilePointsEarned": "points earned",
+    "review": "Review",
+    "continue": "Continue",
+
+    "feedback":{
+    "feedbackTitle":"How was your experience?",
+    "feedbackCommentPlaceholder":"Add your comment here...",
+    "skip":"Skip",
+    "submit":"Submit"
+  }},
+  
+  "review":{
+    "quizReview": "Quiz Review",
+    "goToProgressReport": "Check Progress Report",
+    "goToLessons": "Go to Lessons"
+  },
   "registerTitle": "Join us at the Academy of Mystic Code and Arts",
   "nameLabel": "Name",
   "ageLabel": "Age",
@@ -53,34 +111,14 @@
   "registerButton": "Register",
   "registrationSuccess": "Registration successful",
   "registrationFailed": "Registration failed",
-  "sidebarLessons": "Lessons",
-  "sidebarFlashCards": "Flash Cards",
-  "sidebarGame": "Game",
-  "sidebarChatbot": "Chatbot",
-  "sidebarProfile": "Profile",
-  "gamebutton": "Start Game",
   "profileAchievements": "Achievements",
   "profileProgressReport": "Progress Report",
   "profileViewAll": "View All",
   "profileEdit": "Edit",
   "profilePoints": "points",
-  "profilePointsEarned": "points earned",
-  "unit":"Unit",
-  "lesson":"Lesson",
-  "quiz":"Quiz",
   "profileUnitCompleted": "Unit Quiz completed",
   "profileUnitCompletedGeneric": "Unit Quiz completed",
   "lessonQuizCompleted": "Lesson Quiz completed",
-  "startQuiz": "Start Quiz",
-  "checkAnswer": "Check Answer",
-  "correctAnswer": "Correct Answer",
-  "wrongAnswer": "Wrong Answer",
-  "next": "Next",
-  "continue": "Continue",
-  "review": "Review",
-  "quizReview": "Quiz Review",
-  "goToLessons": "Go to Lessons",
-  "goToProgressReport": "Check Progress Report",
   "askPythonWizard": "Ask Your Magical Python Wizard",
   "askPythonQuestion":"Ask Python Question",
   "points": "points",
@@ -113,16 +151,10 @@
   "SuccessfullySaved!": "Successfully saved!",
   "saveError": "Error saving preferences",
   "confirmLogout": "Are you sure you want to log out?",
-  "feedbackTitle":"How was your experience?",
-  "feedbackCommentPlaceholder":"Add your comment here...",
-  "skip":"Skip",
-  "submit":"Submit",
   "Unlocklessons": "Complete the previous lessons to unlock this lesson.",
-  "Ok": "Ok",
   "Unlockunitquiz": "You need to complete all the lessons before taking the unit quiz",
   "Try Again":"Try Again",
   "noAchievementsYet" :" No Achievements Yet",
-  "selectFeedbackScore": "Please select a feedback score!",
   "missingQuizId": "Student Quiz ID is missing. Please try again.",
   "ok": "OK",
   "Something went wrong. Please try again later.": "Something went wrong. Please try again later.",
@@ -155,8 +187,6 @@
       "updateFailed": "Failed to update profile. Please try again.",
       "networkError": "Network error. Please check your connection.",
       "alertMessage": "Please select a feedback score!"
-
-    
       
     }
   

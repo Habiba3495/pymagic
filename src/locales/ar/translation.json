@@ -42,10 +42,67 @@
 
   },
 
-  "lesson":{
-
+  "sidebar":{
+    "sidebarLessons": "الدروس",
+    "sidebarFlashCards": "بطاقات تعليمية",
+    "sidebarGame": "اللعبة",
+    "sidebarChatbot": "روبوت الدردشة",
+    "sidebarProfile": "الملف الشخصي"
   },
-  
+
+  "lesson":{
+  "Next":"التالي",
+  "Ok":"تمام",
+  "Previous":"السابق"
+  },
+
+  "flashcard":{
+   "accessError":"شاهد الدرس أولاً، وبعدها ستُفتح البطاقة بطريقة سحرية! ",
+   "next":"التالي",
+   "previous":"السابق",
+   "noFlashcardsAvailable":"لا يوجد بطاقات متاحه"
+  },
+
+  "game":{
+  "gamebutton": "ابدأ اللعب",
+  "exitGame":"خروج"
+  },
+
+  "video":{
+  "unit": "الوحدة",
+  "startQuiz": "ابدأ الاختبار"
+  },
+
+  "quiz":{
+  "quiz": "اختبار",
+  "lesson":"درس",
+  "question":"سؤال",
+  "checkAnswer": "تحقق من الإجابة",
+  "next":"التالي",
+  "Hint":"تلميح:",
+  "correctAnswer": "الإجابة صحيحة",
+  "wrongAnswer": "الإجابة غير صحيحة"
+  },
+
+  "quizcomplete":{
+    "selectFeedbackScore": "من فضلك اختار درجة التقييم!",
+    "LessonCompleted":"لقد أنهيت الدرس!",
+    "profilePointsEarned": "نقاط مكتسبة",
+    "review": "مراجعة",
+    "continue": "متابعة",
+
+    "feedback":{
+    "feedbackTitle": "كيف كانت تجربتك؟",
+    "feedbackCommentPlaceholder": "أضف تعليقك هنا...",
+    "skip": "تخطي",
+    "submit": "إرسال"
+  }},
+
+  "review":{
+    "quizReview": "مراجعة الاختبار",
+    "goToProgressReport": "عرض تقرير التقدم",
+    "goToLessons": "اذهب للدروس"
+  },
   "registerTitle": "انضم لينا في أكاديمية الكود السحرية",
   "nameLabel": "الاسم",
   "ageLabel": "السن",
@@ -56,32 +113,14 @@
   "registerButton": "تسجيل",
   "registrationSuccess": "تم التسجيل بنجاح",
   "registrationFailed": "فشل في التسجيل",
-  "sidebarLessons": "الدروس",
-  "sidebarFlashCards": "بطاقات تعليمية",
-  "sidebarGame": "اللعبة",
-  "sidebarChatbot": "روبوت الدردشة",
-  "sidebarProfile": "الملف الشخصي",
-  "gamebutton": "ابدأ اللعب",
   "profileAchievements": "الإنجازات",
   "profileProgressReport": "تقرير التقدم",
   "profileViewAll": "عرض الكل",
   "profileEdit": "تعديل",
   "profilePoints": "نقطة",
-  "profilePointsEarned": "نقاط مكتسبة",
-  "unit": "الوحدة",
-  "lesson": "الدرس",
-  "quiz": "اختبار",
   "profileUnitCompleted": "الوحدة {unitId} خلصت",
   "profileUnitCompletedGeneric": "اختبار الوحدة خلص",
   "lessonQuizCompleted": "اختبار الدرس خلص",
-  "startQuiz": "ابدأ الاختبار",
-  "checkAnswer": "تحقق من الإجابة",
-  "correctAnswer": "الإجابة الصحيحة",
-  "wrongAnswer": "الإجابة غير صحيحة",
-  "next": "التالي",
-  "review": "مراجعة",
-  "quizReview": "مراجعة الاختبار",
-  "goToLessons": "اذهب للدروس",
   "goToPrpgressReport": "اذهب لتقرير التقدم",
   "askPythonWizard": "اسأل ساحر بايثون السحري",
   "askPythonQuestion":"اسأل فى بايثون",
@@ -115,19 +154,12 @@
   "SuccessfullySaved!": "تم الحفظ بنجاح!",
   "saveError": "خطأ في حفظ التفضيلات",
   "confirmLogout": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
-    "feedbackCommentPlaceholder": "أضف تعليقك هنا...",
-    "skip": "تخطي",
-    "submit": "إرسال",
     "Unlocklessons":"خلص الدروس اللي قبل كده عشان تقدر تفتح الدرس ده.",
-    "Ok":"تمام",
     "Unlockunitquiz": "كمّل دروس الوحدة دي الأول علشان تفتح الاختبار ",
     "noAchievementsYet" :"  لا يوجد انجازات بعد",
     "Try Again":"حاول مره اخرى",
-    "selectFeedbackScore": "من فضلك اختار درجة التقييم!",
     "missingQuizId": "معرف الكويز غير موجود. من فضلك حاولي مرة أخرى.",
     "ok": "موافق",
-    "continue": "متابعة",
-    "feedbackTitle": "كيف كانت تجربتك؟",
     "Something went wrong. Please try again later." :"حصلت مشكلة بسيطة، حاول تاني كمان شوية.",
 
 

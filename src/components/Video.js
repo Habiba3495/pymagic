@@ -5,9 +5,10 @@ import Exit from "./images/Exit iconsvg.svg";
 import apiClient from '../services';
 import { useTranslation } from "react-i18next";
 import { useAuth } from '../context/AuthContext';
-import ReactGA from 'react-ga4'; // Added for page views
+import ReactGA from 'react-ga4';
 import trackEvent from '../utils/trackEvent';
 import PyMagicRunner from './Pymagic_runnergame'; 
+import Loading from "./Loading.js"; 
 
 const Video = () => {
   const { unitId, lessonId } = useParams();
@@ -115,7 +116,7 @@ const Video = () => {
 
       <div className="vlesson-content">
         <h1 className="lesson-header" style={{ backgroundColor: unitColor }}>
-          {t("unit")} {unitId} - {lessonData?.title || `Lesson ${lessonId}`}
+          {t("video.unit")} {unitId} - {lessonData?.title || `Lesson ${lessonId}`}
         </h1>
 
         <div className="video-container">
@@ -130,7 +131,7 @@ const Video = () => {
               </video>
             </> */}
             {loading ? (
-            <p>Loading video...</p>
+              <Loading />
              ) : error ? (
              <>
               <p>Error: {error}</p>
@@ -157,7 +158,7 @@ const Video = () => {
         </div>
 
         <button className="quiz-button" onClick={handleStartQuiz}>
-          {t("startQuiz")}
+          {t("video.startQuiz")}
         </button>
       </div>
     </div>

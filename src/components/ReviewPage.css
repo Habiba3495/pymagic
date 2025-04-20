@@ -40,6 +40,10 @@
   border-radius: 5px;
   text-align: center;
 }
+[dir="rtl"] .Reviewheader {
+  font-family: 'Marhey', cursive;
+
+}
 
 .question-box {
   margin-bottom: 20px;
@@ -100,7 +104,10 @@
   outline: none;
   font-size: 18px;
 }
+[dir="rtl"] .lbutton {
+  font-family: 'Marhey', cursive;
 
+}
 
 .pbutton {
   padding: 15px 70px;
@@ -113,4 +120,8 @@
   /* border: none; */
   outline: none;
   font-size: 18px;
+}
+[dir="rtl"] .pbutton {
+  font-family: 'Marhey', cursive;
+
 }

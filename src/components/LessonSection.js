@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Lsidebar from "./Lsidebar";
+import Lsidebar from "./Sidebar.js";
 import "./LessonSection.css";
 import unitquizicon from "../components/images/unitquizicon.svg";
 import { useAuth } from '../context/AuthContext';
@@ -25,45 +25,6 @@ const LessonSection = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
   const { t } = useTranslation();
-
-
-  // useEffect(() => {
-  //   if (user?.id) {
-  //     trackEvent(user.id, 'pageview', { 
-  //       page: '/lessons',
-  //       category: 'Navigation'
-  //     });
-  //   }
-
-  //   const fetchData = async () => {
-  //     try {        
-  //       const response = await apiClient.get(`/sections/${sectionId}`);
-  //       if (response.status !== 200) throw new Error("Failed to fetch data");
-        
-  //       setLessonData(response.data);
-        
-  //       trackEvent(user.id, 'lesson_data_loaded', {
-  //         category: 'Lesson',
-  //         label: 'Lesson Data Loaded',
-  //         unit_count: response.data.units.length,
-  //         lesson_count: response.data.units.reduce((sum, unit) => sum + unit.lessons.length, 0)
-  //       });
-
-       
-  //     } catch (error) {
-  //       setError(error.message);
-  //       trackEvent(user.id, 'lesson_data_error', {
-  //         category: 'Error',
-  //         label: 'Lesson Data Error',
-  //         error: error.message
-  //       });
-        
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [user, sectionId]);
 
   useEffect(() => {
     if (user?.id) {
@@ -108,51 +69,6 @@ const LessonSection = () => {
   
     fetchData();
   }, [user, sectionId]);
-
-  // const checkLessonAccess = async (lessonId) => {
-  //   try {
-  //     const response = await apiClient.get(`/api/quiz/check-access/${user.id}/${lessonId}`);
-  //     if (response.status !== 200 || !response.data.success) {
-  //       throw new Error(response.data.message || "Access denied");
-  //     }
-  //     return true;
-  //   } catch (error) {
-  //     setAccessDeniedLessons((prev) => new Set(prev).add(lessonId));
-  //     trackEvent(user.id, 'lesson_access_denied', {
-  //       category: 'Access',
-  //       label: 'Lesson Access Denied',
-  //       lesson_id: lessonId,
-  //       error: error.message
-  //     });
-
-  //     setPopupMessage(t("Unlocklessons"));
-  //     setPopupVisible(true);
-  //     return false;
-  //   }
-  // };  
-  
-
-  // const checkUnitQuizAccess = async (unitId) => {
-  //   try {
-  //     const response = await apiClient.get(`/api/quiz/check-access/${user.id}/unit/${unitId}`);
-  //     if (response.status !== 200 || !response.data.success) {
-  //       throw new Error(response.data.message || "Access denied");
-  //     }
-  //     return true;
-  //   } catch (error) {
-  //     setAccessDeniedUnits((prev) => new Set(prev).add(unitId));
-  //     trackEvent(user.id, 'unit_quiz_access_denied', {
-  //       category: 'Access',
-  //       label: 'Unit Quiz Access Denied',
-  //       unit_id: unitId,
-  //       error: error.message
-  //     });
-  
-  //     setPopupMessage(t("Unlockunitquiz")); 
-  //     setPopupVisible(true);
-  //     return false;
-  //   }
-  // };
 
   const checkLessonAccess = async (lessonId) => {
     try {
@@ -340,7 +256,7 @@ const LessonSection = () => {
                 onClick={() => getPreviousSection()}
                 className="nav-button prev-button"
               >
-                Previous: {prevSectionName}
+                {t("lesson.Previous")}: {prevSectionName}
               </button>
             </div>
           )}
@@ -351,7 +267,7 @@ const LessonSection = () => {
                 onClick={() => getNextSection()}
                 className="nav-button next-button"
               >
-                Next: {nextSectionName}
+                {t("lesson.Next")}: {nextSectionName}
               </button>
             </div>
           )}
@@ -373,10 +289,6 @@ const LessonSection = () => {
   
 };
 
-// const generateColor = (id) => {
-//   const hue = (id * 137) % 360;
-//   return `hsl(${hue}, 70%, 45%)`;
-// };
 const generateColor = (id) => {
   const colors = [
     "#5B287C", 
