@@ -465,35 +465,58 @@ const ProgressReport = () => {
     fetchProgress();
   }, [user]);
 
-  const handleCardClick = (quiz) => {
-    trackEvent(user.id, 'quiz_selected_from_progress', {
-      category: 'Progress',
-      label: 'Quiz Selected',
-      quiz_id: quiz.id,
-      quiz_type: quiz.lesson_id ? 'Lesson Quiz' : 'Unit Quiz',
-      score: quiz.score,
-      is_passed: quiz.is_passed
-    });
-  
+// Handle clicking on a quiz card
+const handleCardClick = async (quiz) => {
+  trackEvent(user.id, 'quiz_selected_from_progress', {
+    category: 'Progress',
+    label: 'Quiz Selected',
+    quiz_id: quiz.id,
+    quiz_type: quiz.lesson_id ? 'Lesson Quiz' : 'Unit Quiz',
+    score: quiz.score,
+    is_passed: quiz.is_passed,
+  });
+
+  try {
+    // Fetch progress data to validate quiz ID
+    const response = await apiClient.get(`/api/quiz/progress/${user.id}`);
+    const validQuiz = response.data.progress.find(
+      (progressQuiz) =>
+        progressQuiz.id === quiz.id &&
+        progressQuiz.unit_id === quiz.unit_id &&
+        (progressQuiz.lesson_id === quiz.lesson_id || (!progressQuiz.lesson_id && !quiz.lesson_id))
+    );
+
+    if (!validQuiz) {
+      console.error('Invalid or non-existent quiz:', quiz.id);
+      alert(t('invalidQuiz', { defaultValue: 'This quiz is not available or does not belong to you.' }));
+      return;
+    }
+
     const quizData = {
-      score: quiz.score || 0,
-      answers: Array(quiz.total_questions || 10)
+      score: validQuiz.score || 0,
+      answers: Array(validQuiz.total_questions || 10)
         .fill()
         .map((_, i) => ({
-          isCorrect: i < (quiz.score || 0),
+          isCorrect: i < (validQuiz.score || 0),
         })),
-      earned_points: quiz.earned_points || 0,
-      is_passed: quiz.is_passed || false,
-      studentQuizId: quiz.id, // Explicitly include studentQuizId
-      total_questions: quiz.total_questions || 10, // Ensure total_questions is included
+      earned_points: validQuiz.earned_points || 0,
+      is_passed: validQuiz.is_passed || false,
+      studentQuizId: validQuiz.id,
+      total_questions: validQuiz.total_questions || 10,
+      unit_id: validQuiz.unit_id,
+      lesson_id: validQuiz.lesson_id,
     };
-  
-    if (quiz.lesson_id) {
-      navigate("/quiz-complete", { state: { quizData } });
-    } else if (quiz.unit_id) {
-      navigate("/unit-quiz-complete", { state: { quizData } });
+
+    if (validQuiz.lesson_id) {
+      navigate('/quiz-complete', { state: { quizData, studentQuizId: validQuiz.id } });
+    } else if (validQuiz.unit_id) {
+      navigate('/unit-quiz-complete', { state: { quizData, studentQuizId: validQuiz.id } });
     }
-  };
+  } catch (error) {
+    console.error('Error validating quiz:', error);
+    alert(t('errorLoadingQuiz', { defaultValue: 'Unable to load quiz details. Please try again.' }));
+  }
+};
 
   const handleBackClick = () => {
     trackEvent(user.id, 'back_button_clicked', {
