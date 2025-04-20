@@ -109,14 +109,61 @@ const LessonSection = () => {
     fetchData();
   }, [user, sectionId]);
 
+  // const checkLessonAccess = async (lessonId) => {
+  //   try {
+  //     const response = await apiClient.get(`/api/quiz/check-access/${user.id}/${lessonId}`);
+  //     if (response.status !== 200 || !response.data.success) {
+  //       throw new Error(response.data.message || "Access denied");
+  //     }
+  //     return true;
+  //   } catch (error) {
+  //     setAccessDeniedLessons((prev) => new Set(prev).add(lessonId));
+  //     trackEvent(user.id, 'lesson_access_denied', {
+  //       category: 'Access',
+  //       label: 'Lesson Access Denied',
+  //       lesson_id: lessonId,
+  //       error: error.message
+  //     });
+
+  //     setPopupMessage(t("Unlocklessons"));
+  //     setPopupVisible(true);
+  //     return false;
+  //   }
+  // };  
+  
+
+  // const checkUnitQuizAccess = async (unitId) => {
+  //   try {
+  //     const response = await apiClient.get(`/api/quiz/check-access/${user.id}/unit/${unitId}`);
+  //     if (response.status !== 200 || !response.data.success) {
+  //       throw new Error(response.data.message || "Access denied");
+  //     }
+  //     return true;
+  //   } catch (error) {
+  //     setAccessDeniedUnits((prev) => new Set(prev).add(unitId));
+  //     trackEvent(user.id, 'unit_quiz_access_denied', {
+  //       category: 'Access',
+  //       label: 'Unit Quiz Access Denied',
+  //       unit_id: unitId,
+  //       error: error.message
+  //     });
+  
+  //     setPopupMessage(t("Unlockunitquiz")); 
+  //     setPopupVisible(true);
+  //     return false;
+  //   }
+  // };
+
   const checkLessonAccess = async (lessonId) => {
     try {
-      const response = await apiClient.get(`/api/quiz/check-access/${user.id}/${lessonId}`);
+      const response = await apiClient.get(`/api/quiz/check-access/lesson/${user.id}/${lessonId}`);
+      console.log(`API response for lesson_id=${lessonId}:`, response.data);
       if (response.status !== 200 || !response.data.success) {
         throw new Error(response.data.message || "Access denied");
       }
       return true;
     } catch (error) {
+      console.log(`Lesson access error: lesson_id=${lessonId}, message=${error.message}`);
       setAccessDeniedLessons((prev) => new Set(prev).add(lessonId));
       trackEvent(user.id, 'lesson_access_denied', {
         category: 'Access',
@@ -124,17 +171,17 @@ const LessonSection = () => {
         lesson_id: lessonId,
         error: error.message
       });
-
-      setPopupMessage(t("Unlocklessons"));
+      setPopupMessage(lessonId === 1
+        ? t("FirstLessonAccessError")
+        : error.message || t("Unlocklessons"));
       setPopupVisible(true);
       return false;
     }
-  };  
+  };
   
-
   const checkUnitQuizAccess = async (unitId) => {
     try {
-      const response = await apiClient.get(`/api/quiz/check-access/${user.id}/unit/${unitId}`);
+      const response = await apiClient.get(`/api/quiz/check-access/unit/${user.id}/${unitId}`);
       if (response.status !== 200 || !response.data.success) {
         throw new Error(response.data.message || "Access denied");
       }
@@ -147,8 +194,7 @@ const LessonSection = () => {
         unit_id: unitId,
         error: error.message
       });
-  
-      setPopupMessage(t("Unlockunitquiz")); 
+      setPopupMessage(t("Unlockunitquiz"));
       setPopupVisible(true);
       return false;
     }
