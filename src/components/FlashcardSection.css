@@ -1,58 +1,132 @@
-.page-container {
+.flashcard-page-container {
     display: flex;
     justify-content: space-between;
-}
-
-.content {
+    min-height: 100vh;
+  }
+  
+  .flashcard-content {
     flex: 1;
     padding: 20px;
     margin-left: 250px;
-    background-color: #f3e5f5;
-}
-
-.section-container {
+    background-color: #f3e5f5; /* Light purple background */
+  }
+  
+  .section-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px; /* Space above buttons when at the bottom */
+    padding: 0 150px; /* Match unit-title margins for alignment */
+  }
+  
+  .nav-button {
+    padding: 20px 18px;
+    background-color: #ffc145; /* Yellow button background */
+    color: #5b287c; /* Dark purple text */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    font-family: "Fredoka", sans-serif;
+    font-size: 18px;
+  }
+  
+  .nav-button:hover {
+    background-color: #e6a93c; /* Darker yellow on hover */
+  }
+  
+  .prev-button {
+    margin-right: auto;
+  }
+  
+  .next-button {
+    margin-left: auto;
+  }
+  
+  .unit-container {
     width: 100%;
     margin-bottom: 20px;
     padding: 15px;
     background: white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #f3e5f5;
-}
-
-.sectiontitle {
-    background: #5B287C;
+    background-color: #f3e5f5; /* Matches section-container */
+  }
+  
+  .unit-title {
+    background: #5b287c; /* Dark purple background */
     color: white;
     padding: 33px;
     border-radius: 10px;
     margin-bottom: 20px;
     margin-left: 150px;
+    margin-right: 100px;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Germania One', sans-serif;
+    font-family: "Germania One", sans-serif;
     font-size: 28px;
-    margin-right: 100px;
-}
-
-
-.cards-container {
+  }
+  
+  .flashcards-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
     padding: 10px;
-    background-color: #f3e5f5;
-}
-
-.flashcard {
+    background-color: #f3e5f5; /* Matches cards-container */
+  }
+  
+  .flashcard-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .flashcard-wrapper.denied {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .lesson-number {
+    position: absolute;
+    top: 60px; /* Centered vertically on card */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 30px;
+    font-weight: bold;
+    color: #000; /* Black for contrast */
+  }
+  
+  .flashcard {
     width: 120px;
     height: 160px;
     cursor: pointer;
-}
-
-.modal-overlay {
+  }
+  
+  .flashcard.passed {
+    filter: brightness(1.2); /* Brighten passed flashcards */
+  }
+  
+  .no-flashcards {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 20px;
+    color: #5b287c; /* Dark purple text */
+    font-family: "Fredoka", sans-serif;
+  }
+  
+  .error-message {
+    font-size: 1.2rem;
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+    font-family: "Fredoka", sans-serif;
+  }
+  
+  .popup-overlay,
+  .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -62,9 +136,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
-.modal-window {
-    background: #5E2B97; 
+    z-index: 1000;
+  }
+  
+  .popup-window {
+    background: white;
+    color: red; /* Red text for access denial */
+    padding: 20px;
+    border-radius: 10px;
+    width: 50%;
+    max-width: 400px;
+    position: relative;
+    text-align: center;
+    border: 4px solid #fdc82e; /* Yellow border */
+  }
+  
+  .modal-window {
+    background: #5e2b97; /* Dark purple background */
     color: white;
     padding: 20px;
     border-radius: 10px;
@@ -72,116 +160,80 @@
     max-width: 400px;
     position: relative;
     text-align: center;
-    border: 4px solid #FDC82E;
-}
-
-
-.close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: red;
-    cursor: pointer;
-}
-
-
-.modal-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-
-.modal-text {
-    font-size: 16px;
-    line-height: 1.5;
-}
-
-  .Emodal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.Emodal-window {
-    background: white; 
-    color: red;
-    padding: 20px;
-    border-radius: 10px;
-    width: 50%;
-    max-width: 400px;
-    position: relative;
-    text-align: center;
-    border: 4px solid #FDC82E;
-}
-
-
-.Eclose-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: #FDC82E;
-    cursor: pointer;
-}
-
-
-.Emodal-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-
-.Emodal-text {
-    font-size: 16px;
-    line-height: 1.5;
-}
-
-[dir="rtl"] .content {
-    margin-left: 0%;
-    margin-right: 16%;
-  }
-
-
-  .flashcard-wrapper {
-    position: relative;
-    display: inline-block;
+    border: 4px solid #fdc82e; /* Yellow border */
   }
   
-  .lesson-number {
+  .popup-close-button,
+  .modal-close-button {
     position: absolute;
-    top: 60px; /* تقدرِ تظبطي الرقم حسب المسافة اللي تريحك */
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #fdc82e; /* Yellow for popup */
+    cursor: pointer;
+  }
+  
+  .modal-close-button {
+    color: red; /* Red for modal */
+  }
+  
+  .modal-flashcard-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 15px; /* Space below the card */
+  }
+  
+  .modal-lesson-number {
+    position: absolute;
+    top: 60px; /* Match lesson-number positioning */
     left: 50%;
     transform: translateX(-50%);
     font-size: 30px;
     font-weight: bold;
-    color: #000; /* غيري اللون حسب التصميم */
+    color: #000; /* Black for contrast */
+    display: none;
+
   }
-
-
-
-
-  .Fnext-button{
-    padding: 20px 18px;
-    background-color: #ffc145;
-    color: #5b287c;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  
+  .modal-flashcard {
+    width: 120px;
+    height: 160px;
+    display: none;
+  }
+  
+  .popup-title,
+  .modal-title {
+    font-size: 25px;
     font-weight: bold;
-    margin-left: 70px;
-    font-family: 'Fredoka';
-    font-size: 18px;
+    margin-bottom: 10px;
+    font-family: "Germania One", cursive;
+  }
+  
+  .popup-text,
+  .modal-text {
+    font-size: 16px;
+    line-height: 1.5;
+    font-family: "Fredoka", sans-serif;
+  }
+  
+  [dir="rtl"] .flashcard-content {
+    margin-left: 0;
+    margin-right: 16%;
+  }
+  
+  [dir="rtl"] .unit-title {
+    margin-left: 100px;
+    margin-right: 150px;
+  }
+  
+  [dir="rtl"] .prev-button {
+    margin-left: auto;
+    margin-right: 0;
+  }
+  
+  [dir="rtl"] .next-button {
+    margin-right: auto;
+    margin-left: 0;
   }

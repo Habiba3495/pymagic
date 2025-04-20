@@ -329,6 +329,8 @@ import trackEvent from '../utils/trackEvent';
 import PyMagicRunner from './Pymagic_runnergame'; // استيراد PyMagicRunner
 import correctSound from '../Sound/correct3-95630.mp3'; // استيراد صوت الإجابة الصحيحة
 import wrongSound from '../Sound/wronganswer-37702.mp3'; // استيراد صوت الإجابة الخاطئة
+import points from "./images/points.svg";
+
 
 const UnitQuiz = () => {
   const { user } = useAuth();
@@ -598,6 +600,15 @@ const UnitQuiz = () => {
 
       <div className="unit-quiz-box">
         <h1 className="unit-quiz-header">{t("quiz")} {t("unit")} {unitId}</h1>
+        
+        <div className="quiz-points">
+           {t("question")} {currentQuestionIndex + 1} / {questions.length}
+          <span className='qestion-points'>
+          {currentQuestion.points}
+          <img src={points} alt="points icon" className="userpointstow" />
+          </span>
+           </div>
+
         <p className="unit-quiz-question">{currentQuestion.question}</p>
 
         <div className="unit-quiz-options">
