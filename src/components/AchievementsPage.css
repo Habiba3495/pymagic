@@ -37,6 +37,10 @@
     font-family: 'Germania One', cursive;
     font-size: 30px;
   }
+  [dir="rtl"] .achievements-header {
+    font-family: 'Marhey', cursive;
+  
+  }
   
   .achievements-grid {
     justify-content: center;

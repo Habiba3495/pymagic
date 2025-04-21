@@ -8,10 +8,9 @@ import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
 import { FiSettings } from 'react-icons/fi';
 import trackEvent from '../utils/trackEvent';
-import Avatar_bg from "./images/Avatar bg.svg";
 
 const ProfilePage = () => {
-  const { user, logout } = useAuth();
+  const { user} = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [userProfile, setUserProfile] = useState({ name: "", points: 0 });
@@ -219,20 +218,22 @@ const ProfilePage = () => {
                 navigate("/profile/avatar");
               }}
             >
-              {t("profileEdit")}
+              {t("profile.profileEdit")}
             </button>
           </div>
+
+          {/* //////gab between name and points */}
           <div className="profile-name-container">
             <h2 className="profile-name">{userProfile.name}</h2>
             <p className="profile-points">
               <img src={points} alt="points icon" className="userpointstow" />
-              {userProfile.points} {t("profilePoints")}
+              {userProfile.points} {t("profile.profilePoints")}
             </p>
           </div>
         </div>
 
         <div className="section achievements">
-          <p className="section-title">{t("profileAchievements")}</p>
+          <p className="section-title">{t("profile.profileAchievements")}</p>
           <div className="achievements-grid">
           {achievements.length > 0 ? (
             achievements.map((achievement) => (
@@ -248,7 +249,7 @@ const ProfilePage = () => {
        </div>
             ))
           ):(
-            <p className="no-achievements">{t("noAchievementsYet")}</p>
+            <p className="no-achievements">{t("profile.noAchievementsYet")}</p>
           )}
         </div>
 
@@ -262,12 +263,12 @@ const ProfilePage = () => {
               navigate("/achievements");
             }}
           >
-            {t("profileViewAll")}
+            {t("profile.profileViewAll")}
           </button>
         </div>
 
         <div className="section progress-report">
-          <p className="section-title">{t("profileProgressReport")}</p>
+          <p className="section-title">{t("profile.profileProgressReport")}</p>
           <div className="progress-grid">
             {progressData.map((quiz) => (
               <div key={quiz.id} className="progress-card">
@@ -276,12 +277,12 @@ const ProfilePage = () => {
                 </div>
                 <p className="lesson-info">
                   {quiz.lesson_id && quiz.lesson_number
-                    ? `${t("unit")} ${quiz.unit_id}, ${t("lesson")} ${quiz.lesson_number}`
-                    : `${t("unit")} ${quiz.unit_id}`}
+                    ? `${t("profile.unit")} ${quiz.unit_id}, ${t("profile.lesson")} ${quiz.lesson_number}`
+                    : `${t("profile.unit")} ${quiz.unit_id}`}
                 </p>
                 <p className="points-earned">
                   <img src={points} alt="points icon" className="points" />
-                  {quiz.earned_points} {t("profilePointsEarned")}
+                  {quiz.earned_points} {t("profile.profilePointsEarned")}
                 </p>
               </div>
             ))}
@@ -296,7 +297,7 @@ const ProfilePage = () => {
               navigate(`/progress-report/${userId}`);
             }}
           >
-            {t("profileViewAll")}
+            {t("profile.profileViewAll")}
           </button>
         </div>
       </div>

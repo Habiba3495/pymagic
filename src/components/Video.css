@@ -73,4 +73,7 @@ video {
   .back-button:hover .back-icon {
     opacity: 0.7; /* تأثير عند التمرير */
   }
+  [dir="rtl"] .quiz-button {
+    font-family: 'Marhey', cursive;
   
+  }

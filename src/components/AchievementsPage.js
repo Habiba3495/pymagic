@@ -98,7 +98,7 @@ if (error) return <PyMagicRunner />;
         <img src={Exit} alt="Back" className="back-icon" />
       </button>
       <div className="achievements-container">
-        <p className="achievements-header">{t("profileAchievements")}</p>
+        <p className="achievements-header">{t("achivement.profileAchievements")}</p>
         <div className="achievements-grid">
           {achievements.length > 0 ? (
             achievements.map((achievement) => (
@@ -147,7 +147,7 @@ if (error) return <PyMagicRunner />;
           ) : (
             <div className="ano-achievements-wrapper">
             <div className="ano-achievements">
-              <p>{t("noAchievementsYet")}</p>
+              <p>{t("achivement.noAchievementsYet")}</p>
             </div>
             </div>
           )}

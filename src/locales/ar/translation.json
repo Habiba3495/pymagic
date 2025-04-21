@@ -103,6 +103,58 @@
     "goToProgressReport": "عرض تقرير التقدم",
     "goToLessons": "اذهب للدروس"
   },
+
+  "progress":{
+    "profileProgressReport": "تقرير التقدم",
+    "lesson":"الدرس",
+    "unit": "الوحدة",
+    "profilePointsEarned": "نقاط مكتسبة"
+  },
+
+  "unitcomplete":{
+    "profileUnitCompletedGeneric": "اختبار الوحدة خلص",
+    "profilePointsEarned": "نقاط مكتسبة",
+    "review": "مراجعة",
+    "continue": "متابعة",
+
+    "feedback":{
+      "feedbackTitle": "كيف كانت تجربتك؟",
+      "feedbackCommentPlaceholder": "أضف تعليقك هنا...",
+      "skip": "تخطي",
+      "submit": "إرسال"
+  }},
+
+  "profile":{
+    "profileEdit": "تعديل",
+    "profilePoints": "نقطة",
+    "profileAchievements": "الإنجازات",
+    "noAchievementsYet" :"  لا يوجد انجازات بعد",
+    "profileViewAll": "عرض الكل",
+    "profileProgressReport": "تقرير التقدم",
+    "unit": "الوحدة",
+    "lesson":"الدرس",
+    "profilePointsEarned": "نقاط مكتسبة"
+  },
+
+  "achivement":{
+    "profileAchievements": "الإنجازات",
+    "noAchievementsYet" :"  لا يوجد انجازات بعد"
+  },
+
+  "avatr":{
+    "pointsIconAlt": "أيقونة النقاط",
+    "points": "نقطة",
+    "headdresses": "أغطية الرأس",
+    "owned": "مملوك",
+    "buy": "شراء",
+    "equip": "ارتداء",
+    "unequip": "إزالة",
+    "save": "حفظ",
+    "confirmPurchase": "هل أنت متأكد أنك تريد شراء هذا العنصر مقابل {{price}} نقطة؟",
+    "yes": "نعم",
+    "no": "لا"
+  },
+
   "registerTitle": "انضم لينا في أكاديمية الكود السحرية",
   "nameLabel": "الاسم",
   "ageLabel": "السن",
@@ -113,19 +165,11 @@
   "registerButton": "تسجيل",
   "registrationSuccess": "تم التسجيل بنجاح",
   "registrationFailed": "فشل في التسجيل",
-  "profileAchievements": "الإنجازات",
-  "profileProgressReport": "تقرير التقدم",
-  "profileViewAll": "عرض الكل",
-  "profileEdit": "تعديل",
-  "profilePoints": "نقطة",
   "profileUnitCompleted": "الوحدة {unitId} خلصت",
-  "profileUnitCompletedGeneric": "اختبار الوحدة خلص",
   "lessonQuizCompleted": "اختبار الدرس خلص",
   "goToPrpgressReport": "اذهب لتقرير التقدم",
   "askPythonWizard": "اسأل ساحر بايثون السحري",
   "askPythonQuestion":"اسأل فى بايثون",
-  "points": "نقطة",
-  "pointsIconAlt": "أيقونة النقاط",
   "faceIconAlt": "أيقونة الوجه",
   "hairstyleIconAlt": "أيقونة تصفيفة الشعر",
   "headdressIconAlt": "أيقونة غطاء الرأس",
@@ -135,19 +179,10 @@
   "noseIconAlt": "أيقونة الأنف",
   "faces": "وجوه",
   "hairstyles": "تصفيفات الشعر",
-  "headdresses": "أغطية الرأس",
   "brows": "حواجب",
   "eyes": "عيون",
   "lips": "شفاه",
   "noses": "أنوف",
-  "owned": "مملوك",
-  "buy": "شراء",
-  "equip": "ارتداء",
-  "unequip": "إزالة",
-  "save": "حفظ",
-  "confirmPurchase": "هل أنت متأكد أنك تريد شراء هذا العنصر مقابل {{price}} نقطة؟",
-  "yes": "نعم",
-  "no": "لا",
   "You already own this item!": "لديك هذا العنصر بالفعل!",
   "purchaseSuccess": "تم شراء العنصر بنجاح!",
   "purchaseError": "خطأ في شراء العنصر",
@@ -156,7 +191,6 @@
   "confirmLogout": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
     "Unlocklessons":"خلص الدروس اللي قبل كده عشان تقدر تفتح الدرس ده.",
     "Unlockunitquiz": "كمّل دروس الوحدة دي الأول علشان تفتح الاختبار ",
-    "noAchievementsYet" :"  لا يوجد انجازات بعد",
     "Try Again":"حاول مره اخرى",
     "missingQuizId": "معرف الكويز غير موجود. من فضلك حاولي مرة أخرى.",
     "ok": "موافق",

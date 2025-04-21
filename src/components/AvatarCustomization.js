@@ -261,8 +261,8 @@ const AvatarCustomization = () => {
             </button>
       <div className="Aheader">
         <span className="username">{user.name}</span>
-        <img src={points} alt={t("pointsIcon")} className="userpoints" />
-        <span className="user_points">{userPoints} {t("points")}</span>
+        <img src={points} alt={t("avatr.pointsIcon")} className="userpoints" />
+        <span className="user_points">{userPoints} {t("avatr.points")}</span>
       </div>
 
       <div className="main-content">
@@ -290,7 +290,7 @@ const AvatarCustomization = () => {
           </div>
 
           <p className="assetoptionname">
-            {selectedTab === "headdress" ? t("headdresses") : t(`${selectedTab}s`)}
+            {selectedTab === "headdress" ? t("avatr.headdresses") : t(`${selectedTab}s`)}
           </p>
           <div className="asset-content">
             <div className="asset-grid">
@@ -300,26 +300,26 @@ const AvatarCustomization = () => {
                   <div key={asset.id} className="asset-card">
                     <img src={asset.image_url} alt={asset.name} />
                     {ownedAssets.some((owned) => asset.price !== 0 && owned.id === asset.id) ? (
-                      <span className="owned-label">{t("owned")}</span>
+                      <span className="owned-label">{t("avatr.owned")}</span>
                     ) : asset.price > 0 ? (
                       <div>
                         <p className="pointsname">
                           <img src={points} alt={t("pointsIcon")} className="userpointstow" />
-                          {asset.price} {t("points")}
+                          {asset.price} {t("avatr.points")}
                         </p>
                         <button className="buy_button" onClick={() => handleBuyClick(asset)}>
-                          {t("buy")}
+                          {t("avatr.buy")}
                         </button>
                       </div>
                     ) : null}
                     {(ownedAssets.some((owned) => owned.id === asset.id) || asset.price === 0) && (
                       <button onClick={() => handleEquip(asset.image_url, asset.type)}>
-                        {t("equip")}
+                        {t("avatr.equip")}
                       </button>
                     )}
                     {equippedAssets[asset.type] === asset.image_url && (
                       <button onClick={() => handleUnequip(asset.type)}>
-                        {t("unequip")}
+                        {t("avatr.unequip")}
                       </button>
                     )}
                   </div>
@@ -352,7 +352,7 @@ const AvatarCustomization = () => {
 
       <div className="action-buttons">
         <button className="save-button" onClick={handleSave}>
-          {t("save")}
+          {t("avatr.save")}
         </button>
       </div>
 
@@ -367,9 +367,9 @@ const AvatarCustomization = () => {
       {showConfirmation && (
         <div className="confirmation-modal-overlay">
           <div className="confirmation-modal">
-            <p>{t("confirmPurchase", { price: selectedAsset.price })}</p>
-            <button onClick={confirmPurchase}>{t("yes")}</button>
-            <button onClick={cancelPurchase}>{t("no")}</button>
+            <p>{t("avatr.confirmPurchase", { price: selectedAsset.price })}</p>
+            <button onClick={confirmPurchase}>{t("avatr.yes")}</button>
+            <button onClick={cancelPurchase}>{t("avatr.no")}</button>
           </div>
         </div>
       )}

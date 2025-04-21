@@ -15,6 +15,11 @@
   margin-left: 30px;
 }
 
+[dir="rtl"] .profile-name {
+  font-family: 'Marhey', cursive;
+
+}
+
 .profile-header {
   display: flex;
   flex-direction: column;
@@ -63,7 +68,10 @@
   font-weight: bold;
   transition: background 0.3s, transform 0.2s;
 }
+[dir="rtl"] .edit-button  {
+  font-family: 'Marhey', cursive;
 
+}
 /* .edit-button:hover {
   background: rgba(76, 29, 149, 0.9);
   transform: scale(1.1);
@@ -72,7 +80,7 @@
 /* Name and Points Box */
 .profile-name-container {
   background: white;
-  /* padding: 16px; */
+  padding: 0px 8px;
   border-radius: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
@@ -80,7 +88,8 @@
   display: flex;
   justify-content: space-between; /* Name on right, points on left */
   align-items: center;
-  min-width: 640px;
+  min-width: 625px;
+  gap: 8px;
 }
 
 .profile-points {
@@ -113,7 +122,10 @@
   font-family: 'Germania One', cursive;
   font-size: 20px;
 }
+[dir="rtl"] .section-title  {
+  font-family: 'Marhey', cursive;
 
+}
 /* Achievements Grid */
 .achievements-grid {
   display: grid;
@@ -194,7 +206,10 @@
 .view-all-button:hover {
   background: #eab308;
 }
+[dir="rtl"] .view-all-button  {
+  font-family: 'Marhey', cursive;
 
+}
 /* Style for the logout button */
 .settings-button {
 position: absolute;

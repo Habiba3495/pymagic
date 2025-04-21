@@ -101,6 +101,58 @@
     "goToProgressReport": "Check Progress Report",
     "goToLessons": "Go to Lessons"
   },
+
+  "progress":{
+    "profileProgressReport": "Progress Report",
+    "lesson":"lesson",
+    "unit":"Unit",
+    "profilePointsEarned": "points earned"
+  },
+
+  "unitcomplete":{
+    "profileUnitCompletedGeneric": "Unit Quiz completed",
+    "profilePointsEarned": "points earned",
+    "review": "Review",
+    "continue": "Continue",
+
+    "feedback":{
+      "feedbackTitle":"How was your experience?",
+      "feedbackCommentPlaceholder":"Add your comment here...",
+      "skip":"Skip",
+      "submit":"Submit"
+  }},
+
+  "profile":{
+    "profileEdit": "Edit",
+    "profilePoints": "points",
+    "profileAchievements": "Achievements",
+    "noAchievementsYet" :" No Achievements Yet",
+    "profileViewAll": "View All",
+    "profileProgressReport": "Progress Report",
+    "unit":"Unit",
+    "lesson":"lesson",
+    "profilePointsEarned": "points earned"
+  },
+
+  "achivement":{
+    "profileAchievements": "Achievements",
+    "noAchievementsYet" :" No Achievements Yet"
+  },
+
+  "avatar":{
+    "pointsIconAlt": "points icon",
+    "points": "points",
+    "headdresses": "Headdresses",
+    "owned": "OWNED",
+    "buy": "Buy",
+    "equip": "Equip",
+    "unequip": "Unequip",
+    "save": "Save",
+    "confirmPurchase": "Are you sure you want to buy this item for {{price}} points?",
+    "yes": "Yes",
+    "no": "No"
+  },
+
   "registerTitle": "Join us at the Academy of Mystic Code and Arts",
   "nameLabel": "Name",
   "ageLabel": "Age",
@@ -111,18 +163,10 @@
   "registerButton": "Register",
   "registrationSuccess": "Registration successful",
   "registrationFailed": "Registration failed",
-  "profileAchievements": "Achievements",
-  "profileProgressReport": "Progress Report",
-  "profileViewAll": "View All",
-  "profileEdit": "Edit",
-  "profilePoints": "points",
   "profileUnitCompleted": "Unit Quiz completed",
-  "profileUnitCompletedGeneric": "Unit Quiz completed",
   "lessonQuizCompleted": "Lesson Quiz completed",
   "askPythonWizard": "Ask Your Magical Python Wizard",
   "askPythonQuestion":"Ask Python Question",
-  "points": "points",
-  "pointsIconAlt": "points icon",
   "faceIconAlt": "face icon",
   "hairstyleIconAlt": "hairstyle icon",
   "headdressIconAlt": "headdress icon",
@@ -132,19 +176,10 @@
   "noseIconAlt": "nose icon",
   "faces": "Faces",
   "hairstyles": "Hairstyles",
-  "headdresses": "Headdresses",
   "brows": "Brows",
   "eyes": "Eyes",
   "lips": "Lips",
   "noses": "Noses",
-  "owned": "OWNED",
-  "buy": "Buy",
-  "equip": "Equip",
-  "unequip": "Unequip",
-  "save": "Save",
-  "confirmPurchase": "Are you sure you want to buy this item for {{price}} points?",
-  "yes": "Yes",
-  "no": "No",
   "You already own this item!": "You already own this item!",
   "purchaseSuccess": "Item purchased successfully!",
   "purchaseError": "Error purchasing item",
@@ -154,7 +189,6 @@
   "Unlocklessons": "Complete the previous lessons to unlock this lesson.",
   "Unlockunitquiz": "You need to complete all the lessons before taking the unit quiz",
   "Try Again":"Try Again",
-  "noAchievementsYet" :" No Achievements Yet",
   "missingQuizId": "Student Quiz ID is missing. Please try again.",
   "ok": "OK",
   "Something went wrong. Please try again later.": "Something went wrong. Please try again later.",

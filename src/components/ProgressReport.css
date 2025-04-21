@@ -51,7 +51,10 @@
   font-family: 'Germania One', cursive;
   font-size: 30px;
 }
+[dir="rtl"] .progress-report-header  {
+  font-family: 'Marhey', cursive;
 
+}
 /* الشبكة التي تحتوي على الكروت */
 .progress-cards {
   display: grid;
