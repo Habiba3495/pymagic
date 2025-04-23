@@ -21,27 +21,6 @@ const ChatbotSection = () => {
   const chatEndRef = useRef(null);
   const { t, i18n } = useTranslation();
 
-  // Custom components for rendering Markdown code blocks
-  // const components = {
-  //   code({ node, inline, className, children, ...props }) {
-  //     const match = /language-(\w+)/.exec(className || '');
-  //     return !inline && match ? (
-  //       <SyntaxHighlighter
-  //         style={dracula}
-  //         language={match[1]}
-  //         PreTag="div"
-  //         {...props}
-  //       >
-  //         {String(children).replace(/\n$/, '')}
-  //       </SyntaxHighlighter>
-  //     ) : (
-  //       <code className={className} {...props}>
-  //         {children}
-  //       </code>
-  //     );
-  //   },
-  // };
-
   const components = {
     code({ node, inline, className, children, ...props }) {
       const match = /language-(\w+)/.exec(className || '');
@@ -51,7 +30,7 @@ const ChatbotSection = () => {
           language={match[1]}
           PreTag="div"
           {...props}
-          customStyle={{ direction: 'ltr', textAlign: 'left' }} // التأكد من اتجاه الكود
+          customStyle={{ direction: 'ltr', textAlign: 'left' }}
         >
           {String(children).replace(/\n$/, '')}
         </SyntaxHighlighter>
@@ -119,12 +98,16 @@ const ChatbotSection = () => {
     });
 
     try {
+      // Ensure the language is set based on the input text
+      const detectedLanguage = isArabic(input) ? 'ar' : i18n.language;
+      console.log("Sending language:", detectedLanguage); // For debugging
+
       const response = await apiClient.post("/api/chatbot/send", {
         userId: user.id,
         message: input,
       }, {
         headers: {
-          'Accept-Language': i18n.language, // Send current language
+          'Accept-Language': detectedLanguage,
         },
       });
 
@@ -201,7 +184,6 @@ const ChatbotSection = () => {
                 key={index}
                 className={`message ${msg.sender}`}
                 style={{
-                  // direction: isArabic(msg.text) ? 'rtl' : 'ltr',
                   textAlign: isArabic(msg.text) ? 'right' : 'left',
                 }}
                 onClick={() => {

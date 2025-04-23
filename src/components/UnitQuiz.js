@@ -330,6 +330,7 @@ import PyMagicRunner from './Pymagic_runnergame'; // استيراد PyMagicRunne
 import correctSound from '../Sound/correct3-95630.mp3'; // استيراد صوت الإجابة الصحيحة
 import wrongSound from '../Sound/wronganswer-37702.mp3'; // استيراد صوت الإجابة الخاطئة
 import points from "./images/points.svg";
+import Loading from "./Loading.js"; 
 
 
 const UnitQuiz = () => {
@@ -582,7 +583,7 @@ const UnitQuiz = () => {
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />; 
   }
 
   if (questions.length === 0) {
@@ -599,10 +600,10 @@ const UnitQuiz = () => {
       </button>
 
       <div className="unit-quiz-box">
-        <h1 className="unit-quiz-header">{t("quiz.quiz")} {t("unit")} {unitId}</h1>
+        <h1 className="unit-quiz-header">{t("quiz.quiz")} {t("quiz.unit")} {unitId}</h1>
         
         <div className="quiz-points">
-           {t("question")} {currentQuestionIndex + 1} / {questions.length}
+           {t("quiz.question")} {currentQuestionIndex + 1} / {questions.length}
           <span className='qestion-points'>
           {currentQuestion.points}
           <img src={points} alt="points icon" className="userpointstow" />
@@ -640,7 +641,7 @@ const UnitQuiz = () => {
               onClick={checkAnswer}
               disabled={!selectedOption}
             >
-              {t("checkAnswer")}
+              {t("quiz.checkAnswer")}
             </button>
           </div>
         ) : (
@@ -650,9 +651,9 @@ const UnitQuiz = () => {
                 <img src={WizardIcon} alt="Wizard" className="unit-icon" />
                 <p className="unit-message">{motivationMessage}</p>
                 <img src={CorrectAnswerIcon} alt="Correct" className="unit-icon" />
-                <p className="unit-correct-message">{t("correctAnswer")}</p>
+                <p className="unit-correct-message">{t("quiz.correctAnswer")}</p>
                 <button className="unit-next-button" onClick={handleNextQuestion}>
-                  {t("next")}
+                  {t("quiz.next")}
                 </button>
               </div>
             ) : (
@@ -660,9 +661,9 @@ const UnitQuiz = () => {
                 <img src={WrongIcon} alt="Wrong" className="unit-icon" />
                 <p className="unit-message">{motivationMessage}</p>
                 <img src={WrongAnswerIcon} alt="Wrong" className="unit-icon" />
-                <p className="unit-wrong-message">{t("wrongAnswer")}</p>
+                <p className="unit-wrong-message">{t("quiz.wrongAnswer")}</p>
                 <button className="unit-next-button" onClick={handleNextQuestion}>
-                  {t("next")}
+                  {t("quiz.next")}
                 </button>
               </div>
             )}
@@ -671,7 +672,7 @@ const UnitQuiz = () => {
 
         {hint && (
           <p className="unit-hint-text">
-            <span>Hint:</span> {hint}
+            <span>{t("quiz.Hint")}</span> {hint}
           </p>
         )}
       </div>

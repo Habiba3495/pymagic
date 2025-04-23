@@ -79,7 +79,8 @@
   "next":"Next",
   "Hint":"Hint:",
   "correctAnswer": "Correct Answer",
-  "wrongAnswer": "Wrong Answer"
+  "wrongAnswer": "Wrong Answer",
+  "unit":"unit"
   },
 
   "quizcomplete":{
@@ -228,5 +229,3 @@
   }
   
 }
-
-

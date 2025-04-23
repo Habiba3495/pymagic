@@ -81,7 +81,8 @@
   "next":"التالي",
   "Hint":"تلميح:",
   "correctAnswer": "الإجابة صحيحة",
-  "wrongAnswer": "الإجابة غير صحيحة"
+  "wrongAnswer": "الإجابة غير صحيحة",
+  "unit":"وحده"
   },
 
   "quizcomplete":{

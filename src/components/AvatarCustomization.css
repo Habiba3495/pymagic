@@ -335,3 +335,14 @@ button:hover {
 .avatar-preview, .asset-section {
   min-height: 500px; /* يمنع النمو الزائد */
 }
+
+[dir="rtl"] .assetoptionname {
+  font-family: 'Marhey', cursive;
+
+}                                                                                                                                                                                                                                                   [dir="rtl"] .buy_button {
+  font-family: 'Marhey', cursive;
+
+}                                                                                                                                                                                                      [dir="rtl"] .save-button {
+  font-family: 'Marhey', cursive;
+
+}

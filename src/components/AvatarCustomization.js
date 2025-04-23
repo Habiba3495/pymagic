@@ -40,6 +40,7 @@ const AvatarCustomization = () => {
   const userId = user.id;
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(null);
+  const [showBackConfirmation, setShowBackConfirmation] = useState(false); // State for back confirmation modal
 
   useEffect(() => {
     if (message) {
@@ -223,6 +224,38 @@ const AvatarCustomization = () => {
       });
   };
 
+
+  // Handler for back button click
+  const handleBackClick = () => {
+    // Check if there are any equipped assets to prompt for saving
+    if (
+      equippedAssets.face ||
+      equippedAssets.brow ||
+      equippedAssets.eye ||
+      equippedAssets.hairstyle ||
+      equippedAssets.lip ||
+      equippedAssets.nose ||
+      equippedAssets.headdress
+    ) {
+      setShowBackConfirmation(true); // Show confirmation modal if assets are equipped
+    } else {
+      navigate("/profile"); // Navigate directly if no assets are equipped
+    }
+  };
+
+  // Handler for confirming save and navigate
+  const confirmBackSave = () => {
+    handleSave(); // Call the existing handleSave function
+    setShowBackConfirmation(false); // Close the modal
+    navigate("/profile"); // Navigate to profile
+  };
+
+  // Handler for navigating without saving
+  const cancelBackSave = () => {
+    setShowBackConfirmation(false); // Close the modal
+    navigate("/profile"); // Navigate to profile without saving
+  };
+
   const getStyleForType = (type) => {
     switch (type) {
       case "face":
@@ -254,15 +287,141 @@ const AvatarCustomization = () => {
     { type: "nose", icon: NoseIcon },
   ];
 
+  // return (
+  //   <div className="avatar-customization-container">
+  //           <button className="back-button" onClick={() => navigate("/profile")}>
+  //           <img src={Exit} alt="Back" className="back-icon" />
+  //           </button>
+  //     <div className="Aheader">
+  //       <span className="username">{user.name}</span>
+  //       <img src={points} alt={t("avatr.pointsIcon")} className="userpoints" />
+  //       <span className="user_points">{userPoints} {t("avatr.points")}</span>
+  //     </div>
+
+  //     <div className="main-content">
+  //       <div className="asset-section">
+  //         <div className="Anavigation-tabs">
+  //           {assetTypes.map(({ type, icon }) => (
+  //             <button
+  //               key={type}
+  //               onClick={() => {
+  //                 setSelectedTab(type);
+  //                 trackEvent(userId, 'tab_switched', {
+  //                   category: 'AvatarCustomization',
+  //                   label: `${type} - User ${userId}`
+  //                 });
+  //               }}
+  //               className={selectedTab === type ? "active" : ""}
+  //             >
+  //               <img
+  //                 src={icon}
+  //                 alt={t(`${type}Icon`)}
+  //                 className="nav-icon"
+  //               />
+  //             </button>
+  //           ))}
+  //         </div>
+
+  //         <p className="assetoptionname">
+  //           {selectedTab === "headdress" ? t("avatr.headdresses") : t(`${selectedTab}s`)}
+  //         </p>
+  //         <div className="asset-content">
+  //           <div className="asset-grid">
+  //             {assets
+  //               .filter((asset) => asset.type === selectedTab)
+  //               .map((asset) => (
+  //                 <div key={asset.id} className="asset-card">
+  //                   <img src={asset.image_url} alt={asset.name} />
+  //                   {ownedAssets.some((owned) => asset.price !== 0 && owned.id === asset.id) ? (
+  //                     <span className="owned-label">{t("avatr.owned")}</span>
+  //                   ) : asset.price > 0 ? (
+  //                     <div>
+  //                       <p className="pointsname">
+  //                         <img src={points} alt={t("pointsIcon")} className="userpointstow" />
+  //                         {asset.price} {t("avatr.points")}
+  //                       </p>
+  //                       <button className="buy_button" onClick={() => handleBuyClick(asset)}>
+  //                         {t("avatr.buy")}
+  //                       </button>
+  //                     </div>
+  //                   ) : null}
+  //                   {(ownedAssets.some((owned) => owned.id === asset.id) || asset.price === 0) && (
+  //                     <button onClick={() => handleEquip(asset.image_url, asset.type)}>
+  //                       {t("avatr.equip")}
+  //                     </button>
+  //                   )}
+  //                   {equippedAssets[asset.type] === asset.image_url && (
+  //                     <button onClick={() => handleUnequip(asset.type)}>
+  //                       {t("avatr.unequip")}
+  //                     </button>
+  //                   )}
+  //                 </div>
+  //               ))}
+  //           </div>
+  //         </div>
+  //       </div>
+
+  //       <div className="avatar-preview">
+  //         <div style={{ position: "relative", width: "300px", height: "350px", margin: "0 auto" }}>
+  //           {equippedAssets.face && (
+  //             <img src={equippedAssets.face} alt={t("faceAlt")} style={getStyleForType("face")} />
+  //           )}
+  //           {Object.keys(equippedAssets).map((type, index) => {
+  //             if (type !== "face" && equippedAssets[type]) {
+  //               return (
+  //                 <img
+  //                   key={index}
+  //                   src={equippedAssets[type]}
+  //                   alt={t(`${type}Alt`)}
+  //                   style={getStyleForType(type)}
+  //                 />
+  //               );
+  //             }
+  //             return null;
+  //           })}
+  //         </div>
+  //       </div>
+  //     </div>
+
+  //     <div className="action-buttons">
+  //       <button className="save-button" onClick={handleSave}>
+  //         {t("avatr.save")}
+  //       </button>
+  //     </div>
+
+  //     {message && (
+  //       <div className="message-modal_overlay">
+  //         <div className="message-modal">
+  //           <p>{message}</p>
+  //         </div>
+  //       </div>
+  //     )}
+
+  //     {showConfirmation && (
+  //       <div className="confirmation-modal-overlay">
+  //         <div className="confirmation-modal">
+  //           <p>{t("avatr.confirmPurchase", { price: selectedAsset.price })}</p>
+  //           <button onClick={confirmPurchase}>{t("avatr.yes")}</button>
+  //           <button onClick={cancelPurchase}>{t("avatr.no")}</button>
+  //         </div>
+  //       </div>
+  //     )}
+  //   </div>
+  // );
+
   return (
     <div className="avatar-customization-container">
-            <button className="back-button" onClick={() => navigate("/profile")}>
-            <img src={Exit} alt="Back" className="back-icon" />
-            </button>
+      {/* Back Button */}
+      <button className="back-button" onClick={handleBackClick}>
+        <img src={Exit} alt="Back" className="back-icon" />
+      </button>
+
       <div className="Aheader">
         <span className="username">{user.name}</span>
         <img src={points} alt={t("avatr.pointsIcon")} className="userpoints" />
-        <span className="user_points">{userPoints} {t("avatr.points")}</span>
+        <span className="user_points">
+          {userPoints} {t("avatr.points")}
+        </span>
       </div>
 
       <div className="main-content">
@@ -273,18 +432,14 @@ const AvatarCustomization = () => {
                 key={type}
                 onClick={() => {
                   setSelectedTab(type);
-                  trackEvent(userId, 'tab_switched', {
-                    category: 'AvatarCustomization',
-                    label: `${type} - User ${userId}`
+                  trackEvent(userId, "tab_switched", {
+                    category: "AvatarCustomization",
+                    label: `${type} - User ${userId}`,
                   });
                 }}
                 className={selectedTab === type ? "active" : ""}
               >
-                <img
-                  src={icon}
-                  alt={t(`${type}Icon`)}
-                  className="nav-icon"
-                />
+                <img src={icon} alt={t(`${type}Icon`)} className="nav-icon" />
               </button>
             ))}
           </div>
@@ -373,8 +528,21 @@ const AvatarCustomization = () => {
           </div>
         </div>
       )}
+
+      {/* Back Confirmation Modal */}
+      {showBackConfirmation && (
+        <div className="confirmation-modal-overlay">
+          <div className="confirmation-modal">
+            <p>{t("avatr.confirmSaveBeforeExit")}</p>
+            <button onClick={confirmBackSave}>{t("avatr.yes")}</button>
+            <button onClick={cancelBackSave}>{t("avatr.no")}</button>
+          </div>
+        </div>
+      )}
     </div>
   );
+
+
 };
 
 export default AvatarCustomization;
