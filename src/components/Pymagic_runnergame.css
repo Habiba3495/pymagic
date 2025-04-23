@@ -208,5 +208,8 @@
   .restart-button:hover {
     background-color: #e6b800;
   }
-    
+     
+  .background-paused {
+    animation-play-state: paused !important;
+  }
   

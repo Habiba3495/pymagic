@@ -52,7 +52,7 @@ const ProfilePage = () => {
         }
       } catch (error) {
         console.error("Error fetching user profile:", error);
-        setUserProfile({ name: t("profileUnknownUser"), points: 0 });
+        setUserProfile({ name: t("profile.profileUnknownUser"), points: 0 });
       }
     };
 

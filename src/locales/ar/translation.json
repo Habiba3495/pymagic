@@ -133,7 +133,8 @@
     "profileProgressReport": "تقرير التقدم",
     "unit": "الوحدة",
     "lesson":"الدرس",
-    "profilePointsEarned": "نقاط مكتسبة"
+    "profilePointsEarned": "نقاط مكتسبة",
+    "profileUnknownUser": "اسم المستخدم غير معرف"
   },
 
   "achivement":{

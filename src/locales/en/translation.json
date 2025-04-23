@@ -131,7 +131,8 @@
     "profileProgressReport": "Progress Report",
     "unit":"Unit",
     "lesson":"lesson",
-    "profilePointsEarned": "points earned"
+    "profilePointsEarned": "points earned",
+    "profileUnknownUser":"profile Unknown User"
   },
 
   "achivement":{
