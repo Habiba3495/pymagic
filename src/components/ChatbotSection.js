@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import Lsidebar from "./Sidebar";
 import "./ChatbotSection.css";
@@ -8,6 +9,9 @@ import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
 import { useTranslation } from "react-i18next";
 import trackEvent from '../utils/trackEvent';
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const ChatbotSection = () => {
   const { user } = useAuth();
@@ -18,12 +22,32 @@ const ChatbotSection = () => {
   const chatEndRef = useRef(null);
   const { t } = useTranslation();
 
-  useEffect(() => {
+  // Custom components for rendering Markdown code blocks
+  const components = {
+    code({ node, inline, className, children, ...props }) {
+      const match = /language-(\w+)/.exec(className || '');
+      return !inline && match ? (
+        <SyntaxHighlighter
+          style={dracula}
+          language={match[1]}
+          PreTag="div"
+          {...props}
+        >
+          {String(children).replace(/\n$/, '')}
+        </SyntaxHighlighter>
+      ) : (
+        <code className={className} {...props}>
+          {children}
+        </code>
+      );
+    },
+  };
 
+  useEffect(() => {
     if (user?.id) {
-      trackEvent(user.id, 'pageview', { 
+      trackEvent(user.id, 'pageview', {
         page: '/chatbot',
-        category: 'Navigation'
+        category: 'Navigation',
       });
     }
 
@@ -31,24 +55,22 @@ const ChatbotSection = () => {
     const fetchMessages = async () => {
       try {
         const response = await apiClient.post("/api/chatbot/messages", { userId: user.id });
-        
-        // Track successful message load
+
         trackEvent(user.id, 'chatbot_messages_loaded', {
           category: 'Chatbot',
           label: 'Initial Messages Loaded',
-          message_count: response.data?.length || 0
+          message_count: response.data?.length || 0,
         });
 
         setMessages(response.data || []);
       } catch (error) {
         console.error("Error fetching messages:", error);
         setError(error.message);
-        
-        // Track message load error
+
         trackEvent(user.id, 'chatbot_error', {
           category: 'Error',
           label: 'Message Load Error',
-          error: error.message
+          error: error.message,
         });
       } finally {
         setLoading(false);
@@ -66,41 +88,38 @@ const ChatbotSection = () => {
     setMessages(newMessages);
     setInput("");
 
-    // Track message sent
     trackEvent(user.id, 'chatbot_message_sent', {
       category: 'Chatbot',
       label: 'User Message Sent',
       message_length: input.length,
-      message_hash: hashCode(input) // For tracking without storing content
+      message_hash: hashCode(input),
     });
 
     try {
       const response = await apiClient.post("/api/chatbot/send", {
         userId: user.id,
-        message: input
+        message: input,
       });
 
       const botMessage = { text: response.data.reply, sender: "bot" };
       setMessages([...newMessages, botMessage]);
 
-      // Track bot response
       trackEvent(user.id, 'chatbot_response_received', {
         category: 'Chatbot',
         label: 'Bot Response Received',
         response_length: response.data.reply.length,
-        response_time: response.headers['x-response-time'] || null
+        response_time: response.headers['x-response-time'] || null,
       });
     } catch (error) {
       console.error("Error sending message:", error);
       setError("Failed to get response from the wizard");
-      setMessages(messages); // Revert to previous messages
-      
-      // Track chatbot error
+      setMessages(messages);
+
       trackEvent(user.id, 'chatbot_error', {
         category: 'Error',
         label: 'Chatbot Response Error',
         error: error.message,
-        user_message: input
+        user_message: input,
       });
     }
   };
@@ -133,7 +152,9 @@ const ChatbotSection = () => {
       <div className="chatbot-wrapper">
         <div className="errormessage">
           {error}
-          <button className = "tryagain" onClick={() => window.location.reload()}>{t("Try Again")}</button>
+          <button className="tryagain" onClick={() => window.location.reload()}>
+            {t("Try Again")}
+          </button>
         </div>
       </div>
     );
@@ -149,16 +170,15 @@ const ChatbotSection = () => {
 
           <div className="chat-messages">
             {messages.map((msg, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className={`message ${msg.sender}`}
                 onClick={() => {
-                  // Track message click
                   trackEvent(user.id, 'chatbot_message_clicked', {
                     category: 'Chatbot',
                     label: 'Message Clicked',
                     sender: msg.sender,
-                    message_length: msg.text.length
+                    message_length: msg.text.length,
                   });
                 }}
               >
@@ -166,7 +186,13 @@ const ChatbotSection = () => {
                   <img src={botAvatar} alt="Bot" className="avatar" />
                 )}
                 <div className="message-text">
-                  {msg.text}
+                  {msg.sender === "user" ? (
+                    msg.text
+                  ) : (
+                    <ReactMarkdown components={components}>
+                      {msg.text}
+                    </ReactMarkdown>
+                  )}
                   {msg.sender === "bot" && " ✨"}
                 </div>
                 {msg.sender === "user" && (
@@ -186,24 +212,22 @@ const ChatbotSection = () => {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                // Track enter key usage
                 trackEvent(user.id, 'chatbot_enter_used', {
                   category: 'Chatbot',
-                  label: 'Enter Key Used'
+                  label: 'Enter Key Used',
                 });
                 sendMessage();
               }
             }}
           />
-          <button 
+          <button
             onClick={() => {
               sendMessage();
-              // Track send button click
               trackEvent(user.id, 'chatbot_send_clicked', {
                 category: 'Chatbot',
-                label: 'Send Button Clicked'
+                label: 'Send Button Clicked',
               });
-            }} 
+            }}
             className="send-button"
           >
             <img src={sendIcon} alt="Send" />
