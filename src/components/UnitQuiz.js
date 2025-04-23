@@ -599,7 +599,7 @@ const UnitQuiz = () => {
       </button>
 
       <div className="unit-quiz-box">
-        <h1 className="unit-quiz-header">{t("quiz")} {t("unit")} {unitId}</h1>
+        <h1 className="unit-quiz-header">{t("quiz.quiz")} {t("unit")} {unitId}</h1>
         
         <div className="quiz-points">
            {t("question")} {currentQuestionIndex + 1} / {questions.length}
