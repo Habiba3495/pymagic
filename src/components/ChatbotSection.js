@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import Lsidebar from "./Sidebar";
 import "./ChatbotSection.css";
@@ -20,9 +19,29 @@ const ChatbotSection = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const chatEndRef = useRef(null);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Custom components for rendering Markdown code blocks
+  // const components = {
+  //   code({ node, inline, className, children, ...props }) {
+  //     const match = /language-(\w+)/.exec(className || '');
+  //     return !inline && match ? (
+  //       <SyntaxHighlighter
+  //         style={dracula}
+  //         language={match[1]}
+  //         PreTag="div"
+  //         {...props}
+  //       >
+  //         {String(children).replace(/\n$/, '')}
+  //       </SyntaxHighlighter>
+  //     ) : (
+  //       <code className={className} {...props}>
+  //         {children}
+  //       </code>
+  //     );
+  //   },
+  // };
+
   const components = {
     code({ node, inline, className, children, ...props }) {
       const match = /language-(\w+)/.exec(className || '');
@@ -32,16 +51,20 @@ const ChatbotSection = () => {
           language={match[1]}
           PreTag="div"
           {...props}
+          customStyle={{ direction: 'ltr', textAlign: 'left' }} // التأكد من اتجاه الكود
         >
           {String(children).replace(/\n$/, '')}
         </SyntaxHighlighter>
       ) : (
-        <code className={className} {...props}>
+        <code className={className} {...props} style={{ direction: 'ltr' }}>
           {children}
         </code>
       );
     },
   };
+
+  // Detect if text is Arabic (simple heuristic)
+  const isArabic = (text) => /[\u0600-\u06FF]/.test(text);
 
   useEffect(() => {
     if (user?.id) {
@@ -65,7 +88,7 @@ const ChatbotSection = () => {
         setMessages(response.data || []);
       } catch (error) {
         console.error("Error fetching messages:", error);
-        setError(error.message);
+        setError(t("errorFetchingMessages"));
 
         trackEvent(user.id, 'chatbot_error', {
           category: 'Error',
@@ -78,7 +101,7 @@ const ChatbotSection = () => {
     };
 
     fetchMessages();
-  }, [user]);
+  }, [user, t]);
 
   const sendMessage = async () => {
     if (input.trim() === "") return;
@@ -99,6 +122,10 @@ const ChatbotSection = () => {
       const response = await apiClient.post("/api/chatbot/send", {
         userId: user.id,
         message: input,
+      }, {
+        headers: {
+          'Accept-Language': i18n.language, // Send current language
+        },
       });
 
       const botMessage = { text: response.data.reply, sender: "bot" };
@@ -112,7 +139,7 @@ const ChatbotSection = () => {
       });
     } catch (error) {
       console.error("Error sending message:", error);
-      setError("Failed to get response from the wizard");
+      setError(t("errorSendingMessage"));
       setMessages(messages);
 
       trackEvent(user.id, 'chatbot_error', {
@@ -142,7 +169,7 @@ const ChatbotSection = () => {
   if (loading) {
     return (
       <div className="chatbot-wrapper">
-        <div className="loading-indicator">Loading chat history...</div>
+        <div className="loading-indicator">{t("loadingChatHistory")}</div>
       </div>
     );
   }
@@ -153,7 +180,7 @@ const ChatbotSection = () => {
         <div className="errormessage">
           {error}
           <button className="tryagain" onClick={() => window.location.reload()}>
-            {t("Try Again")}
+            {t("tryAgain")}
           </button>
         </div>
       </div>
@@ -173,6 +200,10 @@ const ChatbotSection = () => {
               <div
                 key={index}
                 className={`message ${msg.sender}`}
+                style={{
+                  // direction: isArabic(msg.text) ? 'rtl' : 'ltr',
+                  textAlign: isArabic(msg.text) ? 'right' : 'left',
+                }}
                 onClick={() => {
                   trackEvent(user.id, 'chatbot_message_clicked', {
                     category: 'Chatbot',
@@ -187,7 +218,7 @@ const ChatbotSection = () => {
                 )}
                 <div className="message-text">
                   {msg.sender === "user" ? (
-                    msg.text
+                    <span>{msg.text}</span>
                   ) : (
                     <ReactMarkdown components={components}>
                       {msg.text}
@@ -219,6 +250,7 @@ const ChatbotSection = () => {
                 sendMessage();
               }
             }}
+            style={{ direction: isArabic(input) ? 'rtl' : 'ltr' }}
           />
           <button
             onClick={() => {
