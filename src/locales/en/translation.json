@@ -152,8 +152,52 @@
     "save": "Save",
     "confirmPurchase": "Are you sure you want to buy this item for {{price}} points?",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "confirmSaveBeforeExit":"Are you want to save your changes?"
   },
+
+  "setting":{
+   "myAccount":"my Account",
+   "language":"language",
+   "logout":"logout",
+   "settings":"settings",
+   "confirmLogout": "Are you sure you want to log out?",
+   "confirm":"confirm",
+   "cancel":"cancel"
+  },
+  
+  "editProfile": {
+    "title": "Edit Profile",
+    "nameLabel": "Full Name",
+    "emailLabel": "Email Address",
+    "parentEmailLabel": "Parent's Email (optional)",
+    "passwordSectionTitle": "Change Password",
+    "passwordInstructions": "Leave blank if you don't want to change your password",
+    "currentPasswordLabel": "Current Password",
+    "newPasswordLabel": "New Password",
+    "confirmPasswordLabel": "Confirm New Password",
+    "saveButton": "Save Changes",
+    "cancelButton": "Cancel",
+    "saving": "Saving...",
+    "successMessage": "Profile updated successfully!",
+
+    "errors": {
+      "nameRequired": "Name is required",
+      "emailRequired": "Email is required",
+      "invalidEmail": "Please enter a valid email address",
+      "invalidParentEmail": "Please enter a valid parent email address",
+      "currentPasswordRequired": "Current password is required to change password",
+      "passwordTooShort": "Password must be at least 6 characters",
+      "passwordsDontMatch": "Passwords don't match",
+      "incorrectPassword": "Current password is incorrect",
+      "updateFailed": "Failed to update profile. Please try again.",
+      "networkError": "Network error. Please check your connection.",
+      "alertMessage": "Please select a feedback score!"
+      
+    }
+  
+  },
+
 
   "registerTitle": "Join us at the Academy of Mystic Code and Arts",
   "nameLabel": "Name",
@@ -187,45 +231,12 @@
   "purchaseError": "Error purchasing item",
   "SuccessfullySaved!": "Successfully saved!",
   "saveError": "Error saving preferences",
-  "confirmLogout": "Are you sure you want to log out?",
   "Unlocklessons": "Complete the previous lessons to unlock this lesson.",
   "Unlockunitquiz": "You need to complete all the lessons before taking the unit quiz",
   "Try Again":"Try Again",
   "missingQuizId": "Student Quiz ID is missing. Please try again.",
   "ok": "OK",
-  "Something went wrong. Please try again later.": "Something went wrong. Please try again later.",
+  "Something went wrong. Please try again later.": "Something went wrong. Please try again later."
 
-
-  "editProfile": {
-    "title": "Edit Profile",
-    "nameLabel": "Full Name",
-    "emailLabel": "Email Address",
-    "parentEmailLabel": "Parent's Email (optional)",
-    "passwordSectionTitle": "Change Password",
-    "passwordInstructions": "Leave blank if you don't want to change your password",
-    "currentPasswordLabel": "Current Password",
-    "newPasswordLabel": "New Password",
-    "confirmPasswordLabel": "Confirm New Password",
-    "saveButton": "Save Changes",
-    "cancelButton": "Cancel",
-    "saving": "Saving...",
-    "successMessage": "Profile updated successfully!",
-
-    "errors": {
-      "nameRequired": "Name is required",
-      "emailRequired": "Email is required",
-      "invalidEmail": "Please enter a valid email address",
-      "invalidParentEmail": "Please enter a valid parent email address",
-      "currentPasswordRequired": "Current password is required to change password",
-      "passwordTooShort": "Password must be at least 6 characters",
-      "passwordsDontMatch": "Passwords don't match",
-      "incorrectPassword": "Current password is incorrect",
-      "updateFailed": "Failed to update profile. Please try again.",
-      "networkError": "Network error. Please check your connection.",
-      "alertMessage": "Please select a feedback score!"
-      
-    }
-  
-  }
   
 }

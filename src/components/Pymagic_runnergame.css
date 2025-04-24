@@ -74,6 +74,7 @@
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
+    z-index: 2;
   }
   
   .jump {

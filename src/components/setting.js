@@ -17,19 +17,20 @@ const SettingsPage = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
 
+  
   const settings = [
     {
-      title: t("myAccount"),
+      title: t("setting.myAccount"),
       icon: "👤",
       link: "/EditProfile"
     },
     {
-      title: t("language"),
+      title: t("setting.language"),
       icon: "🌐",
       link: "/language"
     },
     {
-      title: t("logout"),
+      title: t("setting.logout"),
       icon: <FiLogOut size={24} />,
       action: "logout"
     }
@@ -49,16 +50,17 @@ const SettingsPage = () => {
     setShowPopup(false);
   };
 
+  
   return (
     <div className="settings-bg">
       <button className="back-button" onClick={() => navigate("/profile")}>
         <img src={Exit} alt="Back" className="back-icon" />
       </button>
       <div className="settings-container">
-        <div className="settings-header">{t("settings")}</div>
+        <div className="settings-header">{t("setting.settings")}</div>
         <div className="settings-cards">
           {settings.map((item, index) => (
-            item.title === t("language") ? (
+            item.title === t("setting.language") ? (
               <div
                 key={index}
                 className="settings-card"
@@ -99,10 +101,10 @@ const SettingsPage = () => {
   <>
     <div className="confirmation-popup-overlay" onClick={cancelLogout}></div>
     <div className="confirmation-popup">
-      <div className="popup-title">{t("confirmLogout")}</div>
+      <div className="popup-title">{t("setting.confirmLogout")}</div>
       <div className="popup-buttons">
-        <button onClick={confirmLogout}>{t("confirm")}</button>
-        <button className="cancel" onClick={cancelLogout}>{t("cancel")}</button>
+        <button onClick={confirmLogout}>{t("setting.confirm")}</button>
+        <button className="cancel" onClick={cancelLogout}>{t("setting.cancel")}</button>
       </div>
     </div>
   </>

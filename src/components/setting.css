@@ -1,22 +1,20 @@
-SettingsPage.css
-
 .settings-container {
-  height: 100vh; /* لتحديد ارتفاع ثابت */
-  width: 100%;   /* لتحديد العرض */
-  background: linear-gradient(to bottom right, #1e144f, #3c2373);
-  color: white;
-  padding: 1.5rem;
-}
+  background: white;
+  width: 80%;
+  max-width: 900px;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
 
-  
+}
   .settings-title {
     text-align: center;
-    font-size: 2rem;
+    font-size: 18px;
     font-weight: bold;
-    margin-bottom: 2rem;
-    color: #fcd34d; 
+    color: #4b1665; 
+    margin-top: 10px;
   }
-  
   .settings-grid {
     display: grid;
     gap: 1.5rem;
@@ -24,49 +22,68 @@ SettingsPage.css
     margin: auto;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
+
+  .settings-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    justify-content: center;
+  }
   
   .settings-card {
-    background-color: #2a1b5c;
-    border: 1px solid #facc15; 
-    border-radius: 1rem;
-    padding: 1.5rem;
+    background: #f2ddff;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
     cursor: pointer;
-    transition: box-shadow 0.3s ease;
+    transition: 0.3s;
+    border: 1px solid #facc15; 
   }
   
   .settings-card:hover {
     box-shadow: 0 0 15px #f2ddff;
+    transform: translateY(-5px);
   }
-  
+
   .settings-icon {
     font-size: 2.5rem;
     margin-bottom: 1rem;
     color: #facc15;
+    font-size: 30px;
   }
-  
+
   .settings-heading {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
   }
-  
-  .settings-description {
-    font-size: 0.9rem;
-    color: #d1d5db;
-  }
-  
-  .settings-bg {
+
+  /* .settings-bg {
     background-color: #f2ddff; 
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    width: 100%;
+    height: 100%;       
+    min-height: 92.5vh; 
+    width: 95%;        
+    min-width: 80vh;
     padding: 20px;
     position: relative;
-  }
+    overflow: hidden;
+  } */
+  .settings-bg {
+    background-color: #f2ddff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    min-height: 94.5vh;
+    min-width: 90vh;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
   
- 
   .back-button {
     position: absolute;
     top: 20px;
@@ -84,18 +101,6 @@ SettingsPage.css
   .back-button:hover .back-icon {
     opacity: 0.7;
   }
-  
-
-  .settings-container {
-    background: white;
-    width: 80%;
-    max-width: 900px;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
 
   .settings-header {
     background: #5c2685; 
@@ -107,46 +112,10 @@ SettingsPage.css
     font-family: Germania One;
   }
   
+   [dir="rtl"] .settings-header {
+    font-family: 'Marhey', cursive;
   
-  .settings-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    justify-content: center;
-  }
-  
-
-  .settings-card {
-    background: #f2ddff;
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  
-  .settings-card:hover {
-    transform: translateY(-5px);
-  }
-  
-  
-  .settings-icon {
-    font-size: 30px;
-  }
- 
-  .settings-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #4b1665; 
-    margin-top: 10px;
-  }
-  
-
-  .settings-description {
-    font-size: 14px;
-    color: #4b1665;
-    margin-top: 10px;
-  }
+  } 
   
   /* Dark background for the entire screen */
 .confirmation-popup-overlay {
@@ -181,6 +150,10 @@ SettingsPage.css
   margin-bottom: 20px;
 }
 
+[dir="rtl"] .popup-title  {
+  font-family: 'Marhey', cursive;
+
+}
 /* Buttons container */
 .popup-buttons {
   display: flex;
@@ -218,5 +191,5 @@ SettingsPage.css
     border-radius: 8px; /* لتنعيم الحواف */
     z-index: 1000; /* التأكد من أن الصندوق يظهر فوق باقي العناصر */
   } 
+ 
   
-    
