@@ -116,3 +116,9 @@
   width: 20px;  /* حجم الأيقونة */
   height: 20px;
 }
+.no-progress-message {
+  text-align: center;
+  color: #555;
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}

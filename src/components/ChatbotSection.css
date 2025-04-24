@@ -64,7 +64,10 @@
   margin: 0 auto;
   font-family: 'Germania One', cursive;
 }
+[dir="rtl"] .chat-header {
+  font-family: 'Marhey', cursive;
 
+}
 .chat-messages {
   flex: 1;
   width: 100%;
@@ -197,7 +200,7 @@ input::placeholder {
   font-size: 18px;
   font-family: 'Comic Sans MS', cursive;
   border-radius: 25px;
-  background-color: #f9f1fc;
+  background-color: white;
   color: #6a1b9a;
 }
 

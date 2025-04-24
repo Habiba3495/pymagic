@@ -30,7 +30,9 @@
     "validAgeRequired": "السن المطلوب : علي الاقل 8 سنوات",
     "passwordMismatch": "كلمات السر مش متطابقة",
      "emailExists": "الإيميل ده متسجل قبل كده",
-     "parentEmailExists": "إيميل ولي الأمر ده متسجل قبل كده"
+     "parentEmailExists": "إيميل ولي الأمر ده متسجل قبل كده",
+     "registrationSuccess": "تم التسجيل بنجاح"
+
   },
 
   "login":{
@@ -53,7 +55,10 @@
   "lesson":{
   "Next":"التالي",
   "Ok":"تمام",
-  "Previous":"السابق"
+  "Previous":"السابق",
+  "Unlockunitquiz": "كمّل دروس الوحدة دي الأول علشان تفتح الاختبار ",
+  "Unlocklessons":"خلص الدروس اللي قبل كده عشان تقدر تفتح الدرس ده."
+
   },
 
   "flashcard":{
@@ -97,7 +102,13 @@
     "feedbackCommentPlaceholder": "أضف تعليقك هنا...",
     "skip": "تخطي",
     "submit": "إرسال"
-  }},
+    },
+
+    "reward":{
+    "newRewardsTitle":"هدايا جديده اتفتحت!",
+    "continue": "متابعة"
+    }
+  },
 
   "review":{
     "quizReview": "مراجعة الاختبار",
@@ -109,7 +120,9 @@
     "profileProgressReport": "تقرير التقدم",
     "lesson":"الدرس",
     "unit": "الوحدة",
-    "profilePointsEarned": "نقاط مكتسبة"
+    "profilePointsEarned": "نقاط مكتسبة",
+    "noProgress": "لا يوجد تقارير تقدم حتى الآن.",
+    "errorLoading":"لا يوجد تقارير تقدم حتى الآن."
   },
 
   "unitcomplete":{
@@ -135,7 +148,8 @@
     "unit": "الوحدة",
     "lesson":"الدرس",
     "profilePointsEarned": "نقاط مكتسبة",
-    "profileUnknownUser": "اسم المستخدم غير معرف"
+    "profileUnknownUser": "اسم المستخدم غير معرف",
+    "noProgressYet": "لا يوجد تقارير تقدم بعد"
   },
 
   "achivement":{
@@ -210,7 +224,6 @@
   "RpasswordLabel": "كلمة السر",
   "confirmPasswordLabel": "تأكيد كلمة السر",
   "registerButton": "تسجيل",
-  "registrationSuccess": "تم التسجيل بنجاح",
   "registrationFailed": "فشل في التسجيل",
   "profileUnitCompleted": "الوحدة {unitId} خلصت",
   "lessonQuizCompleted": "اختبار الدرس خلص",
@@ -235,8 +248,6 @@
   "purchaseError": "خطأ في شراء العنصر",
   "SuccessfullySaved!": "تم الحفظ بنجاح!",
   "saveError": "خطأ في حفظ التفضيلات",
-    "Unlocklessons":"خلص الدروس اللي قبل كده عشان تقدر تفتح الدرس ده.",
-    "Unlockunitquiz": "كمّل دروس الوحدة دي الأول علشان تفتح الاختبار ",
     "Try Again":"حاول مره اخرى",
     "missingQuizId": "معرف الكويز غير موجود. من فضلك حاولي مرة أخرى.",
     "ok": "موافق",

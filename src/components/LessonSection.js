@@ -87,9 +87,15 @@ const LessonSection = () => {
         lesson_id: lessonId,
         error: error.message
       });
+      // setPopupMessage(lessonId === 1
+      //   ? t("FirstLessonAccessError")
+      //   : error.message || t("lesson.Unlocklessons"));
+      // setPopupVisible(true);
+      // return false;
+
       setPopupMessage(lessonId === 1
         ? t("FirstLessonAccessError")
-        : error.message || t("Unlocklessons"));
+        : t("lesson.Unlocklessons"));
       setPopupVisible(true);
       return false;
     }
@@ -110,7 +116,7 @@ const LessonSection = () => {
         unit_id: unitId,
         error: error.message
       });
-      setPopupMessage(t("Unlockunitquiz"));
+      setPopupMessage(t("lesson.Unlockunitquiz"));
       setPopupVisible(true);
       return false;
     }
@@ -279,7 +285,7 @@ const LessonSection = () => {
           <div className="popup-content">
             <p>{popupMessage}</p>
             <button className="popup-close-btn" onClick={() => setPopupVisible(false)}>
-              {t("Ok")}
+              {t("lesson.Ok")}
             </button>
           </div>
         </div>

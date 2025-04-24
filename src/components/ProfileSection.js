@@ -269,7 +269,7 @@ const ProfilePage = () => {
 
         <div className="section progress-report">
           <p className="section-title">{t("profile.profileProgressReport")}</p>
-          <div className="progress-grid">
+          {/* <div className="progress-grid">
             {progressData.map((quiz) => (
               <div key={quiz.id} className="progress-card">
                 <div className="pscore-circle">
@@ -284,9 +284,30 @@ const ProfilePage = () => {
                   <img src={points} alt="points icon" className="points" />
                   {quiz.earned_points} {t("profile.profilePointsEarned")}
                 </p>
-              </div>
-            ))}
-          </div>
+              </div> */}
+              <div className="progress-grid">
+              {progressData.length > 0 ? (
+             progressData.map((quiz) => (
+             <div key={quiz.id} className="progress-card">
+            <div className="pscore-circle">
+             {quiz.score} / {quiz.total_questions}
+             </div>
+             <p className="lesson-info">
+            {quiz.lesson_id && quiz.lesson_number
+            ? `${t("profile.unit")} ${quiz.unit_id}, ${t("profile.lesson")} ${quiz.lesson_number}`
+            : `${t("profile.unit")} ${quiz.unit_id}`}
+           </p>
+           <p className="points-earned">
+          <img src={points} alt="points icon" className="points" />
+          {quiz.earned_points} {t("profile.profilePointsEarned")}
+           </p>
+         </div>
+       ))
+      ) : (
+       <p className="no-progress">{t("profile.noProgressYet")}</p>
+      )}
+     </div>
+
           <button
             className="view-all-button"
             onClick={() => {

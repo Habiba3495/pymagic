@@ -105,12 +105,28 @@ const handleCardClick = async (quiz) => {
 
   // هنا نقوم بإظهار Loading أو PyMagicRunner خارج الـ return بناءً على الحالة
   if (loading) {
-    return <Loading />; // يظهر Loading إذا كانت الحالة في تحميل
+    return <Loading />;
   }
-
-  if (error) {
-    return <PyMagicRunner />; // يظهر PyMagicRunner في حالة حدوث خطأ
+  
+  // if (error) {
+  //   return (
+  //     <div className="error-container">
+  //       <p className="error-message">{t("progress.errorLoading") || "حدث خطأ أثناء تحميل البيانات."}</p>
+  //       <PyMagicRunner />
+  //     </div>
+  //   );
+  // }
+  if (error && error !== "No progress data available") {
+    return (
+      <div className="error-container">
+        <p className="error-message">{t("progress.errorLoading") }</p>
+        <PyMagicRunner />
+      </div>
+    );
   }
+  
+  
+  
 
   return (
     <div className="progress-report-bg">
@@ -119,7 +135,7 @@ const handleCardClick = async (quiz) => {
       </button>
       <div className="progress-report-container">
         <div className="progress-report-header">{t("progress.profileProgressReport")}</div>
-        <div className="progress-cards">
+        {/* <div className="progress-cards">
           {progressData.map((quiz) => (
             <div
               key={quiz.id}
@@ -140,7 +156,36 @@ const handleCardClick = async (quiz) => {
               </div>
             </div>
           ))}
+        </div> */}
+        <div className="progress-cards">
+  {progressData.length > 0 ? (
+    progressData.map((quiz) => (
+      <div
+        key={quiz.id}
+        className={`progress-card ${quiz.is_passed ? 'passed' : 'failed'}`}
+        onClick={() => handleCardClick(quiz)}
+      >
+        <div className="pscore-circle">
+          {quiz.score} / {quiz.total_questions}
         </div>
+        <p className="lesson-info">
+          {quiz.lesson_id && quiz.lesson_number
+            ? `${t("progress.unit")} ${quiz.unit_id}, ${t("progress.lesson")} ${quiz.lesson_number}`
+            : `${t("progress.unit")} ${quiz.unit_id}`}
+        </p>
+        <div className="points-earned">
+          <img src={points} alt="points icon" className="points" />
+          {quiz.earned_points} {t("progress.profilePointsEarned")}
+        </div>
+      </div>
+    ))
+  ) : (
+    <p className="no-progress-message">
+    {t("progress.noProgress")}
+  </p>
+  )}
+</div>
+
       </div>
     </div>
   );

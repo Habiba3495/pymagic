@@ -242,4 +242,9 @@ right: auto;
   font-size: 18px;
   grid-column: span 3;
 }
-
+.no-progress{
+  text-align: center;
+  color: #888;
+  font-size: 18px;
+  grid-column: span 3;
+}

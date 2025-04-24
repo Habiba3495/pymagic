@@ -90,11 +90,15 @@
   }
   
   
-  
   .ano-achievements {
+    /* text-align: center;
+    color: #888;
+    font-size: 18px;
+    grid-column: span 3; */
     text-align: center;
-    color: #6b7280;
+    color: #555;
     font-size: 1.2rem;
+    margin-top: 2rem;
   }
   
   

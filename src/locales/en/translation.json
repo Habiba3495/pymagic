@@ -29,14 +29,16 @@
     "validAgeRequired": "Age Required: atleast 8 ages",
     "passwordMismatch": "Passwords do not match",
     "emailExists": "Email already exist",
-    "parentEmailExists": "Parent email already exist"
+    "parentEmailExists": "Parent email already exist",
+    "registrationSuccess": "Registration successful"
+
   },
 
   "login":{
     "loginError": "Login failed",
     "emailLabel": "Email",
     "LpasswordLabel": "Password",
-    "rememberMe": "Remember Me",
+    "rememberMe": "RememberMe",
     "loginButton": "Log In"
   },
 
@@ -51,7 +53,11 @@
   "lesson":{
   "Next":"Next",
   "Ok": "Ok",
-  "Previous":"Previous"
+  "Previous":"Previous",
+  "Unlockunitquiz": "You need to complete all the lessons before taking the unit quiz",
+  "Unlocklessons": "Complete the previous lessons to unlock this lesson."
+
+
   },
 
   "flashcard":{
@@ -94,7 +100,12 @@
     "feedbackTitle":"How was your experience?",
     "feedbackCommentPlaceholder":"Add your comment here...",
     "skip":"Skip",
-    "submit":"Submit"
+    "submit":"Submit",
+
+    "reward":{
+    "newRewardsTitle":"New Rewards Unlocked!",
+    "continue": "Continue"
+    }
   }},
   
   "review":{
@@ -107,7 +118,9 @@
     "profileProgressReport": "Progress Report",
     "lesson":"lesson",
     "unit":"Unit",
-    "profilePointsEarned": "points earned"
+    "profilePointsEarned": "points earned",
+    "noProgress": "No progress report yet",
+    "errorLoading":"No progress report yet"
   },
 
   "unitcomplete":{
@@ -133,7 +146,8 @@
     "unit":"Unit",
     "lesson":"lesson",
     "profilePointsEarned": "points earned",
-    "profileUnknownUser":"profile Unknown User"
+    "profileUnknownUser":"profile Unknown User",
+    "noProgressYet": "No progress report yet"
   },
 
   "achivement":{
@@ -207,7 +221,6 @@
   "RpasswordLabel": "Password",
   "confirmPasswordLabel": "Confirm Password",
   "registerButton": "Register",
-  "registrationSuccess": "Registration successful",
   "registrationFailed": "Registration failed",
   "profileUnitCompleted": "Unit Quiz completed",
   "lessonQuizCompleted": "Lesson Quiz completed",
@@ -230,9 +243,7 @@
   "purchaseSuccess": "Item purchased successfully!",
   "purchaseError": "Error purchasing item",
   "SuccessfullySaved!": "Successfully saved!",
-  "saveError": "Error saving preferences",
-  "Unlocklessons": "Complete the previous lessons to unlock this lesson.",
-  "Unlockunitquiz": "You need to complete all the lessons before taking the unit quiz",
+  "saveError": "Error saving preferences",  
   "Try Again":"Try Again",
   "missingQuizId": "Student Quiz ID is missing. Please try again.",
   "ok": "OK",

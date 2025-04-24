@@ -78,7 +78,11 @@
     background-color: #5B287C !important;
     color: white;
   }
+  [dir="rtl"] .unit-check-answer-button {
+    font-family: 'Marhey', cursive;
+    font-size: 13px;
   
+  }
   .unit-exit-button {
     position: absolute;
     top: 20px;

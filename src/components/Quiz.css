@@ -69,6 +69,10 @@
   font-family: 'Germania One', cursive;
 }
 
+[dir="rtl"] .check-answer-button {
+  font-family: 'Marhey', cursive;
+  font-size: 13px;
+}
 .check-answer-button:hover {
   cursor: pointer; 
 }
