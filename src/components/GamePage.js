@@ -2,9 +2,14 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./GamePage.css";
 import { useTranslation } from "react-i18next";
 import { FaExpand, FaCompress } from "react-icons/fa";
+import { useAuth } from '../context/AuthContext';
+import apiClient from '../services';
+import { useNavigate } from "react-router-dom"; // لعمل Redirect
 
 const GamePage = ({ onExit }) => {
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const navigate = useNavigate(); // لعمل Redirect
   const [pyodide, setPyodide] = useState(null);
   const [unityReady, setUnityReady] = useState(false);
   const [bridgeReady, setBridgeReady] = useState(false);
@@ -16,36 +21,80 @@ const GamePage = ({ onExit }) => {
   const unityInstanceRef = useRef(null);
   const isMountedRef = useRef(false);
 
-  // Handle code received from Unity game
-  const handleCodeFromGame = useCallback((code) => {
-    console.log("Received code from Unity:", code);
-    if (pyodide) {
-      handleRunCode(code);
-    } else {
-      pendingCodeRef.current = code;
-      console.log("Pyodide not ready, storing code for later execution");
+  // تحقق من وجود المستخدم قبل تحميل اللعبة
+  useEffect(() => {
+    if (!user) {
+      console.error("User not authenticated, redirecting to login...");
+      alert("You need to be logged in to play the game.");
+      navigate("/login"); // Redirect لصفحة الـ Login
     }
-  }, [pyodide]);
+  }, [user, navigate]);
+
+  // Handle code received from Unity game
+  const handleCodeFromGame = useCallback(
+    (code) => {
+      console.log("Received code from Unity:", code);
+      if (pyodide) {
+        handleRunCode(code);
+      } else {
+        pendingCodeRef.current = code;
+        console.log("Pyodide not ready, storing code for later execution");
+      }
+    },
+    [pyodide]
+  );
+
+  // Handle points received from Unity
+  const handlePointsFromGame = useCallback(
+    async (points) => {
+      console.log("Received points from Unity:", points);
+      const pointsInt = parseInt(points, 10); // تحويل points لـ Integer
+      if (isNaN(pointsInt)) {
+        console.error("Invalid points value received from Unity:", points);
+        alert("Error: Invalid points value received from the game.");
+        return;
+      }
+      if (user) {
+        try {
+          await apiClient.post("/api/users/update-points", {
+            userId: user.id,
+            points: pointsInt,
+          });
+          console.log("Points sent to backend successfully");
+        } catch (error) {
+          console.error("Error sending points to backend:", error);
+          alert(
+            "Failed to update points: " +
+              (error.response?.data?.error || error.message)
+          );
+        }
+      } else {
+        console.error("User not authenticated");
+        alert("You need to be logged in to save points.");
+      }
+    },
+    [user]
+  );
 
   // Load Pyodide for Python execution
   useEffect(() => {
     isMountedRef.current = true;
-    
+
     const loadPyodide = async () => {
       try {
         console.log("Starting Pyodide load...");
-        
+
         if (!window.pyodide) {
           window.pyodide = await window.loadPyodide({
             indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.2/full/",
           });
           await window.pyodide.loadPackage("micropip");
         }
-        
+
         if (isMountedRef.current) {
           setPyodide(window.pyodide);
           console.log("Pyodide fully initialized");
-          
+
           if (pendingCodeRef.current) {
             console.log("Executing pending code:", pendingCodeRef.current);
             handleRunCode(pendingCodeRef.current);
@@ -66,26 +115,47 @@ const GamePage = ({ onExit }) => {
     };
   }, [pyodide]);
 
-  // Check for Unity bridge readiness
+  // Check for Unity bridge readiness with Timeout
   useEffect(() => {
+    let timeout;
     const checkBridgeReady = () => {
       if (window.unityBridgeLoaded) {
         setBridgeReady(true);
         console.log("Unity bridge is ready");
-        
+
         if (window.registerReactCallback) {
           window.registerReactCallback(handleCodeFromGame);
           console.log("React callback registered with Unity bridge");
         } else {
           console.error("registerReactCallback not found");
         }
+
+        if (window.registerPointsCallback) {
+          window.registerPointsCallback(handlePointsFromGame);
+          console.log("Points callback registered with Unity bridge");
+        } else {
+          console.error("registerPointsCallback not found");
+        }
       } else {
-        setTimeout(checkBridgeReady, 100);
+        timeout = setTimeout(checkBridgeReady, 100);
       }
     };
 
     checkBridgeReady();
-  }, [handleCodeFromGame]);
+
+    // إضافة Timeout عشان تتأكدي إن الـ Bridge تحمل
+    const failTimeout = setTimeout(() => {
+      if (!window.unityBridgeLoaded) {
+        console.error("Unity bridge failed to load after 10 seconds.");
+        alert("Failed to load Unity bridge. Please refresh the page.");
+      }
+    }, 10000); // 10 ثواني
+
+    return () => {
+      clearTimeout(timeout);
+      clearTimeout(failTimeout);
+    };
+  }, [handleCodeFromGame, handlePointsFromGame]);
 
   // Load Unity game
   useEffect(() => {
@@ -106,11 +176,11 @@ const GamePage = ({ onExit }) => {
         const script = document.createElement("script");
         script.src = "/Build/Build.loader.js";
         script.async = true;
-        
+
         script.onload = async () => {
           setLoadingProgress(60);
           console.log("Unity loader script loaded");
-          
+
           if (!window.createUnityInstance) {
             throw new Error("createUnityInstance not found");
           }
@@ -134,7 +204,7 @@ const GamePage = ({ onExit }) => {
 
             unityInstanceRef.current = instance;
             window.unityInstance = instance;
-            
+
             if (window.unityBridge?.setUnityInstance) {
               window.unityBridge.setUnityInstance(instance);
             }
@@ -193,9 +263,9 @@ const GamePage = ({ onExit }) => {
       `);
 
       await pyodide.runPythonAsync(code);
-      
+
       const output = pyodide.runPython("sys.stdout.getvalue()").trim();
-      
+
       await pyodide.runPythonAsync("sys.stdout = sys.__stdout__");
 
       console.log("Python execution result:", output);
@@ -207,23 +277,26 @@ const GamePage = ({ onExit }) => {
   };
 
   // Send result back to Unity
-  const sendResultToUnity = useCallback((result) => {
-    if (!unityInstanceRef.current) {
-      console.warn("Unity instance not ready - result not sent");
-      return;
-    }
+  const sendResultToUnity = useCallback(
+    (result) => {
+      if (!unityInstanceRef.current) {
+        console.warn("Unity instance not ready - result not sent");
+        return;
+      }
 
-    try {
-      console.log("Sending to Unity:", result);
-      unityInstanceRef.current.SendMessage(
-        "PythonPuzzleManager", 
-        "ReceivePythonOutput", 
-        result.toString()
-      );
-    } catch (error) {
-      console.error("Failed to send result to Unity:", error);
-    }
-  }, []);
+      try {
+        console.log("Sending to Unity:", result);
+        unityInstanceRef.current.SendMessage(
+          "PythonPuzzleManager",
+          "ReceivePythonOutput",
+          result.toString()
+        );
+      } catch (error) {
+        console.error("Failed to send result to Unity:", error);
+      }
+    },
+    []
+  );
 
   // Toggle fullscreen mode
   const toggleFullScreen = useCallback(() => {
@@ -254,14 +327,17 @@ const GamePage = ({ onExit }) => {
       setIsFullScreen(!!document.fullscreenElement);
     };
 
-    document.addEventListener('fullscreenchange', handleFullScreenChange);
-    document.addEventListener('webkitfullscreenchange', handleFullScreenChange);
-    document.addEventListener('msfullscreenchange', handleFullScreenChange);
+    document.addEventListener("fullscreenchange", handleFullScreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullScreenChange);
+    document.addEventListener("msfullscreenchange", handleFullScreenChange);
 
     return () => {
-      document.removeEventListener('fullscreenchange', handleFullScreenChange);
-      document.removeEventListener('webkitfullscreenchange', handleFullScreenChange);
-      document.removeEventListener('msfullscreenchange', handleFullScreenChange);
+      document.removeEventListener("fullscreenchange", handleFullScreenChange);
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        handleFullScreenChange
+      );
+      document.removeEventListener("msfullscreenchange", handleFullScreenChange);
     };
   }, []);
 
@@ -271,7 +347,7 @@ const GamePage = ({ onExit }) => {
         {t("game.exitGame") || "Exit Game"}
       </button>
 
-      {(!unityReady) && (
+      {!unityReady && (
         <div className="unity-loading-overlay">
           <div className="loading-progress-bar">
             <div
@@ -283,7 +359,7 @@ const GamePage = ({ onExit }) => {
       )}
 
       {unityReady && (
-        <button 
+        <button
           className="fullscreen-btn"
           onClick={toggleFullScreen}
           title={isFullScreen ? t("exitFullscreen") : t("enterFullscreen")}
@@ -291,11 +367,8 @@ const GamePage = ({ onExit }) => {
           {isFullScreen ? <FaCompress /> : <FaExpand />}
         </button>
       )}
-      
-      <canvas
-        id="unity-canvas"
-        ref={canvasRef}
-      />
+
+      <canvas id="unity-canvas" ref={canvasRef} />
     </div>
   );
 };
