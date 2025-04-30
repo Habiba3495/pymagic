@@ -47,13 +47,6 @@ const LessonSection = () => {
         setPrevSectionName(sectionData.prevSectionName || ""); // Set previous section name
         setNextSectionName(sectionData.nextSectionName || ""); // Set next section name
   
-        // Track lesson data loaded event
-        trackEvent(user.id, 'lesson_data_loaded', {
-          category: 'Lesson',
-          label: 'Lesson Data Loaded',
-          unit_count: sectionData.units.length,
-          lesson_count: sectionData.units.reduce((sum, unit) => sum + unit.lessons.length, 0)
-        });
   
       } catch (error) {
         setError(error.message);

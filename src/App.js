@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import { useTranslation } from "react-i18next";
 import HomePage from "./components/HomePage";
@@ -21,7 +21,7 @@ import AchievementsPage from "./components/AchievementsPage";
 import AvatarCustomization from "./components/AvatarCustomization";
 import Setting from "./components/setting";
 import EditProfile from "./components/EditProfile";
-import "./i18n"; // Import your i18n configuration
+import "./i18n";
 import ReactGA from 'react-ga4';
 import TrackPageViews from './components/TrackPageViews';
 import TrackEngagement from './components/TrackEngagement';
@@ -29,36 +29,44 @@ import TrackInactivity from './components/TrackInactivity';
 import Loading from "./components/Loading";
 import RegisterFailed from "./components/RegisterFailed";
 
-ReactGA.initialize('G-W0C0ZKC21L');
+ReactGA.initialize('G-W0C0ZKC21L', { debug_mode: true });
 
-const App = () => {
+// مكون وسيط للتعامل مع التتبع داخل Router
+const AppContent = () => {
   const { user } = useAuth();
   const { i18n } = useTranslation();
-
-  
+  const location = useLocation();
 
   useEffect(() => {
     document.documentElement.setAttribute("dir", i18n.language === "ar" ? "rtl" : "ltr");
     document.documentElement.setAttribute("lang", i18n.language);
   }, [i18n.language]);
 
-  useEffect(() => { //// To identify Breakpoints (where users leave the app, close pages, or stop interacting):
+  useEffect(() => {
     const handleBeforeUnload = () => {
-      ReactGA.event({
+      window.gtag('event', 'app_closed', {
         category: 'Session',
         action: 'app_closed',
         label: window.location.pathname,
+        custom_user_id: user?.id,
       });
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, []);
+  }, [user]);
+
+  const noTrackingPages = ['/', '/login', '/register', '/registerfailed'];
+  const shouldTrack = user && user.id && !noTrackingPages.includes(location.pathname.toLowerCase());
 
   return (
-    <Router>
-      <TrackPageViews />
-      <TrackEngagement />
-      <TrackInactivity />
+    <>
+      {shouldTrack && (
+        <>
+          <TrackPageViews userId={user.id} user={user} />
+          <TrackEngagement userId={user.id} user={user} />
+          <TrackInactivity userId={user.id} user={user} />
+        </>
+      )}
       <Routes>
         <Route
           path="/"
@@ -69,22 +77,21 @@ const App = () => {
           element={user ? <Navigate to="/lessons" replace /> : <RegisterPage />}
         />
         <Route
-          path="/RegisterFailed"
-          element={user ? <Navigate to="/RegisterFailed" replace /> : <RegisterFailed />}
+          path="/registerfailed"
+          element={user ? <Navigate to="/lessons" replace /> : <RegisterFailed />}
         />
-                <Route
-          path="/Login"
+        <Route
+          path="/login"
           element={user ? <Navigate to="/lessons" replace /> : <LoginPage />}
         />
         {user ? (
           <>
-
             <Route path="/lessons" element={<Lessons />} />
-            <Route path="/Flashcards" element={<Flashcards />} />
-            <Route path="/Chatbot" element={<Chatbot />} />
-            <Route path="/Profile" element={<Profile />} />
-            <Route path="/EditProfile" element={<EditProfile />} />
-            <Route path="/Game" element={<Game />} />
+            <Route path="/flashcards" element={<Flashcards />} />
+            <Route path="/chatbot" element={<Chatbot />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/editprofile" element={<EditProfile />} />
+            <Route path="/game" element={<Game />} />
             <Route path="/lesson/:unitId/:lessonId" element={<Video />} />
             <Route path="/quiz/:unitId/:lessonId" element={<Quiz />} />
             <Route path="/quiz-complete" element={<QuizComplete />} />
@@ -95,12 +102,20 @@ const App = () => {
             <Route path="/achievements" element={<AchievementsPage />} />
             <Route path="/profile/avatar" element={<AvatarCustomization />} />
             <Route path="/setting" element={<Setting />} />
-            <Route path="/Loading" element={<Loading />} />
+            <Route path="/loading" element={<Loading />} />
           </>
         ) : (
           <Route path="*" element={<Navigate to="/" replace />} />
         )}
       </Routes>
+    </>
+  );
+};
+
+const App = () => {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 };

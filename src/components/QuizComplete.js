@@ -27,6 +27,11 @@ const QuizComplete = () => {
 
   // Track page view on component mount
   useEffect(() => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
     if (user?.id) {
       trackEvent(user.id, 'pageview', {
         page: '/quiz-complete',

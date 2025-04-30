@@ -7,6 +7,7 @@ import points from "./images/points.svg";
 import { useTranslation } from "react-i18next";
 import trackEvent from '../utils/trackEvent';
 import Exit from "./images/Exit iconsvg.svg";
+import Loading from "./Loading.js"; 
 
 // Import SVG icons as React components
 import FacesIcon from "./images/faces.svg";
@@ -37,10 +38,17 @@ const AvatarCustomization = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState("face");
-  const userId = user.id;
+  const userId = user?.id;
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(null);
-  const [showBackConfirmation, setShowBackConfirmation] = useState(false); // State for back confirmation modal
+  const [showBackConfirmation, setShowBackConfirmation] = useState(false);
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     if (message) {
@@ -52,6 +60,8 @@ const AvatarCustomization = () => {
   }, [message]);
 
   useEffect(() => {
+    if (!user) return; // Already handled above, but ensuring no further execution
+
     // Track page view
     trackEvent(userId, 'pageview', { page: `/profile/avatar/${userId}` });
     
@@ -98,9 +108,11 @@ const AvatarCustomization = () => {
       }
     };
     fetchData();
-  }, [userId, t]);
+  }, [userId, t, navigate]);
 
   useEffect(() => {
+    if (!user) return;
+
     const startTime = Date.now();
     return () => {
       const duration = Math.floor((Date.now() - startTime) / 1000);
@@ -112,6 +124,8 @@ const AvatarCustomization = () => {
   }, [userId]);
 
   useEffect(() => {
+    if (!user) return;
+
     let timeout;
     const resetTimeout = () => {
       clearTimeout(timeout);
@@ -224,10 +238,7 @@ const AvatarCustomization = () => {
       });
   };
 
-
-  // Handler for back button click
   const handleBackClick = () => {
-    // Check if there are any equipped assets to prompt for saving
     if (
       equippedAssets.face ||
       equippedAssets.brow ||
@@ -237,23 +248,21 @@ const AvatarCustomization = () => {
       equippedAssets.nose ||
       equippedAssets.headdress
     ) {
-      setShowBackConfirmation(true); // Show confirmation modal if assets are equipped
+      setShowBackConfirmation(true);
     } else {
-      navigate("/profile"); // Navigate directly if no assets are equipped
+      navigate("/profile");
     }
   };
 
-  // Handler for confirming save and navigate
   const confirmBackSave = () => {
-    handleSave(); // Call the existing handleSave function
-    setShowBackConfirmation(false); // Close the modal
-    navigate("/profile"); // Navigate to profile
+    handleSave();
+    setShowBackConfirmation(false);
+    navigate("/profile");
   };
 
-  // Handler for navigating without saving
   const cancelBackSave = () => {
-    setShowBackConfirmation(false); // Close the modal
-    navigate("/profile"); // Navigate to profile without saving
+    setShowBackConfirmation(false);
+    navigate("/profile");
   };
 
   const getStyleForType = (type) => {
@@ -287,9 +296,10 @@ const AvatarCustomization = () => {
     { type: "nose", icon: NoseIcon },
   ];
 
+  if (loading) return <Loading />;
+
   return (
     <div className="avatar-customization-container">
-      {/* Back Button */}
       <button className="back-button" onClick={handleBackClick}>
         <img src={Exit} alt="Back" className="back-icon" />
       </button>
@@ -331,7 +341,14 @@ const AvatarCustomization = () => {
                 .filter((asset) => asset.type === selectedTab)
                 .map((asset) => (
                   <div key={asset.id} className="asset-card">
-                    <img src={asset.image_url} alt={asset.name} />
+                    <img
+                      src={asset.image_url}
+                      alt={asset.name}
+                      onError={(e) => {
+                        e.target.src = "https://via.placeholder.com/50";
+                        e.target.alt = `${asset.name} (Image not found)`;
+                      }}
+                    />
                     {ownedAssets.some((owned) => asset.price !== 0 && owned.id === asset.id) ? (
                       <span className="owned-label">{t("avatr.owned")}</span>
                     ) : asset.price > 0 ? (
@@ -364,7 +381,15 @@ const AvatarCustomization = () => {
         <div className="avatar-preview">
           <div style={{ position: "relative", width: "300px", height: "350px", margin: "0 auto" }}>
             {equippedAssets.face && (
-              <img src={equippedAssets.face} alt={t("faceAlt")} style={getStyleForType("face")} />
+              <img
+                src={equippedAssets.face}
+                alt={t("faceAlt")}
+                style={getStyleForType("face")}
+                onError={(e) => {
+                  e.target.src = "https://via.placeholder.com/50";
+                  e.target.alt = "Face (Image not found)";
+                }}
+              />
             )}
             {Object.keys(equippedAssets).map((type, index) => {
               if (type !== "face" && equippedAssets[type]) {
@@ -374,6 +399,10 @@ const AvatarCustomization = () => {
                     src={equippedAssets[type]}
                     alt={t(`${type}Alt`)}
                     style={getStyleForType(type)}
+                    onError={(e) => {
+                      e.target.src = "https://via.placeholder.com/50";
+                      e.target.alt = `${type} (Image not found)`;
+                    }}
                   />
                 );
               }
@@ -407,7 +436,6 @@ const AvatarCustomization = () => {
         </div>
       )}
 
-      {/* Back Confirmation Modal */}
       {showBackConfirmation && (
         <div className="confirmation-modal-overlay">
           <div className="confirmation-modal">
@@ -419,8 +447,6 @@ const AvatarCustomization = () => {
       )}
     </div>
   );
-
-
 };
 
 export default AvatarCustomization;

@@ -9,6 +9,7 @@ import trackEvent from "../utils/trackEvent";
 import PyMagicRunner from "./Pymagic_runnergame";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
+import Loading from "./Loading.js"; 
 
 const FlashCardSection = () => {
   const { user } = useAuth();
@@ -31,12 +32,19 @@ const FlashCardSection = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    if (user?.id) {
-      trackEvent(user.id, "pageview", {
-        page: "/flashcards",
-        category: "Navigation",
-      });
+    if (!user) {
+      navigate("/login");
+      return;
     }
+  }, [user, navigate]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    trackEvent(user.id, "pageview", {
+      page: "/flashcards",
+      category: "Navigation",
+    });
 
     const fetchData = async () => {
       try {
@@ -91,7 +99,7 @@ const FlashCardSection = () => {
     };
 
     fetchData();
-  }, [user, sectionId]);
+  }, [user, sectionId, navigate]);
 
   const handleFlashcardClick = async (unitId, flashcard) => {
     trackEvent(user.id, "flashcard_clicked", {
@@ -190,16 +198,7 @@ const FlashCardSection = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flashcard-page-container">
-        <Lsidebar />
-        <div className="flashcard-content">
-          <PyMagicRunner />
-        </div>
-      </div>
-    );
-  }
+  if (loading) return <Loading />;
 
   if (error) {
     return (
@@ -234,10 +233,8 @@ const FlashCardSection = () => {
                       className={`flashcard ${flashcard.isPassed ? "passed" : ""}`}
                       onClick={() => handleFlashcardClick(unit.unitId, flashcard)}
                     />
-                   <span className="lesson-number">{flashcard.lessonNumber}</span>
-
+                    <span className="lesson-number">{flashcard.lessonNumber}</span>
                   </div>
-                  
                 ))}
               </div>
             </div>
@@ -271,7 +268,6 @@ const FlashCardSection = () => {
               <button className="popup-close-button" onClick={handlePopupClose}>
                 ✖
               </button>
-              {/* <h2 className="popup-title">{t("accessDenied")}</h2> */}
               <p className="popup-text">{popupMessage}</p>
             </div>
           </div>

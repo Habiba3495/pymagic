@@ -11,6 +11,9 @@ import trackEvent from '../utils/trackEvent';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { useNavigate } from "react-router-dom";
+
+import Loading from "./Loading.js"; 
 
 const ChatbotSection = () => {
   const { user } = useAuth();
@@ -20,6 +23,7 @@ const ChatbotSection = () => {
   const [error, setError] = useState(null);
   const chatEndRef = useRef(null);
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
 
   const components = {
     code({ node, inline, className, children, ...props }) {
@@ -46,12 +50,20 @@ const ChatbotSection = () => {
   const isArabic = (text) => /[\u0600-\u06FF]/.test(text);
 
   useEffect(() => {
-    if (user?.id) {
-      trackEvent(user.id, 'pageview', {
-        page: '/chatbot',
-        category: 'Navigation',
-      });
+    if (!user) {
+      navigate("/login");
+      return;
     }
+  }, [user, navigate]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    // Track page view
+    trackEvent(user.id, 'pageview', {
+      page: '/chatbot',
+      category: 'Navigation',
+    });
 
     // Fetch initial messages
     const fetchMessages = async () => {
@@ -80,7 +92,7 @@ const ChatbotSection = () => {
     };
 
     fetchMessages();
-  }, [user, t]);
+  }, [user, t, navigate]);
 
   const sendMessage = async () => {
     if (input.trim() === "") return;
@@ -149,13 +161,7 @@ const ChatbotSection = () => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  if (loading) {
-    return (
-      <div className="chatbot-wrapper">
-        <div className="loading-indicator">{t("loadingChatHistory")}</div>
-      </div>
-    );
-  }
+  if (loading) return <Loading />;
 
   if (error) {
     return (

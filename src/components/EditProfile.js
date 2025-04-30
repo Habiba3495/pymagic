@@ -23,25 +23,26 @@ const EditProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Track page view
-    if (user?.id) {
-      trackEvent(user.id, 'pageview', { 
-        page: '/edit-profile',
-        category: 'Navigation'
-      });
+    if (!user) {
+      navigate("/login");
+      return;
     }
 
-    if (user) {
-      setFormData({
-        name: user.name || '',
-        email: user.email || '',
-        parentEmail: user.parent_email || '',
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-      });
-    }
-  }, [user]);
+    // Track page view
+    trackEvent(user.id, 'pageview', { 
+      page: '/edit-profile',
+      category: 'Navigation'
+    });
+
+    setFormData({
+      name: user.name || '',
+      email: user.email || '',
+      parentEmail: user.parent_email || '',
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    });
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -100,15 +101,13 @@ const EditProfile = () => {
     setErrors(newErrors);
     
     // Track validation result
-    if (user?.id) {
-      trackEvent(user.id, 'profile_validation', {
-        category: 'Profile',
-        label: 'Form Validation',
-        is_valid: Object.keys(newErrors).length === 0,
-        error_count: Object.keys(newErrors).length,
-        has_password_change: Boolean(formData.currentPassword)
-      });
-    }
+    trackEvent(user.id, 'profile_validation', {
+      category: 'Profile',
+      label: 'Form Validation',
+      is_valid: Object.keys(newErrors).length === 0,
+      error_count: Object.keys(newErrors).length,
+      has_password_change: Boolean(formData.currentPassword)
+    });
     
     return Object.keys(newErrors).length === 0;
   };
@@ -234,8 +233,6 @@ const EditProfile = () => {
   return (
     <div className='background_edit-profile-container'>
       <div className="edit-profile-container">
-        {/* <p>{t('editProfile.title')}</p> */}
-        
         {errors.form && (
           <div className="error-message">
             {errors.form}
@@ -287,9 +284,6 @@ const EditProfile = () => {
             />
             {errors.parentEmail && <span className="error-message">{errors.parentEmail}</span>}
           </div>
-{/*           
-          <h3 className="password-section-title">{t('editProfile.passwordSectionTitle')}</h3>
-          <p className="password-instructions">{t('editProfile.passwordInstructions')}</p> */}
           
           <div className="form-group">
             <label htmlFor="currentPassword">{t('editProfile.currentPasswordLabel')}</label>

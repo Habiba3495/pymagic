@@ -1,12 +1,18 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import ReactGA from 'react-ga4';
+import trackEvent from '../utils/trackEvent';
 
-const TrackPageViews = () => {
+const TrackPageViews = ({ userId, user }) => {
   const location = useLocation();
+
   useEffect(() => {
-    ReactGA.send({ hitType: 'pageview', page: location.pathname });
-  }, [location]);
+    if (!user || !userId) {
+      console.log('No user or userId, skipping page view tracking');
+      return;
+    }
+    trackEvent(userId, 'pageview', { page: location.pathname }, user);
+  }, [location, userId, user]);
+
   return null;
 };
 

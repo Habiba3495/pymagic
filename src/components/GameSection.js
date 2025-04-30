@@ -349,17 +349,37 @@
 
 // export default GameSection;
 
-import React, { useState } from "react";
+
+
+import React, { useState, useEffect } from "react";
 import Lsidebar from "./Sidebar";
 import "./GameSection.css";
 import { useTranslation } from "react-i18next";
-import GamePage from "./GamePage"; // استيراد مكون الصفحة الجديدة
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from "react-router-dom";
+import trackEvent from '../utils/trackEvent';
+import GamePage from "./GamePage";
 
 const GameSection = () => {
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [gameStarted, setGameStarted] = useState(false);
 
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+  }, [user, navigate]);
+
   const startGame = () => {
+    if (user?.id) {
+      trackEvent(user.id, 'start_game_clicked', {
+        category: 'Game',
+        label: 'Start Game Button Clicked',
+      });
+    }
     setGameStarted(true);
   };
 

@@ -8,14 +8,16 @@ import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
 import { FiSettings } from 'react-icons/fi';
 import trackEvent from '../utils/trackEvent';
+import Loading from "./Loading.js"; 
 
 const ProfilePage = () => {
-  const { user} = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [userProfile, setUserProfile] = useState({ name: "", points: 0 });
   const [progressData, setProgressData] = useState([]);
   const [achievements, setAchievements] = useState([]);
+  const [loading, setLoading] = useState(true);
   const defaultAssets = {
     face: "/assets/faces/boy_face_1.svg",
     brow: "/assets/brows/brows_1.svg",
@@ -26,13 +28,15 @@ const ProfilePage = () => {
     headdress: null,
   };
   const [equippedAssets, setEquippedAssets] = useState(defaultAssets);
-  const userId = user.id;
+  const userId = user?.id;
 
   useEffect(() => {
-    // Track page view
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
     trackEvent(userId, 'pageview', { page: `/profile/${userId}` });
-    
-    // Track profile loaded event
     trackEvent(userId, 'profile_loaded', {
       category: 'Profile',
       label: `User ${userId}`
@@ -106,13 +110,25 @@ const ProfilePage = () => {
       }
     };
 
-    fetchUserProfile();
-    fetchProgressData();
-    fetchAchievements();
-    fetchAvatarPreferences();
-  }, [userId, t]);
+    const fetchData = async () => {
+      try {
+        await Promise.all([
+          fetchUserProfile(),
+          fetchProgressData(),
+          fetchAchievements(),
+          fetchAvatarPreferences(),
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [user, userId, t, navigate]);
 
   useEffect(() => {
+    if (!user) return;
+
     const startTime = Date.now();
     return () => {
       const duration = Math.floor((Date.now() - startTime) / 1000);
@@ -121,9 +137,11 @@ const ProfilePage = () => {
         label: `User ${userId}`
       }, duration);
     };
-  }, [userId]);
+  }, [userId, user]);
 
   useEffect(() => {
+    if (!user) return;
+
     let timeout;
     const resetTimeout = () => {
       clearTimeout(timeout);
@@ -145,7 +163,7 @@ const ProfilePage = () => {
       window.removeEventListener('mousemove', resetTimeout);
       window.removeEventListener('keydown', resetTimeout);
     };
-  }, [userId]);
+  }, [userId, user]);
 
   const getStyleForType = (type) => {
     switch (type) {
@@ -167,6 +185,8 @@ const ProfilePage = () => {
         return {};
     }
   };
+
+  if (loading) return <Loading />;
 
   return (
     <div className="profile-container">
@@ -192,7 +212,15 @@ const ProfilePage = () => {
           <div className="profile-avatar-container">
             <div className="profile-avatar" style={{ position: "relative", width: "150px", height: "200px" }}>
               {equippedAssets.face && (
-                <img src={equippedAssets.face} alt="Equipped face" style={getStyleForType("face")} />
+                <img
+                  src={equippedAssets.face}
+                  alt="Equipped face"
+                  style={getStyleForType("face")}
+                  onError={(e) => {
+                    e.target.src = "https://via.placeholder.com/50";
+                    e.target.alt = "Face (Image not found)";
+                  }}
+                />
               )}
               {Object.keys(equippedAssets).map((type, index) => {
                 if (type !== "face" && equippedAssets[type]) {
@@ -202,6 +230,10 @@ const ProfilePage = () => {
                       src={equippedAssets[type]}
                       alt={`Equipped ${type}`}
                       style={getStyleForType(type)}
+                      onError={(e) => {
+                        e.target.src = "https://via.placeholder.com/50";
+                        e.target.alt = `${type} (Image not found)`;
+                      }}
                     />
                   );
                 }
@@ -222,7 +254,6 @@ const ProfilePage = () => {
             </button>
           </div>
 
-          {/* //////gab between name and points */}
           <div className="profile-name-container">
             <h2 className="profile-name">{userProfile.name}</h2>
             <p className="profile-points">
@@ -235,23 +266,27 @@ const ProfilePage = () => {
         <div className="section achievements">
           <p className="section-title">{t("profile.profileAchievements")}</p>
           <div className="achievements-grid">
-          {achievements.length > 0 ? (
-            achievements.map((achievement) => (
-              <div key={achievement.id} className="pachievement-card">
-              {achievement.image && (
-              <img
-             src={`http://localhost:5000${achievement.image}`}
-            alt={achievement.title}
-           className="achievement-image"
-           />
-          )}
-        <p className="achievement-title">{achievement.title}</p>
-       </div>
-            ))
-          ):(
-            <p className="no-achievements">{t("profile.noAchievementsYet")}</p>
-          )}
-        </div>
+            {achievements.length > 0 ? (
+              achievements.map((achievement) => (
+                <div key={achievement.id} className="pachievement-card">
+                  {achievement.image && (
+                    <img
+                      src={`http://localhost:5000${achievement.image}`}
+                      alt={achievement.title}
+                      className="achievement-image"
+                      onError={(e) => {
+                        e.target.src = "https://via.placeholder.com/50";
+                        e.target.alt = `${achievement.title} (Image not found)`;
+                      }}
+                    />
+                  )}
+                  <p className="achievement-title">{achievement.title}</p>
+                </div>
+              ))
+            ) : (
+              <p className="no-achievements">{t("profile.noAchievementsYet")}</p>
+            )}
+          </div>
 
           <button
             className="view-all-button"
@@ -269,44 +304,28 @@ const ProfilePage = () => {
 
         <div className="section progress-report">
           <p className="section-title">{t("profile.profileProgressReport")}</p>
-          {/* <div className="progress-grid">
-            {progressData.map((quiz) => (
-              <div key={quiz.id} className="progress-card">
-                <div className="pscore-circle">
-                  {quiz.score} / {quiz.total_questions}
+          <div className="progress-grid">
+            {progressData.length > 0 ? (
+              progressData.map((quiz) => (
+                <div key={quiz.id} className="progress-card">
+                  <div className="pscore-circle">
+                    {quiz.score} / {quiz.total_questions}
+                  </div>
+                  <p className="lesson-info">
+                    {quiz.lesson_id && quiz.lesson_number
+                      ? `${t("profile.unit")} ${quiz.unit_id}, ${t("profile.lesson")} ${quiz.lesson_number}`
+                      : `${t("profile.unit")} ${quiz.unit_id}`}
+                  </p>
+                  <p className="points-earned">
+                    <img src={points} alt="points icon" className="points" />
+                    {quiz.earned_points} {t("profile.profilePointsEarned")}
+                  </p>
                 </div>
-                <p className="lesson-info">
-                  {quiz.lesson_id && quiz.lesson_number
-                    ? `${t("profile.unit")} ${quiz.unit_id}, ${t("profile.lesson")} ${quiz.lesson_number}`
-                    : `${t("profile.unit")} ${quiz.unit_id}`}
-                </p>
-                <p className="points-earned">
-                  <img src={points} alt="points icon" className="points" />
-                  {quiz.earned_points} {t("profile.profilePointsEarned")}
-                </p>
-              </div> */}
-              <div className="progress-grid">
-              {progressData.length > 0 ? (
-             progressData.map((quiz) => (
-             <div key={quiz.id} className="progress-card">
-            <div className="pscore-circle">
-             {quiz.score} / {quiz.total_questions}
-             </div>
-             <p className="lesson-info">
-            {quiz.lesson_id && quiz.lesson_number
-            ? `${t("profile.unit")} ${quiz.unit_id}, ${t("profile.lesson")} ${quiz.lesson_number}`
-            : `${t("profile.unit")} ${quiz.unit_id}`}
-           </p>
-           <p className="points-earned">
-          <img src={points} alt="points icon" className="points" />
-          {quiz.earned_points} {t("profile.profilePointsEarned")}
-           </p>
-         </div>
-       ))
-      ) : (
-       <p className="no-progress">{t("profile.noProgressYet")}</p>
-      )}
-     </div>
+              ))
+            ) : (
+              <p className="no-progress">{t("profile.noProgressYet")}</p>
+            )}
+          </div>
 
           <button
             className="view-all-button"

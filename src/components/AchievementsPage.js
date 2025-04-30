@@ -17,24 +17,30 @@ const AchievementsPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-
-   useEffect(() => {
-   if (achievements.length === 0 && user?.id) {
-    trackEvent(user.id, 'empty_achievements_viewed', {
-      category: 'Achievements',
-      label: 'No Achievements Yet'
-     });
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+      return;
     }
-    }, [achievements, user]);
+  }, [user, navigate]);
 
   useEffect(() => {
-    // Track page view
-    if (user?.id) {
-      trackEvent(user.id, 'pageview', { 
-        page: '/achievements',
-        category: 'Navigation'
+    if (achievements.length === 0 && user?.id) {
+      trackEvent(user.id, 'empty_achievements_viewed', {
+        category: 'Achievements',
+        label: 'No Achievements Yet'
       });
     }
+  }, [achievements, user]);
+
+  useEffect(() => {
+    if (!user) return; // Already handled above, but ensuring no further execution
+
+    // Track page view
+    trackEvent(user.id, 'pageview', { 
+      page: '/achievements',
+      category: 'Navigation'
+    });
 
     const fetchAchievements = async () => {
       setLoading(true);
@@ -67,7 +73,7 @@ const AchievementsPage = () => {
     };
   
     fetchAchievements();
-  }, [user]);
+  }, [user, navigate]);
 
   const handleBackClick = () => {
     // Track back button click
@@ -87,10 +93,9 @@ const AchievementsPage = () => {
       achievement_title: achievement.title
     });
   };
-  ///////////
+
   if (loading) return <Loading />;
-    
-if (error) return <PyMagicRunner />;
+  if (error) return <PyMagicRunner />;
 
   return (
     <div className="achievements-bg">
@@ -116,21 +121,6 @@ if (error) return <PyMagicRunner />;
                       console.error("Image failed to load:", e.target.src);
                       e.target.src = "https://via.placeholder.com/50";
                       e.target.alt = `${achievement.title} (Image not found)`;
-                      // Track image load error
-                      // trackEvent(user.id, 'image_load_error', {
-                      //   category: 'Error',
-                      //   label: 'Achievement Image Error',
-                      //   achievement_id: achievement.id,
-                      //   image_url: e.target.src
-                      // });
-                    }}
-                    onLoad={() => {
-                      // Track successful image load
-                      // trackEvent(user.id, 'image_loaded', {
-                      //   category: 'Achievements',
-                      //   label: 'Achievement Image Loaded',
-                      //   achievement_id: achievement.id
-                      // });
                     }}
                     loading="lazy"
                     crossOrigin="anonymous"
@@ -146,9 +136,9 @@ if (error) return <PyMagicRunner />;
             ))
           ) : (
             <div className="ano-achievements-wrapper">
-            <div className="ano-achievements">
-              <p>{t("achivement.noAchievementsYet")}</p>
-            </div>
+              <div className="ano-achievements">
+                <p>{t("achivement.noAchievementsYet")}</p>
+              </div>
             </div>
           )}
         </div>
