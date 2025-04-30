@@ -19,36 +19,70 @@ const ProgressReport = () => {
   const { t } = useTranslation();
 
   const fetchProgress = async () => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     setLoading(true);
     setError("");
     try {
       const response = await apiClient.get(`/api/quiz/progress/${user.id}`);
       if (response.status !== 200) {
-        throw new Error("Failed to fetch progress");
+        throw new Error(t("progress.fetchError"));
       }
       const data = response.data;
       if (data.success && data.progress.length > 0) {
         setProgressData(data.progress);
+        trackEvent(user.id, 'progress_data_loaded', {
+          category: 'Progress',
+          label: 'Progress Data Loaded',
+          progress_count: data.progress.length,
+        }, user).catch((error) => {
+          console.error('Failed to track progress_data_loaded:', error);
+        });
       } else {
-        throw new Error("No progress data available");
+        throw new Error(t("progress.noProgress"));
       }
     } catch (error) {
-      setError(error.message);
+      setError(error.message || t("progress.fetchError"));
+      trackEvent(user.id, 'progress_data_error', {
+        category: 'Error',
+        label: 'Progress Data Fetch Error',
+        error: error.message,
+      }, user).catch((error) => {
+        console.error('Failed to track progress_data_error:', error);
+      });
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!user) {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
       navigate("/login");
       return;
     }
 
+    trackEvent(user.id, 'pageview', {
+      page: '/progress-report',
+      category: 'Navigation',
+    }, user).catch((error) => {
+      console.error('Failed to track pageview:', error);
+    });
+
     fetchProgress();
-  }, [user, navigate]);
+  }, [user, navigate, t]);
 
   const handleCardClick = async (quiz) => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     trackEvent(user.id, 'quiz_selected_from_progress', {
       category: 'Progress',
       label: 'Quiz Selected',
@@ -56,6 +90,8 @@ const ProgressReport = () => {
       quiz_type: quiz.lesson_id ? 'Lesson Quiz' : 'Unit Quiz',
       score: quiz.score,
       is_passed: quiz.is_passed,
+    }, user).catch((error) => {
+      console.error('Failed to track quiz_selected_from_progress:', error);
     });
 
     try {
@@ -70,6 +106,13 @@ const ProgressReport = () => {
       if (!validQuiz) {
         console.error('Invalid or non-existent quiz:', quiz.id);
         alert(t('progress.invalidQuiz'));
+        trackEvent(user.id, 'invalid_quiz_error', {
+          category: 'Error',
+          label: 'Invalid Quiz Selected',
+          quiz_id: quiz.id,
+        }, user).catch((error) => {
+          console.error('Failed to track invalid_quiz_error:', error);
+        });
         return;
       }
 
@@ -96,20 +139,35 @@ const ProgressReport = () => {
     } catch (error) {
       console.error('Error validating quiz:', error);
       alert(t('progress.errorLoadingQuiz'));
+      trackEvent(user.id, 'quiz_validation_error', {
+        category: 'Error',
+        label: 'Quiz Validation Failed',
+        error: error.message,
+      }, user).catch((error) => {
+        console.error('Failed to track quiz_validation_error:', error);
+      });
     }
   };
 
   const handleBackClick = () => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     trackEvent(user.id, 'back_button_clicked', {
       category: 'Navigation',
       label: 'Back to Profile'
+    }, user).catch((error) => {
+      console.error('Failed to track back_button_clicked:', error);
     });
     navigate("/profile");
   };
 
   if (loading) return <Loading />;
 
-  if (error && error !== "No progress data available") {
+  if (error && error !== t("progress.noProgress")) {
     return (
       <div className="error-container">
         <p className="error-message">{t("progress.errorLoading")}</p>

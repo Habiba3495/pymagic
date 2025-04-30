@@ -27,7 +27,8 @@ const QuizComplete = () => {
 
   // Track page view on component mount
   useEffect(() => {
-    if (!user) {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
       navigate("/login");
       return;
     }
@@ -36,6 +37,8 @@ const QuizComplete = () => {
       trackEvent(user.id, 'pageview', {
         page: '/quiz-complete',
         category: 'Navigation',
+      }, user).catch((error) => {
+        console.error('Failed to track pageview:', error);
       });
     }
 
@@ -68,6 +71,8 @@ const QuizComplete = () => {
               total_questions: answers.length,
               is_passed: newQuizData.is_passed,
               earned_points: newQuizData.earned_points,
+            }, user).catch((error) => {
+              console.error('Failed to track quiz_completed:', error);
             });
           }
         } else if (user?.id && state?.quizData?.unit_id && state?.quizData?.lesson_id) {
@@ -101,6 +106,8 @@ const QuizComplete = () => {
                   total_questions: latestQuiz.total_questions || state.quizData.answers.length,
                   is_passed: latestQuiz.is_passed,
                   earned_points: latestQuiz.earned_points,
+                }, user).catch((error) => {
+                  console.error('Failed to track quiz_completed:', error);
                 });
               }
             } else {
@@ -129,18 +136,19 @@ const QuizComplete = () => {
             total_questions: quizData.total_questions || quizData.answers.length,
             is_passed: quizData.is_passed,
             earned_points: quizData.earned_points,
+          }, user).catch((error) => {
+            console.error('Failed to track quiz_completed:', error);
           });
         }
       }
 
       // استخراج المكافآت الجديدة من quizData
       setNewRewards(quizData?.achievements || []);
-      console.log("New Rewards", quizData.achievements);
-      
+      console.log("New Rewards", quizData?.achievements);
     };
 
     fetchQuizData();
-  }, [quizData, studentQuizId, state, user]);
+  }, [quizData, studentQuizId, state, user, navigate]);
 
   // Fetch motivational message based on score
   const fetchMotivationalMessage = async (score, total) => {
@@ -162,6 +170,11 @@ const QuizComplete = () => {
 
   // Check if feedback already exists for the quiz
   const checkExistingFeedback = async (quizId) => {
+    if (!user || !user.id) {
+      console.log('No user, skipping feedback check');
+      return false;
+    }
+
     try {
       const response = await apiClient.get(`/api/feedback/check/${quizId}`);
       return response.data.exists; // Backend should return { exists: true/false }
@@ -173,16 +186,22 @@ const QuizComplete = () => {
 
   // Handle Review button click
   const handleReviewClick = async () => {
-    if (user?.id) {
-      trackEvent(user.id, 'quiz_review_initiated', {
-        category: 'Quiz',
-        label: 'Review button clicked',
-      });
+    if (!user || !user.id) {
+      console.log('No user, skipping quiz_review_initiated tracking');
+      navigate('/login');
+      return;
     }
+
+    trackEvent(user.id, 'quiz_review_initiated', {
+      category: 'Quiz',
+      label: 'Review button clicked',
+    }, user).catch((error) => {
+      console.error('Failed to track quiz_review_initiated:', error);
+    });
 
     if (!studentQuizId) {
       console.error('Student quiz ID is missing');
-      alert('Unable to proceed: Quiz ID is missing.');
+      alert(t('missingQuizId', { defaultValue: 'Unable to proceed: Quiz ID is missing.' }));
       navigate('/lessons');
       return;
     }
@@ -200,16 +219,22 @@ const QuizComplete = () => {
 
   // Handle Continue button click
   const handleContinueClick = async () => {
-    if (user?.id) {
-      trackEvent(user.id, 'quiz_continue_clicked', {
-        category: 'Navigation',
-        label: 'Continue button clicked',
-      });
+    if (!user || !user.id) {
+      console.log('No user, skipping quiz_continue_clicked tracking');
+      navigate('/login');
+      return;
     }
+
+    trackEvent(user.id, 'quiz_continue_clicked', {
+      category: 'Navigation',
+      label: 'Continue button clicked',
+    }, user).catch((error) => {
+      console.error('Failed to track quiz_continue_clicked:', error);
+    });
 
     if (!studentQuizId) {
       console.error('Student quiz ID is missing');
-      alert('Unable to proceed: Quiz ID is missing.');
+      alert(t('missingQuizId', { defaultValue: 'Unable to proceed: Quiz ID is missing.' }));
       navigate('/lessons');
       return;
     }
@@ -234,6 +259,8 @@ const QuizComplete = () => {
           category: 'Achievements',
           label: 'New Rewards Popup',
           reward_count: newRewards.length,
+        }, user).catch((error) => {
+          console.error('Failed to track new_rewards_popup_shown:', error);
         });
       }
     } else {
@@ -247,6 +274,12 @@ const QuizComplete = () => {
 
   // Perform quiz review
   const performReview = async () => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     setLoading(true);
     try {
       if (!studentQuizId) {
@@ -260,26 +293,26 @@ const QuizComplete = () => {
 
       const data = response.data;
       if (data.success) {
-        if (user?.id) {
-          trackEvent(user.id, 'quiz_review_accessed', {
-            category: 'Quiz',
-            label: 'Review data loaded',
-            question_count: data.reviewData?.answers?.length || 0,
-          });
-        }
+        trackEvent(user.id, 'quiz_review_accessed', {
+          category: 'Quiz',
+          label: 'Review data loaded',
+          question_count: data.reviewData?.answers?.length || 0,
+        }, user).catch((error) => {
+          console.error('Failed to track quiz_review_accessed:', error);
+        });
         navigate('/quiz-review', { state: { quizData: data.reviewData } });
       } else {
         navigate('/quiz-review', { state: { quizData: createFallbackReviewData(quizData) } });
       }
     } catch (error) {
       console.error('Error fetching review data:', error);
-      if (user?.id) {
-        trackEvent(user.id, 'quiz_review_error', {
-          category: 'Error',
-          label: 'Error in review data',
-          error: error.message,
-        });
-      }
+      trackEvent(user.id, 'quiz_review_error', {
+        category: 'Error',
+        label: 'Error in review data',
+        error: error.message,
+      }, user).catch((error) => {
+        console.error('Failed to track quiz_review_error:', error);
+      });
       navigate('/quiz-review', { state: { quizData: createFallbackReviewData(quizData) } });
     } finally {
       setLoading(false);
@@ -304,6 +337,12 @@ const QuizComplete = () => {
 
   // Submit feedback
   const submitFeedback = async () => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     if (!feedbackScore || isNaN(feedbackScore)) {
       alert(t("quizcomplete.selectFeedbackScore"));
       return;
@@ -333,12 +372,12 @@ const QuizComplete = () => {
               defaultValue: 'Unable to submit feedback: Quiz ID is missing. Redirecting to lessons.',
             })
           );
-          if (user?.id) {
-            trackEvent(user.id, 'quiz_feedback_error', {
-              category: 'Error',
-              label: 'Missing Student Quiz ID',
-            });
-          }
+          trackEvent(user.id, 'quiz_feedback_error', {
+            category: 'Error',
+            label: 'Missing Student Quiz ID',
+          }, user).catch((error) => {
+            console.error('Failed to track quiz_feedback_error:', error);
+          });
           navigate('/lessons');
           return;
         }
@@ -349,13 +388,13 @@ const QuizComplete = () => {
             defaultValue: 'Unable to submit feedback: Quiz ID is missing. Redirecting to lessons.',
           })
         );
-        if (user?.id) {
-          trackEvent(user.id, 'quiz_feedback_error', {
-            category: 'Error',
-            label: 'Feedback Submission Error',
-            error: error.message,
-          });
-        }
+        trackEvent(user.id, 'quiz_feedback_error', {
+          category: 'Error',
+          label: 'Feedback Submission Error',
+          error: error.message,
+        }, user).catch((error) => {
+          console.error('Failed to track quiz_feedback_error:', error);
+        });
         navigate('/lessons');
         return;
       }
@@ -368,23 +407,17 @@ const QuizComplete = () => {
         })
       );
       console.error('Student Quiz ID is undefined.');
-      if (user?.id) {
-        trackEvent(user.id, 'quiz_feedback_error', {
-          category: 'Error',
-          label: 'Missing Student Quiz ID',
-        });
-      }
+      trackEvent(user.id, 'quiz_feedback_error', {
+        category: 'Error',
+        label: 'Missing Student Quiz ID',
+      }, user).catch((error) => {
+        console.error('Failed to track quiz_feedback_error:', error);
+      });
       navigate('/lessons');
       return;
     }
 
     const userId = user?.id;
-    if (!userId) {
-      console.error('User is not authenticated');
-      navigate('/login');
-      return;
-    }
-
     const payload = {
       user_id: userId,
       student_quiz_id: currentStudentQuizId,
@@ -394,16 +427,16 @@ const QuizComplete = () => {
 
     try {
       console.log('Submitting feedback with payload:', payload);
-      if (user?.id) {
-        trackEvent(user.id, 'quiz_feedback_submitted', {
-          category: 'Feedback',
-          label: 'Feedback Submitted',
-          value: Number(feedbackScore),
-          comment_length: feedbackComment.length,
-          has_comment: feedbackComment.length > 0,
-          next_action: nextAction,
-        });
-      }
+      trackEvent(user.id, 'quiz_feedback_submitted', {
+        category: 'Feedback',
+        label: 'Feedback Submitted',
+        value: Number(feedbackScore),
+        comment_length: feedbackComment.length,
+        has_comment: feedbackComment.length > 0,
+        next_action: nextAction,
+      }, user).catch((error) => {
+        console.error('Failed to track quiz_feedback_submitted:', error);
+      });
 
       const response = await apiClient.post('/api/feedback/submit', payload);
 
@@ -432,13 +465,13 @@ const QuizComplete = () => {
           })
         );
       }
-      if (user?.id) {
-        trackEvent(user.id, 'quiz_feedback_error', {
-          category: 'Error',
-          label: 'Feedback Submission Error',
-          error: error.response?.data?.message || error.message,
-        });
-      }
+      trackEvent(user.id, 'quiz_feedback_error', {
+        category: 'Error',
+        label: 'Feedback Submission Error',
+        error: error.response?.data?.message || error.message,
+      }, user).catch((error) => {
+        console.error('Failed to track quiz_feedback_error:', error);
+      });
       setShowFeedbackModal(false);
       proceedAfterFeedback();
     }
@@ -446,24 +479,33 @@ const QuizComplete = () => {
 
   // Skip feedback
   const skipFeedback = () => {
-    if (user?.id) {
-      trackEvent(user.id, 'quiz_feedback_skipped', {
-        category: 'Feedback',
-        label: 'Feedback Skipped',
-        next_action: nextAction,
-      });
+    if (!user || !user.id) {
+      console.log('No user, skipping quiz_feedback_skipped tracking');
+      return;
     }
+
+    trackEvent(user.id, 'quiz_feedback_skipped', {
+      category: 'Feedback',
+      label: 'Feedback Skipped',
+      next_action: nextAction,
+    }, user).catch((error) => {
+      console.error('Failed to track quiz_feedback_skipped:', error);
+    });
     setShowFeedbackModal(false);
     proceedAfterFeedback();
   };
 
   // دالة لإغلاق النافذة المنبثقة والانتقال
   const closeRewardsPopupAndProceed = () => {
-    if (user?.id) {
+    if (!user || !user.id) {
+      console.log('No user, skipping new_rewards_popup_closed tracking');
+    } else {
       trackEvent(user.id, 'new_rewards_popup_closed', {
         category: 'Achievements',
         label: 'New Rewards Popup Closed',
         next_action: nextAction,
+      }, user).catch((error) => {
+        console.error('Failed to track new_rewards_popup_closed:', error);
       });
     }
     setShowRewardsPopup(false);
@@ -530,6 +572,8 @@ const QuizComplete = () => {
                         category: "Feedback",
                         label: "Feedback Score Selected",
                         value: score,
+                      }, user).catch((error) => {
+                        console.error('Failed to track quiz_feedback_score_selected:', error);
                       });
                     }
                   }}
@@ -564,35 +608,6 @@ const QuizComplete = () => {
       )}
 
       {showRewardsPopup && (
-        // <div className="rewards-popup-overlay">
-        //   <div className="rewards-popup">
-        //     <h3>{t("newRewardsTitle", { defaultValue: "New Rewards Unlocked!" })}</h3>
-        //     <div className="rewards-list">
-        //       {newRewards.map((reward) => (
-        //         <div key={reward.id} className="reward-item">
-        // <img
-        //   src={
-        //     reward.image.startsWith("http")
-        //       ? reward.image
-        //       : `${apiClient.defaults.baseURL}${reward.image}`
-        //   }
-        //   alt={reward.title}
-        //   className="reward-image"
-        //   onError={(e) => {
-        //     e.target.src = "https://via.placeholder.com/50";
-        //     e.target.alt = `${reward.title} (Image not found)`;
-        //   }}
-        // />
-        //           <p>{reward.title}</p>
-        //         </div>
-        //       ))}
-        //     </div>
-        // <button onClick={closeRewardsPopupAndProceed} className="reward-button">
-        //   {t("continue", { defaultValue: "Continue" })}
-        // </button>
-        //   </div>
-        // </div>
-
         <div className="rewards-popup-overlay">
           <div className="rewards-popup">
             <h3>

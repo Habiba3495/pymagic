@@ -7,9 +7,11 @@ const TrackPageViews = ({ userId, user }) => {
 
   useEffect(() => {
     if (!user || !userId) {
-      console.log('No user or userId, skipping page view tracking');
+      console.log('No user or userId, sending page view as anonymous');
+      trackEvent(null, 'pageview', { page: location.pathname }, null);
       return;
     }
+
     trackEvent(userId, 'pageview', { page: location.pathname }, user);
   }, [location, userId, user]);
 

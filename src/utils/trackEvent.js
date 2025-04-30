@@ -1,18 +1,14 @@
-//src\utils\trackEvent.js
 import apiClient from '../services';
-import { useAuth } from '../context/AuthContext';
 
-// ملاحظة: بما إن useAuth هو React hook، لازم نستخدمه داخل مكون React
-// هنمرر الـ user كمعامل للدالة بدل ما نستخدم useAuth هنا مباشرة
 const trackEvent = async (userId, eventType, eventData, user, duration = null) => {
   try {
     console.log('Tracking event with userId:', userId);
 
-    // إرسال الأحداث لـ Google Analytics (ما يحتاجش token، فبنبعت دايماً)
+    // إرسال الأحداث لـ Google Analytics حتى لو مفيش user
     if (eventType === 'pageview') {
       window.gtag('event', 'page_view', {
         page_path: eventData.page,
-        custom_user_id: userId,
+        custom_user_id: userId || 'anonymous',
       });
       console.log('Pageview sent:', eventData.page);
     } else {
@@ -20,7 +16,7 @@ const trackEvent = async (userId, eventType, eventData, user, duration = null) =
         category: eventData.category,
         action: eventType,
         label: eventData.label,
-        custom_user_id: userId,
+        custom_user_id: userId || 'anonymous',
       };
 
       const value = eventData.value || duration;
@@ -32,9 +28,9 @@ const trackEvent = async (userId, eventType, eventData, user, duration = null) =
       console.log('Custom event sent:', { eventType, eventData });
     }
 
-    // إرسال الطلب للـ API بس لو فيه user مسجل دخول
-    if (!user) {
-      console.log('No user logged in, skipping API track event');
+    // إرسال الطلب للـ API بس لو فيه user و userId متطابق
+    if (!user || !userId || user.id !== userId) {
+      console.log('No user, no userId, or userId mismatch, skipping API track event');
       return;
     }
 
@@ -46,7 +42,7 @@ const trackEvent = async (userId, eventType, eventData, user, duration = null) =
     });
   } catch (error) {
     console.error('Error tracking event:', error);
-    // الـ interceptor في apiClient.js هيتعامل مع الـ 401 ويعمل redirect لصفحة الـ login
+    throw error;
   }
 };
 

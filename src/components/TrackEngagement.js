@@ -8,9 +8,15 @@ const TrackEngagement = ({ userId, user }) => {
   useEffect(() => {
     longSessionTimer.current = setTimeout(() => {
       if (!user || !userId) {
-        console.log('No user or userId, skipping long session tracking');
+        console.log('No user or userId, sending long session as anonymous');
+        trackEvent(null, 'long_session', {
+          category: 'Session',
+          action: 'long_session',
+          label: 'Over 60s',
+        }, null);
         return;
       }
+
       trackEvent(userId, 'long_session', {
         category: 'Session',
         action: 'long_session',
@@ -29,7 +35,23 @@ const TrackEngagement = ({ userId, user }) => {
   useEffect(() => {
     const handleClick = (event) => {
       if (!user || !userId) {
-        console.log('No user or userId, skipping engagement tracking');
+        console.log('No user or userId, sending click event as anonymous');
+        const target = event.target;
+        let category = 'Unknown';
+        let label = 'Unknown';
+
+        if (target.tagName === 'BUTTON') {
+          category = 'Button';
+          label = target.textContent || target.id || 'Unnamed Button';
+        } else if (target.tagName === 'A') {
+          category = 'Link';
+          label = target.textContent || target.href || 'Unnamed Link';
+        } else if (target.tagName === 'INPUT' || target.tagName === 'SELECT') {
+          category = 'Form';
+          label = target.name || target.id || 'Unnamed Form Element';
+        }
+
+        trackEvent(null, 'click', { category, label }, null);
         return;
       }
 

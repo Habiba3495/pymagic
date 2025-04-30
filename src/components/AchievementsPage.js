@@ -18,28 +18,34 @@ const AchievementsPage = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (!user) {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
       navigate("/login");
       return;
     }
   }, [user, navigate]);
 
   useEffect(() => {
-    if (achievements.length === 0 && user?.id) {
+    if (!user || !user.id) return;
+
+    if (achievements.length === 0) {
       trackEvent(user.id, 'empty_achievements_viewed', {
         category: 'Achievements',
         label: 'No Achievements Yet'
+      }, user).catch((error) => {
+        console.error('Failed to track empty_achievements_viewed:', error);
       });
     }
   }, [achievements, user]);
 
   useEffect(() => {
-    if (!user) return; // Already handled above, but ensuring no further execution
+    if (!user || !user.id) return;
 
-    // Track page view
     trackEvent(user.id, 'pageview', { 
       page: '/achievements',
       category: 'Navigation'
+    }, user).catch((error) => {
+      console.error('Failed to track pageview:', error);
     });
 
     const fetchAchievements = async () => {
@@ -55,42 +61,64 @@ const AchievementsPage = () => {
   
         if (data.success) {
           setAchievements(data.achievements || []);
-          // Track successful achievements load
           trackEvent(user.id, 'achievements_loaded', {
             category: 'Achievements',
             label: 'Achievements Data Loaded',
             count: data.achievements?.length || 0
+          }, user).catch((error) => {
+            console.error('Failed to track achievements_loaded:', error);
           });
         } else {
-          throw new Error(data.message || "Failed to load achievements");
+          throw new Error(data.message || t('achievements.fetchError'));
         }
       } catch (error) {
         console.error("Error fetching achievements:", error);
-        setError(error.message);    
+        setError(error.message || t('achievements.fetchError'));  
+        trackEvent(user.id, 'achievements_load_error', {
+          category: 'Error',
+          label: 'Achievements Load Error',
+          error: error.message,
+        }, user).catch((error) => {
+          console.error('Failed to track achievements_load_error:', error);
+        });
       } finally {
         setLoading(false);
       }
     };
   
     fetchAchievements();
-  }, [user, navigate]);
+  }, [user, navigate, t]);
 
   const handleBackClick = () => {
-    // Track back button click
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     trackEvent(user.id, 'back_button_clicked', {
       category: 'Navigation',
       label: 'Back to Profile'
+    }, user).catch((error) => {
+      console.error('Failed to track back_button_clicked:', error);
     });
     navigate("/profile");
   };
 
   const handleAchievementClick = (achievement) => {
-    // Track achievement click
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     trackEvent(user.id, 'achievement_clicked', {
       category: 'Achievements',
       label: 'Achievement Viewed',
       achievement_id: achievement.id,
       achievement_title: achievement.title
+    }, user).catch((error) => {
+      console.error('Failed to track achievement_clicked:', error);
     });
   };
 

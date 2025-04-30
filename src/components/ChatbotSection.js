@@ -12,7 +12,6 @@ import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useNavigate } from "react-router-dom";
-
 import Loading from "./Loading.js"; 
 
 const ChatbotSection = () => {
@@ -46,26 +45,26 @@ const ChatbotSection = () => {
     },
   };
 
-  // Detect if text is Arabic (simple heuristic)
   const isArabic = (text) => /[\u0600-\u06FF]/.test(text);
 
   useEffect(() => {
-    if (!user) {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
       navigate("/login");
       return;
     }
   }, [user, navigate]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !user.id) return;
 
-    // Track page view
     trackEvent(user.id, 'pageview', {
       page: '/chatbot',
       category: 'Navigation',
+    }, user).catch((error) => {
+      console.error('Failed to track pageview:', error);
     });
 
-    // Fetch initial messages
     const fetchMessages = async () => {
       try {
         const response = await apiClient.post("/api/chatbot/messages", { userId: user.id });
@@ -74,17 +73,20 @@ const ChatbotSection = () => {
           category: 'Chatbot',
           label: 'Initial Messages Loaded',
           message_count: response.data?.length || 0,
+        }, user).catch((error) => {
+          console.error('Failed to track chatbot_messages_loaded:', error);
         });
 
         setMessages(response.data || []);
       } catch (error) {
         console.error("Error fetching messages:", error);
         setError(t("errorFetchingMessages"));
-
         trackEvent(user.id, 'chatbot_error', {
           category: 'Error',
           label: 'Message Load Error',
           error: error.message,
+        }, user).catch((error) => {
+          console.error('Failed to track chatbot_error:', error);
         });
       } finally {
         setLoading(false);
@@ -95,6 +97,12 @@ const ChatbotSection = () => {
   }, [user, t, navigate]);
 
   const sendMessage = async () => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     if (input.trim() === "") return;
 
     const userMessage = { text: input, sender: "user" };
@@ -107,12 +115,13 @@ const ChatbotSection = () => {
       label: 'User Message Sent',
       message_length: input.length,
       message_hash: hashCode(input),
+    }, user).catch((error) => {
+      console.error('Failed to track chatbot_message_sent:', error);
     });
 
     try {
-      // Ensure the language is set based on the input text
       const detectedLanguage = isArabic(input) ? 'ar' : i18n.language;
-      console.log("Sending language:", detectedLanguage); // For debugging
+      console.log("Sending language:", detectedLanguage);
 
       const response = await apiClient.post("/api/chatbot/send", {
         userId: user.id,
@@ -131,6 +140,8 @@ const ChatbotSection = () => {
         label: 'Bot Response Received',
         response_length: response.data.reply.length,
         response_time: response.headers['x-response-time'] || null,
+      }, user).catch((error) => {
+        console.error('Failed to track chatbot_response_received:', error);
       });
     } catch (error) {
       console.error("Error sending message:", error);
@@ -142,17 +153,18 @@ const ChatbotSection = () => {
         label: 'Chatbot Response Error',
         error: error.message,
         user_message: input,
+      }, user).catch((error) => {
+        console.error('Failed to track chatbot_error:', error);
       });
     }
   };
 
-  // Helper function to create a simple hash of messages for tracking
   const hashCode = (str) => {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
-      hash |= 0; // Convert to 32bit integer
+      hash |= 0;
     }
     return hash;
   };
@@ -193,12 +205,16 @@ const ChatbotSection = () => {
                   textAlign: isArabic(msg.text) ? 'right' : 'left',
                 }}
                 onClick={() => {
-                  trackEvent(user.id, 'chatbot_message_clicked', {
-                    category: 'Chatbot',
-                    label: 'Message Clicked',
-                    sender: msg.sender,
-                    message_length: msg.text.length,
-                  });
+                  if (user?.id) {
+                    trackEvent(user.id, 'chatbot_message_clicked', {
+                      category: 'Chatbot',
+                      label: 'Message Clicked',
+                      sender: msg.sender,
+                      message_length: msg.text.length,
+                    }, user).catch((error) => {
+                      console.error('Failed to track chatbot_message_clicked:', error);
+                    });
+                  }
                 }}
               >
                 {msg.sender === "bot" && (
@@ -231,10 +247,14 @@ const ChatbotSection = () => {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                trackEvent(user.id, 'chatbot_enter_used', {
-                  category: 'Chatbot',
-                  label: 'Enter Key Used',
-                });
+                if (user?.id) {
+                  trackEvent(user.id, 'chatbot_enter_used', {
+                    category: 'Chatbot',
+                    label: 'Enter Key Used',
+                  }, user).catch((error) => {
+                    console.error('Failed to track chatbot_enter_used:', error);
+                  });
+                }
                 sendMessage();
               }
             }}
@@ -243,10 +263,14 @@ const ChatbotSection = () => {
           <button
             onClick={() => {
               sendMessage();
-              trackEvent(user.id, 'chatbot_send_clicked', {
-                category: 'Chatbot',
-                label: 'Send Button Clicked',
-              });
+              if (user?.id) {
+                trackEvent(user.id, 'chatbot_send_clicked', {
+                  category: 'Chatbot',
+                  label: 'Send Button Clicked',
+                }, user).catch((error) => {
+                  console.error('Failed to track chatbot_send_clicked:', error);
+                });
+              }
             }}
             className="send-button"
           >

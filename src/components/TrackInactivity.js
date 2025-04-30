@@ -11,7 +11,13 @@ const TrackInactivity = ({ userId, user }) => {
 
     timeoutRef.current = setTimeout(() => {
       if (!user || !userId) {
-        console.log('No user or userId, skipping inactivity tracking');
+        console.log('No user or userId, sending inactivity event as anonymous');
+        trackEvent(null, 'inactive', {
+          category: 'Session',
+          action: 'inactive',
+          label: window.location.pathname,
+          value: 30,
+        }, null);
         return;
       }
 
@@ -29,16 +35,13 @@ const TrackInactivity = ({ userId, user }) => {
   };
 
   useEffect(() => {
-    // إضافة listeners لأحداث التفاعل
     window.addEventListener('mousemove', handleActivity);
     window.addEventListener('keydown', handleActivity);
     window.addEventListener('click', handleActivity);
     window.addEventListener('scroll', handleActivity);
 
-    // بدء الـ timer لأول مرة
     resetTimeout();
 
-    // تنظيف الـ listeners والـ timer
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);

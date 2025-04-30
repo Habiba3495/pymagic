@@ -25,7 +25,7 @@ const GamePage = ({ onExit }) => {
   const isMountedRef = useRef(false);
 
   useEffect(() => {
-    if (!user) {
+    if (!user || !user.id) {
       console.error("User not authenticated, redirecting to login...");
       alert(t("game.notAuthenticated"));
       navigate("/login");
@@ -55,7 +55,7 @@ const GamePage = ({ onExit }) => {
         alert(t("game.invalidPoints"));
         return;
       }
-      if (user) {
+      if (user && user.id) {
         try {
           await apiClient.post("/api/users/update-points", {
             userId: user.id,
@@ -66,6 +66,8 @@ const GamePage = ({ onExit }) => {
             category: 'Game',
             label: 'Points Updated Successfully',
             value: pointsInt,
+          }, user).catch((error) => {
+            console.error('Failed to track points_updated:', error);
           });
         } catch (error) {
           console.error("Error sending points to backend:", error);
@@ -77,6 +79,8 @@ const GamePage = ({ onExit }) => {
             category: 'Error',
             label: 'Points Update Failed',
             error: error.message,
+          }, user).catch((error) => {
+            console.error('Failed to track points_update_error:', error);
           });
         }
       }
@@ -100,10 +104,14 @@ const GamePage = ({ onExit }) => {
         if (isMountedRef.current) {
           setPyodide(window.pyodide);
           console.log("Pyodide fully initialized");
-          trackEvent(user?.id, 'pyodide_loaded', {
-            category: 'Game',
-            label: 'Pyodide Loaded Successfully',
-          });
+          if (user?.id) {
+            trackEvent(user.id, 'pyodide_loaded', {
+              category: 'Game',
+              label: 'Pyodide Loaded Successfully',
+            }, user).catch((error) => {
+              console.error('Failed to track pyodide_loaded:', error);
+            });
+          }
 
           if (pendingCodeRef.current) {
             console.log("Executing pending code:", pendingCodeRef.current);
@@ -115,11 +123,15 @@ const GamePage = ({ onExit }) => {
         console.error("Pyodide loading failed:", error);
         if (isMountedRef.current) {
           setError(t("game.pyodideLoadError"));
-          trackEvent(user?.id, 'pyodide_load_error', {
-            category: 'Error',
-            label: 'Pyodide Load Failed',
-            error: error.message,
-          });
+          if (user?.id) {
+            trackEvent(user.id, 'pyodide_load_error', {
+              category: 'Error',
+              label: 'Pyodide Load Failed',
+              error: error.message,
+            }, user).catch((error) => {
+              console.error('Failed to track pyodide_load_error:', error);
+            });
+          }
         }
       }
     };
@@ -139,10 +151,14 @@ const GamePage = ({ onExit }) => {
       if (window.unityBridgeLoaded) {
         setBridgeReady(true);
         console.log("Unity bridge is ready");
-        trackEvent(user?.id, 'unity_bridge_ready', {
-          category: 'Game',
-          label: 'Unity Bridge Ready',
-        });
+        if (user?.id) {
+          trackEvent(user.id, 'unity_bridge_ready', {
+            category: 'Game',
+            label: 'Unity Bridge Ready',
+          }, user).catch((error) => {
+            console.error('Failed to track unity_bridge_ready:', error);
+          });
+        }
 
         if (window.registerReactCallback) {
           window.registerReactCallback(handleCodeFromGame);
@@ -168,10 +184,14 @@ const GamePage = ({ onExit }) => {
       if (!window.unityBridgeLoaded) {
         console.error("Unity bridge failed to load after 10 seconds.");
         setError(t("game.unityBridgeLoadError"));
-        trackEvent(user?.id, 'unity_bridge_load_error', {
-          category: 'Error',
-          label: 'Unity Bridge Load Failed',
-        });
+        if (user?.id) {
+          trackEvent(user.id, 'unity_bridge_load_error', {
+            category: 'Error',
+            label: 'Unity Bridge Load Failed',
+          }, user).catch((error) => {
+            console.error('Failed to track unity_bridge_load_error:', error);
+          });
+        }
       }
     }, 10000);
 
@@ -233,10 +253,14 @@ const GamePage = ({ onExit }) => {
             setUnityReady(true);
             setLoadingProgress(100);
             console.log("Unity instance fully loaded");
-            trackEvent(user?.id, 'game_loaded', {
-              category: 'Game',
-              label: 'Unity Game Loaded Successfully',
-            });
+            if (user?.id) {
+              trackEvent(user.id, 'game_loaded', {
+                category: 'Game',
+                label: 'Unity Game Loaded Successfully',
+              }, user).catch((error) => {
+                console.error('Failed to track game_loaded:', error);
+              });
+            }
           } catch (error) {
             console.error("Unity instance creation failed:", error);
             throw error;
@@ -251,11 +275,15 @@ const GamePage = ({ onExit }) => {
       } catch (error) {
         console.error("Unity loading failed:", error);
         setError(t("game.unityLoadError"));
-        trackEvent(user?.id, 'unity_load_error', {
-          category: 'Error',
-          label: 'Unity Load Failed',
-          error: error.message,
-        });
+        if (user?.id) {
+          trackEvent(user.id, 'unity_load_error', {
+            category: 'Error',
+            label: 'Unity Load Failed',
+            error: error.message,
+          }, user).catch((error) => {
+            console.error('Failed to track unity_load_error:', error);
+          });
+        }
       }
     };
 
@@ -304,6 +332,15 @@ const GamePage = ({ onExit }) => {
     } catch (error) {
       console.error("Python execution error:", error);
       sendResultToUnity(`${t("error")}: ${error.message}`);
+      if (user?.id) {
+        trackEvent(user.id, 'code_execution_error', {
+          category: 'Error',
+          label: 'Python Code Execution Failed',
+          error: error.message,
+        }, user).catch((error) => {
+          console.error('Failed to track code_execution_error:', error);
+        });
+      }
     }
   };
 
@@ -323,9 +360,18 @@ const GamePage = ({ onExit }) => {
         );
       } catch (error) {
         console.error("Failed to send result to Unity:", error);
+        if (user?.id) {
+          trackEvent(user.id, 'send_to_unity_error', {
+            category: 'Error',
+            label: 'Send Result to Unity Failed',
+            error: error.message,
+          }, user).catch((error) => {
+            console.error('Failed to track send_to_unity_error:', error);
+          });
+        }
       }
     },
-    []
+    [user]
   );
 
   const toggleFullScreen = useCallback(() => {
@@ -339,10 +385,14 @@ const GamePage = ({ onExit }) => {
       } else if (gameContainerRef.current.msRequestFullscreen) {
         gameContainerRef.current.msRequestFullscreen();
       }
-      trackEvent(user?.id, 'fullscreen_enabled', {
-        category: 'Game',
-        label: 'Fullscreen Enabled',
-      });
+      if (user?.id) {
+        trackEvent(user.id, 'fullscreen_enabled', {
+          category: 'Game',
+          label: 'Fullscreen Enabled',
+        }, user).catch((error) => {
+          console.error('Failed to track fullscreen_enabled:', error);
+        });
+      }
     } else {
       if (document.exitFullscreen) {
         document.exitFullscreen();
@@ -351,10 +401,14 @@ const GamePage = ({ onExit }) => {
       } else if (document.msExitFullscreen) {
         document.msExitFullscreen();
       }
-      trackEvent(user?.id, 'fullscreen_disabled', {
-        category: 'Game',
-        label: 'Fullscreen Disabled',
-      });
+      if (user?.id) {
+        trackEvent(user.id, 'fullscreen_disabled', {
+          category: 'Game',
+          label: 'Fullscreen Disabled',
+        }, user).catch((error) => {
+          console.error('Failed to track fullscreen_disabled:', error);
+        });
+      }
     }
   }, [isFullScreen, user]);
 
@@ -376,7 +430,17 @@ const GamePage = ({ onExit }) => {
 
   return (
     <div className="unity-game-container" ref={gameContainerRef}>
-      <button className="exit-game-btn" onClick={onExit}>
+      <button className="exit-game-btn" onClick={() => {
+        if (user?.id) {
+          trackEvent(user.id, 'exit_game_clicked', {
+            category: 'Game',
+            label: 'Exit Game Button Clicked',
+          }, user).catch((error) => {
+            console.error('Failed to track exit_game_clicked:', error);
+          });
+        }
+        onExit();
+      }}>
         {t("game.exitGame") || "Exit Game"}
       </button>
 

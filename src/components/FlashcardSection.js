@@ -32,25 +32,28 @@ const FlashCardSection = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    if (!user) {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
       navigate("/login");
       return;
     }
   }, [user, navigate]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !user.id) return;
 
     trackEvent(user.id, "pageview", {
       page: "/flashcards",
       category: "Navigation",
+    }, user).catch((error) => {
+      console.error('Failed to track pageview:', error);
     });
 
     const fetchData = async () => {
       try {
         setLoading(true);
         const response = await apiClient.get(`/sections/${sectionId}/flashcards`);
-        if (response.status !== 200) throw new Error("Failed to fetch flashcard data");
+        if (response.status !== 200) throw new Error(t("flashcard.fetchError"));
 
         const data = response.data;
         setFlashcardData({
@@ -81,13 +84,17 @@ const FlashCardSection = () => {
             (sum, unit) => sum + unit.lessons.length,
             0
           ),
+        }, user).catch((error) => {
+          console.error('Failed to track flashcards_loaded:', error);
         });
       } catch (error) {
-        setError(error.message);
+        setError(error.message || t("flashcard.fetchError"));
         trackEvent(user.id, "flashcards_error", {
           category: "Error",
           label: "Flashcards Data Error",
           error: error.message,
+        }, user).catch((error) => {
+          console.error('Failed to track flashcards_error:', error);
         });
         setFlashcardData(null);
         setSectionCount(1);
@@ -99,9 +106,15 @@ const FlashCardSection = () => {
     };
 
     fetchData();
-  }, [user, sectionId, navigate]);
+  }, [user, sectionId, navigate, t]);
 
   const handleFlashcardClick = async (unitId, flashcard) => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     trackEvent(user.id, "flashcard_clicked", {
       category: "Flashcards",
       label: "Flashcard Clicked",
@@ -109,6 +122,8 @@ const FlashCardSection = () => {
       lesson_id: flashcard.lessonId,
       lesson_number: flashcard.lessonNumber,
       is_passed: flashcard.isPassed,
+    }, user).catch((error) => {
+      console.error('Failed to track flashcard_clicked:', error);
     });
 
     try {
@@ -119,7 +134,7 @@ const FlashCardSection = () => {
 
       if (!data.accessGranted) {
         setAccessDeniedFlashcards((prev) => new Set(prev).add(flashcard.lessonId));
-        setPopupMessage(data.message);
+        setPopupMessage(data.message || t("flashcard.accessDenied"));
         setPopupVisible(true);
         trackEvent(user.id, "flashcard_access_denied", {
           category: "Access",
@@ -127,6 +142,8 @@ const FlashCardSection = () => {
           unit_id: unitId,
           lesson_id: flashcard.lessonId,
           reason: data.message,
+        }, user).catch((error) => {
+          console.error('Failed to track flashcard_access_denied:', error);
         });
         return;
       }
@@ -139,26 +156,38 @@ const FlashCardSection = () => {
         unit_id: unitId,
         lesson_id: flashcard.lessonId,
         lesson_name: flashcard.lessonName,
+      }, user).catch((error) => {
+        console.error('Failed to track flashcard_accessed:', error);
       });
     } catch (error) {
       console.error("Error checking flashcard access:", error);
-      setPopupMessage(t("flashcard.accessError"));
+      setPopupMessage(error.message || t("flashcard.accessError"));
       setPopupVisible(true);
       trackEvent(user.id, "flashcard_access_error", {
         category: "Error",
         label: "Access Check Error",
         error: error.message,
+      }, user).catch((error) => {
+        console.error('Failed to track flashcard_access_error:', error);
       });
     }
   };
 
   const handleModalClose = () => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     if (selectedCard) {
       trackEvent(user.id, "flashcard_modal_closed", {
         category: "Flashcards",
         label: "Flashcard Modal Closed",
         unit_id: selectedCard.unitId,
         lesson_id: selectedCard.flashcard.lessonId,
+      }, user).catch((error) => {
+        console.error('Failed to track flashcard_modal_closed:', error);
       });
     }
     setModalOpen(false);
@@ -166,34 +195,58 @@ const FlashCardSection = () => {
   };
 
   const handlePopupClose = () => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     setPopupVisible(false);
     setPopupMessage("");
     trackEvent(user.id, "popup_closed", {
       category: "UI",
       label: "Access Denied Popup Closed",
+    }, user).catch((error) => {
+      console.error('Failed to track popup_closed:', error);
     });
   };
 
   const handlePrevSection = () => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     if (sectionId > 1) {
       setSectionId(sectionId - 1);
-      setAccessDeniedFlashcards(new Set()); // Reset access restrictions
+      setAccessDeniedFlashcards(new Set());
       trackEvent(user.id, "previous_section_clicked", {
         category: "Navigation",
         label: "Previous Section",
         section_id: sectionId - 1,
+      }, user).catch((error) => {
+        console.error('Failed to track previous_section_clicked:', error);
       });
     }
   };
 
   const handleNextSection = () => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     if (sectionId < sectionCount) {
       setSectionId(sectionId + 1);
-      setAccessDeniedFlashcards(new Set()); // Reset access restrictions
+      setAccessDeniedFlashcards(new Set());
       trackEvent(user.id, "next_section_clicked", {
         category: "Navigation",
         label: "Next Section",
         section_id: sectionId + 1,
+      }, user).catch((error) => {
+        console.error('Failed to track next_section_clicked:', error);
       });
     }
   };

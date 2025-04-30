@@ -37,15 +37,29 @@ const Quiz = () => {
 
   // Fetching Questions
   useEffect(() => {
-    trackEvent(userId, 'pageview', { page: `/quiz/${unitId}/${lessonId}` });
-    trackEvent(userId, 'quiz_started', {
-      category: "Quiz",
-      label: `Unit ${unitId} - Lesson ${lessonId}`,
-    });
+    if (!user || !userId) {
+      console.log('No user, skipping pageview and quiz_started tracking');
+    } else {
+      trackEvent(userId, 'pageview', { page: `/quiz/${unitId}/${lessonId}` }, user).catch((error) => {
+        console.error('Failed to track pageview:', error);
+      });
+      trackEvent(userId, 'quiz_started', {
+        category: "Quiz",
+        label: `Unit ${unitId} - Lesson ${lessonId}`,
+      }, user).catch((error) => {
+        console.error('Failed to track quiz_started:', error);
+      });
+    }
 
     const fetchQuestions = async () => {
       setIsLoading(true);
       try {
+        if (!user || !userId) {
+          console.log('No user, skipping fetch questions');
+          setIsLoading(false);
+          return;
+        }
+
         const response = await apiClient.get(`/api/quiz/lesson/${lessonId}`);
         if (response.status !== 200) {
           throw new Error("Failed to fetch questions");
@@ -60,21 +74,28 @@ const Quiz = () => {
     };
 
     fetchQuestions();
-  }, [lessonId, unitId, userId]);
+  }, [lessonId, unitId, user, userId]);
 
   // Track time per question
   useEffect(() => {
     let questionStartTime = Date.now();
     return () => {
+      if (!user || !userId) {
+        console.log('No user, skipping question_time_spent tracking');
+        return;
+      }
+
       const duration = Math.floor((Date.now() - questionStartTime) / 1000);
       if (questions[currentQuestionIndex]?.id) {
         trackEvent(userId, 'question_time_spent', {
           category: 'Quiz',
           label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId} - Lesson ${lessonId}`,
-        }, duration);
+        }, user, duration).catch((error) => {
+          console.error('Failed to track question_time_spent:', error);
+        });
       }
     };
-  }, [currentQuestionIndex, lessonId, unitId, userId, questions]);
+  }, [currentQuestionIndex, lessonId, unitId, user, userId, questions]);
 
   // Track inactivity
   useEffect(() => {
@@ -82,11 +103,18 @@ const Quiz = () => {
     const resetTimeout = () => {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
+        if (!user || !userId) {
+          console.log('No user, skipping inactive tracking');
+          return;
+        }
+
         trackEvent(userId, 'inactive', {
           category: 'Quiz',
           label: `Unit ${unitId} - Lesson ${lessonId} - Question ${currentQuestionIndex + 1}`,
           value: 30,
-        }, 30);
+        }, user, 30).catch((error) => {
+          console.error('Failed to track inactive:', error);
+        });
       }, 30000);
     };
 
@@ -99,7 +127,7 @@ const Quiz = () => {
       window.removeEventListener('mousemove', resetTimeout);
       window.removeEventListener('keydown', resetTimeout);
     };
-  }, [lessonId, unitId, currentQuestionIndex, userId]);
+  }, [lessonId, unitId, currentQuestionIndex, user, userId]);
 
   // Handle Option Click
   const handleOptionClick = (option) => {
@@ -109,10 +137,17 @@ const Quiz = () => {
     setHint("");
     setMotivationMessage("");
 
+    if (!user || !userId) {
+      console.log('No user, skipping option_clicked tracking');
+      return;
+    }
+
     trackEvent(userId, 'option_clicked', {
       category: 'Quiz',
       label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId} - Lesson ${lessonId}`,
       value: option,
+    }, user).catch((error) => {
+      console.error('Failed to track option_clicked:', error);
     });
   };
 
@@ -168,19 +203,30 @@ const Quiz = () => {
 
     setMotivationMessage(isCorrectAnswer ? "Correct! Well done!" : "Incorrect. Try again!");
 
+    if (!user || !userId) {
+      console.log('No user, skipping answer tracking');
+      return;
+    }
+
     trackEvent(userId, isCorrectAnswer ? 'answer_correct' : 'answer_incorrect', {
       category: 'Quiz',
       label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId} - Lesson ${lessonId}`,
+    }, user).catch((error) => {
+      console.error(`Failed to track ${isCorrectAnswer ? 'answer_correct' : 'answer_incorrect'}:`, error);
     });
   };
 
   // Next Question
   const handleNextQuestion = async () => {
     if (currentQuestionIndex < questions.length - 1) {
-      trackEvent(userId, 'next_question', {
-        category: 'Quiz',
-        label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId} - Lesson ${lessonId}`,
-      });
+      if (user && userId) {
+        trackEvent(userId, 'next_question', {
+          category: 'Quiz',
+          label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId} - Lesson ${lessonId}`,
+        }, user).catch((error) => {
+          console.error('Failed to track next_question:', error);
+        });
+      }
 
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedOption(null);
@@ -190,13 +236,18 @@ const Quiz = () => {
       setMotivationMessage("");
     } else {
       const score = answers.filter((a) => a.is_correct).length / answers.length * 100;
-      trackEvent(userId, 'quiz_completed', {
-        category: 'Quiz',
-        label: `Unit ${unitId} - Lesson ${lessonId}`,
-        value: Math.round(score),
-      });
+      if (user && userId) {
+        trackEvent(userId, 'quiz_completed', {
+          category: 'Quiz',
+          label: `Unit ${unitId} - Lesson ${lessonId}`,
+          value: Math.round(score),
+        }, user).catch((error) => {
+          console.error('Failed to track quiz_completed:', error);
+        });
+      }
 
-      if (!userId) {
+      if (!user || !userId) {
+        console.log('No user, redirecting to login');
         navigate("/login");
         return;
       }
@@ -211,11 +262,9 @@ const Quiz = () => {
 
         const data = response.data;
         if (data.success) {
-          // Clear localStorage after successful submission
           localStorage.removeItem('quizAnswers');
           localStorage.setItem('lastStudentQuizId', data.student_quiz_id);
 
-          // Add unit_id and lesson_id to quizData
           const enhancedQuizData = {
             ...data,
             unit_id: unitId,
@@ -232,7 +281,6 @@ const Quiz = () => {
           });
         } else {
           console.error("Error submitting quiz:", data.message);
-          // Pass unit_id and lesson_id even in case of error
           navigate("/quiz-complete", {
             state: {
               quizData: { ...data, unit_id: unitId, lesson_id: lessonId },
@@ -242,7 +290,6 @@ const Quiz = () => {
         }
       } catch (error) {
         console.error("Error submitting quiz:", error);
-        // Pass unit_id and lesson_id in case of error
         navigate("/quiz-complete", {
           state: {
             quizData: {
@@ -260,18 +307,34 @@ const Quiz = () => {
   // Hint
   const handleHintClick = () => {
     setHint(questions[currentQuestionIndex].hint);
+    if (!user || !userId) {
+      console.log('No user, skipping hint_used tracking');
+      return;
+    }
+
     trackEvent(userId, 'hint_used', {
       category: 'Quiz',
       label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId} - Lesson ${lessonId}`,
+    }, user).catch((error) => {
+      console.error('Failed to track hint_used:', error);
     });
   };
 
   // Exit Quiz
   const handleExit = () => {
+    if (!user || !userId) {
+      console.log('No user, skipping exit_quiz tracking');
+      navigate("/lessons");
+      return;
+    }
+
     trackEvent(userId, 'exit_quiz', {
       category: 'Quiz',
       label: `Unit ${unitId} - Lesson ${lessonId} - Question ${currentQuestionIndex + 1}`,
+    }, user).catch((error) => {
+      console.error('Failed to track exit_quiz:', error);
     });
+
     navigate("/lessons");
   };
 

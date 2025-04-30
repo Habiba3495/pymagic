@@ -9,7 +9,6 @@ import trackEvent from '../utils/trackEvent';
 import Exit from "./images/Exit iconsvg.svg";
 import Loading from "./Loading.js"; 
 
-// Import SVG icons as React components
 import FacesIcon from "./images/faces.svg";
 import HairstylesIcon from "./images/hairstyles.svg";
 import Headdress from "./images/headdress.svg";
@@ -44,7 +43,8 @@ const AvatarCustomization = () => {
   const [showBackConfirmation, setShowBackConfirmation] = useState(false);
 
   useEffect(() => {
-    if (!user) {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
       navigate("/login");
       return;
     }
@@ -60,15 +60,17 @@ const AvatarCustomization = () => {
   }, [message]);
 
   useEffect(() => {
-    if (!user) return; // Already handled above, but ensuring no further execution
+    if (!user || !user.id) return;
 
-    // Track page view
-    trackEvent(userId, 'pageview', { page: `/profile/avatar/${userId}` });
+    trackEvent(userId, 'pageview', { page: `/profile/avatar/${userId}` }, user).catch((error) => {
+      console.error('Failed to track pageview:', error);
+    });
     
-    // Track customization loaded event
     trackEvent(userId, 'customization_loaded', {
       category: 'AvatarCustomization',
       label: `User ${userId}`
+    }, user).catch((error) => {
+      console.error('Failed to track customization_loaded:', error);
     });
 
     const fetchData = async () => {
@@ -103,28 +105,38 @@ const AvatarCustomization = () => {
       } catch (error) {
         console.error(t("fetchError"), error);
         setEquippedAssets(defaultAssets);
+        trackEvent(userId, 'fetch_data_error', {
+          category: 'Error',
+          label: 'Avatar Customization Data Fetch Error',
+          error: error.message,
+        }, user).catch((error) => {
+          console.error('Failed to track fetch_data_error:', error);
+        });
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, [userId, t, navigate]);
+  }, [user, userId, t, navigate]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !user.id) return;
 
     const startTime = Date.now();
     return () => {
       const duration = Math.floor((Date.now() - startTime) / 1000);
       trackEvent(userId, 'time_spent', {
         category: 'AvatarCustomization',
-        label: `User ${userId}`
-      }, duration);
+        label: `User ${userId}`,
+        value: duration,
+      }, user).catch((error) => {
+        console.error('Failed to track time_spent:', error);
+      });
     };
-  }, [userId]);
+  }, [user, userId]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !user.id) return;
 
     let timeout;
     const resetTimeout = () => {
@@ -134,7 +146,9 @@ const AvatarCustomization = () => {
           category: 'AvatarCustomization',
           label: `User ${userId}`,
           value: 30
-        }, 30);
+        }, user, 30).catch((error) => {
+          console.error('Failed to track inactive:', error);
+        });
       }, 30000);
     };
 
@@ -147,25 +161,41 @@ const AvatarCustomization = () => {
       window.removeEventListener('mousemove', resetTimeout);
       window.removeEventListener('keydown', resetTimeout);
     };
-  }, [userId]);
+  }, [user, userId]);
 
   const handleBuyClick = (asset) => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     setSelectedAsset(asset);
     setShowConfirmation(true);
     trackEvent(userId, 'buy_clicked', {
       category: 'AvatarCustomization',
       label: `${asset.type} - ${asset.id} - User ${userId}`,
       value: asset.price
+    }, user).catch((error) => {
+      console.error('Failed to track buy_clicked:', error);
     });
   };
 
   const confirmPurchase = () => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     if (selectedAsset) {
       handlePurchase(selectedAsset.id, selectedAsset.price, selectedAsset.image_url, selectedAsset.type);
       trackEvent(userId, 'purchase_confirmed', {
         category: 'AvatarCustomization',
         label: `${selectedAsset.type} - ${selectedAsset.id} - User ${userId}`,
         value: selectedAsset.price
+      }, user).catch((error) => {
+        console.error('Failed to track purchase_confirmed:', error);
       });
     }
     setShowConfirmation(false);
@@ -177,6 +207,12 @@ const AvatarCustomization = () => {
   };
 
   const handlePurchase = async (assetId, price, imageUrl, type) => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     if (ownedAssets.some((asset) => asset.id === assetId)) {
       setMessage(t("alreadyOwned"));
       return;
@@ -189,31 +225,74 @@ const AvatarCustomization = () => {
         setOwnedAssets((prev) => [...prev, response.data.asset]);
         setUserPoints(response.data.updatedPoints);
         setMessage(t("purchaseSuccess"));
+        trackEvent(userId, 'purchase_success', {
+          category: 'AvatarCustomization',
+          label: `${type} - ${assetId} - User ${userId}`,
+          value: price,
+        }, user).catch((error) => {
+          console.error('Failed to track purchase_success:', error);
+        });
       } else {
         setMessage(response.data.message || t("purchaseError"));
+        trackEvent(userId, 'purchase_failed', {
+          category: 'Error',
+          label: 'Purchase Failed',
+          error: response.data.message || t("purchaseError"),
+        }, user).catch((error) => {
+          console.error('Failed to track purchase_failed:', error);
+        });
       }
     } catch (error) {
       setMessage(error.response?.data?.message || t("purchaseError"));
+      trackEvent(userId, 'purchase_failed', {
+        category: 'Error',
+        label: 'Purchase Failed',
+        error: error.response?.data?.message || error.message,
+      }, user).catch((error) => {
+        console.error('Failed to track purchase_failed:', error);
+      });
     }
   };
 
   const handleEquip = (imageUrl, type) => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     setEquippedAssets((prev) => ({ ...prev, [type]: imageUrl }));
     trackEvent(userId, 'asset_equipped', {
       category: 'AvatarCustomization',
       label: `${type} - User ${userId}`
+    }, user).catch((error) => {
+      console.error('Failed to track asset_equipped:', error);
     });
   };
 
   const handleUnequip = (type) => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     setEquippedAssets((prev) => ({ ...prev, [type]: defaultAssets[type] || null }));
     trackEvent(userId, 'asset_unequipped', {
       category: 'AvatarCustomization',
       label: `${type} - User ${userId}`
+    }, user).catch((error) => {
+      console.error('Failed to track asset_unequipped:', error);
     });
   };
 
   const handleSave = () => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     apiClient
       .post("/save-preferences", {
         userId,
@@ -230,15 +309,30 @@ const AvatarCustomization = () => {
         trackEvent(userId, 'preferences_saved', {
           category: 'AvatarCustomization',
           label: `User ${userId}`
+        }, user).catch((error) => {
+          console.error('Failed to track preferences_saved:', error);
         });
       })
       .catch((error) => {
         setMessage(t("saveError"));
         console.error(t("saveError"), error);
+        trackEvent(userId, 'preferences_save_error', {
+          category: 'Error',
+          label: 'Preferences Save Error',
+          error: error.message,
+        }, user).catch((error) => {
+          console.error('Failed to track preferences_save_error:', error);
+        });
       });
   };
 
   const handleBackClick = () => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     if (
       equippedAssets.face ||
       equippedAssets.brow ||
@@ -255,6 +349,12 @@ const AvatarCustomization = () => {
   };
 
   const confirmBackSave = () => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     handleSave();
     setShowBackConfirmation(false);
     navigate("/profile");
@@ -320,10 +420,14 @@ const AvatarCustomization = () => {
                 key={type}
                 onClick={() => {
                   setSelectedTab(type);
-                  trackEvent(userId, "tab_switched", {
-                    category: "AvatarCustomization",
-                    label: `${type} - User ${userId}`,
-                  });
+                  if (user?.id) {
+                    trackEvent(userId, "tab_switched", {
+                      category: "AvatarCustomization",
+                      label: `${type} - User ${userId}`,
+                    }, user).catch((error) => {
+                      console.error('Failed to track tab_switched:', error);
+                    });
+                  }
                 }}
                 className={selectedTab === type ? "active" : ""}
               >

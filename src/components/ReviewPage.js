@@ -14,53 +14,78 @@ const ReviewPage = () => {
 
   // Track page view and quiz review access
   useEffect(() => {
-    if (user?.id) {
-      trackEvent(user.id, 'pageview', {
-        page: '/quiz-review',
-        category: 'Navigation',
-      });
-
-      if (quizData) {
-        trackEvent(user.id, 'quiz_review_accessed', {
-          category: 'Quiz',
-          label: 'Quiz Review Page',
-          score: quizData.score,
-          total_questions: quizData.answers?.length || 0,
-          is_passed: quizData.is_passed || false,
-        });
-      }
+    if (!user || !user.id) {
+      console.log('No user, skipping pageview and quiz_review_accessed tracking');
+      navigate('/login');
+      return;
     }
-  }, [user, quizData]);
+
+    trackEvent(user.id, 'pageview', {
+      page: '/quiz-review',
+      category: 'Navigation',
+    }, user).catch((error) => {
+      console.error('Failed to track pageview:', error);
+    });
+
+    if (quizData) {
+      trackEvent(user.id, 'quiz_review_accessed', {
+        category: 'Quiz',
+        label: 'Quiz Review Page',
+        score: quizData.score,
+        total_questions: quizData.answers?.length || 0,
+        is_passed: quizData.is_passed || false,
+      }, user).catch((error) => {
+        console.error('Failed to track quiz_review_accessed:', error);
+      });
+    }
+  }, [user, quizData, navigate]);
 
   const handleProgressReportClick = () => {
-    if (user?.id) {
-      trackEvent(user.id, 'progress_report_navigated', {
-        category: 'Navigation',
-        label: 'From Quiz Review',
-      });
+    if (!user || !user.id) {
+      console.log('No user, skipping progress_report_navigated tracking');
+      navigate('/login');
+      return;
     }
+
+    trackEvent(user.id, 'progress_report_navigated', {
+      category: 'Navigation',
+      label: 'From Quiz Review',
+    }, user).catch((error) => {
+      console.error('Failed to track progress_report_navigated:', error);
+    });
     navigate("/progress-report/1");
   };
 
   const handleLessonsClick = () => {
-    if (user?.id) {
-      trackEvent(user.id, 'lessons_navigated', {
-        category: 'Navigation',
-        label: 'From Quiz Review',
-      });
+    if (!user || !user.id) {
+      console.log('No user, skipping lessons_navigated tracking');
+      navigate('/login');
+      return;
     }
+
+    trackEvent(user.id, 'lessons_navigated', {
+      category: 'Navigation',
+      label: 'From Quiz Review',
+    }, user).catch((error) => {
+      console.error('Failed to track lessons_navigated:', error);
+    });
     navigate("/lessons");
   };
 
   const handleQuestionReview = (questionId, questionIndex) => {
-    if (user?.id) {
-      trackEvent(user.id, 'question_reviewed', {
-        category: 'Quiz',
-        label: 'Question Review',
-        question_id: questionId,
-        question_index: questionIndex + 1,
-      });
+    if (!user || !user.id) {
+      console.log('No user, skipping question_reviewed tracking');
+      return;
     }
+
+    trackEvent(user.id, 'question_reviewed', {
+      category: 'Quiz',
+      label: 'Question Review',
+      question_id: questionId,
+      question_index: questionIndex + 1,
+    }, user).catch((error) => {
+      console.error('Failed to track question_reviewed:', error);
+    });
   };
 
   if (!quizData) {
@@ -68,6 +93,8 @@ const ReviewPage = () => {
       trackEvent(user.id, 'quiz_review_error', {
         category: 'Error',
         label: 'Missing Quiz Data',
+      }, user).catch((error) => {
+        console.error('Failed to track quiz_review_error:', error);
       });
     }
     return (
@@ -83,6 +110,8 @@ const ReviewPage = () => {
       trackEvent(user.id, 'quiz_review_error', {
         category: 'Error',
         label: 'Empty Quiz Answers',
+      }, user).catch((error) => {
+        console.error('Failed to track quiz_review_error:', error);
       });
     }
     return (

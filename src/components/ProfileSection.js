@@ -31,60 +31,86 @@ const ProfilePage = () => {
   const userId = user?.id;
 
   useEffect(() => {
-    if (!user) {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
       navigate("/login");
       return;
     }
 
-    trackEvent(userId, 'pageview', { page: `/profile/${userId}` });
+    trackEvent(userId, 'pageview', { page: `/profile/${userId}` }, user).catch((error) => {
+      console.error('Failed to track pageview:', error);
+    });
     trackEvent(userId, 'profile_loaded', {
       category: 'Profile',
       label: `User ${userId}`
+    }, user).catch((error) => {
+      console.error('Failed to track profile_loaded:', error);
     });
 
     const fetchUserProfile = async () => {
       try {
         const response = await apiClient.get(`/api/users/profile/${userId}`);
-        if (response.status !== 200) throw new Error("Failed to fetch user profile");
+        if (response.status !== 200) throw new Error(t("profile.fetchProfileError"));
         if (response.data.success) {
           setUserProfile({
             name: response.data.user.name,
             points: response.data.user.points,
           });
         } else {
-          throw new Error(response.data.message || "Failed to load user profile");
+          throw new Error(response.data.message || t("profile.fetchProfileError"));
         }
       } catch (error) {
         console.error("Error fetching user profile:", error);
         setUserProfile({ name: t("profile.profileUnknownUser"), points: 0 });
+        trackEvent(userId, 'fetch_profile_error', {
+          category: 'Error',
+          label: 'User Profile Fetch Error',
+          error: error.message,
+        }, user).catch((error) => {
+          console.error('Failed to track fetch_profile_error:', error);
+        });
       }
     };
 
     const fetchProgressData = async () => {
       try {
         const response = await apiClient.get(`/api/quiz/progress/${userId}`);
-        if (response.status !== 200) throw new Error("Failed to fetch progress data");
+        if (response.status !== 200) throw new Error(t("profile.fetchProgressError"));
         if (response.data.success && response.data.progress.length > 0) {
           setProgressData(response.data.progress.slice(0, 3));
         } else {
-          throw new Error("No progress data available");
+          throw new Error(t("profile.noProgressYet"));
         }
       } catch (error) {
-        console.error("Error fetching progress data, using dummy data:", error);
+        console.error("Error fetching progress data:", error);
+        trackEvent(userId, 'fetch_progress_error', {
+          category: 'Error',
+          label: 'Progress Data Fetch Error',
+          error: error.message,
+        }, user).catch((error) => {
+          console.error('Failed to track fetch_progress_error:', error);
+        });
       }
     };
 
     const fetchAchievements = async () => {
       try {
         const response = await apiClient.get(`/api/achievements/${userId}`);
-        if (response.status !== 200) throw new Error("Failed to fetch achievements");
+        if (response.status !== 200) throw new Error(t("profile.fetchAchievementsError"));
         if (response.data.success) {
           setAchievements(response.data.achievements.slice(0, 3));
         } else {
-          throw new Error(response.data.message || "Failed to load achievements");
+          throw new Error(response.data.message || t("profile.fetchAchievementsError"));
         }
       } catch (error) {
-        console.error("Error fetching achievements, using dummy data:", error);
+        console.error("Error fetching achievements:", error);
+        trackEvent(userId, 'fetch_achievements_error', {
+          category: 'Error',
+          label: 'Achievements Fetch Error',
+          error: error.message,
+        }, user).catch((error) => {
+          console.error('Failed to track fetch_achievements_error:', error);
+        });
       }
     };
 
@@ -107,6 +133,13 @@ const ProfilePage = () => {
       } catch (error) {
         console.error("Error fetching avatar preferences:", error);
         setEquippedAssets(defaultAssets);
+        trackEvent(userId, 'fetch_avatar_preferences_error', {
+          category: 'Error',
+          label: 'Avatar Preferences Fetch Error',
+          error: error.message,
+        }, user).catch((error) => {
+          console.error('Failed to track fetch_avatar_preferences_error:', error);
+        });
       }
     };
 
@@ -127,20 +160,23 @@ const ProfilePage = () => {
   }, [user, userId, t, navigate]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !user.id) return;
 
     const startTime = Date.now();
     return () => {
       const duration = Math.floor((Date.now() - startTime) / 1000);
       trackEvent(userId, 'time_spent', {
         category: 'Profile',
-        label: `User ${userId}`
-      }, duration);
+        label: `User ${userId}`,
+        value: duration,
+      }, user).catch((error) => {
+        console.error('Failed to track time_spent:', error);
+      });
     };
-  }, [userId, user]);
+  }, [user, userId]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !user.id) return;
 
     let timeout;
     const resetTimeout = () => {
@@ -150,7 +186,9 @@ const ProfilePage = () => {
           category: 'Profile',
           label: `User ${userId}`,
           value: 30
-        }, 30);
+        }, user, 30).catch((error) => {
+          console.error('Failed to track inactive:', error);
+        });
       }, 30000);
     };
 
@@ -163,7 +201,7 @@ const ProfilePage = () => {
       window.removeEventListener('mousemove', resetTimeout);
       window.removeEventListener('keydown', resetTimeout);
     };
-  }, [userId, user]);
+  }, [user, userId]);
 
   const getStyleForType = (type) => {
     switch (type) {
@@ -197,10 +235,14 @@ const ProfilePage = () => {
       <button
         className="settings-button"
         onClick={() => {
-          trackEvent(userId, 'settings_clicked', {
-            category: 'Profile',
-            label: `User ${userId}`
-          });
+          if (user?.id) {
+            trackEvent(userId, 'settings_clicked', {
+              category: 'Profile',
+              label: `User ${userId}`
+            }, user).catch((error) => {
+              console.error('Failed to track settings_clicked:', error);
+            });
+          }
           navigate("/setting");
         }}
       >
@@ -243,10 +285,14 @@ const ProfilePage = () => {
             <button
               className="edit-button"
               onClick={() => {
-                trackEvent(userId, 'edit_avatar_clicked', {
-                  category: 'Profile',
-                  label: `User ${userId}`
-                });
+                if (user?.id) {
+                  trackEvent(userId, 'edit_avatar_clicked', {
+                    category: 'Profile',
+                    label: `User ${userId}`
+                  }, user).catch((error) => {
+                    console.error('Failed to track edit_avatar_clicked:', error);
+                  });
+                }
                 navigate("/profile/avatar");
               }}
             >
@@ -291,10 +337,14 @@ const ProfilePage = () => {
           <button
             className="view-all-button"
             onClick={() => {
-              trackEvent(userId, 'view_all_achievements_clicked', {
-                category: 'Profile',
-                label: `User ${userId}`
-              });
+              if (user?.id) {
+                trackEvent(userId, 'view_all_achievements_clicked', {
+                  category: 'Profile',
+                  label: `User ${userId}`
+                }, user).catch((error) => {
+                  console.error('Failed to track view_all_achievements_clicked:', error);
+                });
+              }
               navigate("/achievements");
             }}
           >
@@ -330,10 +380,14 @@ const ProfilePage = () => {
           <button
             className="view-all-button"
             onClick={() => {
-              trackEvent(userId, 'view_all_progress_clicked', {
-                category: 'Profile',
-                label: `User ${userId}`
-              });
+              if (user?.id) {
+                trackEvent(userId, 'view_all_progress_clicked', {
+                  category: 'Profile',
+                  label: `User ${userId}`
+                }, user).catch((error) => {
+                  console.error('Failed to track view_all_progress_clicked:', error);
+                });
+              }
               navigate(`/progress-report/${userId}`);
             }}
           >

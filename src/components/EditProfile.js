@@ -23,15 +23,17 @@ const EditProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!user) {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
       navigate("/login");
       return;
     }
 
-    // Track page view
     trackEvent(user.id, 'pageview', { 
       page: '/edit-profile',
       category: 'Navigation'
+    }, user).catch((error) => {
+      console.error('Failed to track pageview:', error);
     });
 
     setFormData({
@@ -51,17 +53,17 @@ const EditProfile = () => {
       [name]: value
     }));
     
-    // Track field edits (except password fields for security)
     if (user?.id && value && !name.includes('Password')) {
       trackEvent(user.id, 'profile_field_edit', {
         category: 'Profile',
         label: `Editing ${name}`,
         field: name,
         value_length: value.length
+      }, user).catch((error) => {
+        console.error('Failed to track profile_field_edit:', error);
       });
     }
 
-    // Clear error when user types
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -100,20 +102,29 @@ const EditProfile = () => {
     
     setErrors(newErrors);
     
-    // Track validation result
-    trackEvent(user.id, 'profile_validation', {
-      category: 'Profile',
-      label: 'Form Validation',
-      is_valid: Object.keys(newErrors).length === 0,
-      error_count: Object.keys(newErrors).length,
-      has_password_change: Boolean(formData.currentPassword)
-    });
+    if (user?.id) {
+      trackEvent(user.id, 'profile_validation', {
+        category: 'Profile',
+        label: 'Form Validation',
+        is_valid: Object.keys(newErrors).length === 0,
+        error_count: Object.keys(newErrors).length,
+        has_password_change: Boolean(formData.currentPassword)
+      }, user).catch((error) => {
+        console.error('Failed to track profile_validation:', error);
+      });
+    }
     
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     if (!validateForm()) return;
     
     setIsLoading(true);
@@ -127,29 +138,29 @@ const EditProfile = () => {
         parentEmail: formData.parentEmail,
       };
       
-      // Track profile update attempt
       trackEvent(user.id, 'profile_update_attempt', {
         category: 'Profile',
         label: 'Profile Update Started',
         fields_updated: Object.keys(payload).filter(k => payload[k]).join(','),
         has_password_change: Boolean(formData.currentPassword)
+      }, user).catch((error) => {
+        console.error('Failed to track profile_update_attempt:', error);
       });
 
-      // Only include password fields if they're being changed
       if (formData.currentPassword) {
         payload.currentPassword = formData.currentPassword;
         payload.newPassword = formData.newPassword;
         
-        // Track password change attempt
         trackEvent(user.id, 'password_change_attempt', {
           category: 'Security',
           label: 'Password Change Attempt'
+        }, user).catch((error) => {
+          console.error('Failed to track password_change_attempt:', error);
         });
       }
       
       const response = await apiClient.put('/api/users/Editprofile', payload);
       
-      // Update auth context with new user data
       updateUser({
         ...user,
         name: formData.name,
@@ -159,19 +170,21 @@ const EditProfile = () => {
       
       setSuccessMessage(t('editProfile.successMessage'));
       
-      // Track successful update
       trackEvent(user.id, 'profile_update_success', {
         category: 'Profile',
         label: 'Profile Updated Successfully',
         fields_updated: Object.keys(payload).filter(k => payload[k]).join(','),
         has_password_change: Boolean(formData.currentPassword)
+      }, user).catch((error) => {
+        console.error('Failed to track profile_update_success:', error);
       });
 
       if (formData.currentPassword) {
-        // Track successful password change
         trackEvent(user.id, 'password_change_success', {
           category: 'Security',
           label: 'Password Changed Successfully'
+        }, user).catch((error) => {
+          console.error('Failed to track password_change_success:', error);
         });
       }
 
@@ -180,7 +193,6 @@ const EditProfile = () => {
         navigate('/profile');
       }, 1000);
       
-      // Clear password fields if update was successful
       setFormData(prev => ({
         ...prev,
         currentPassword: '',
@@ -190,23 +202,25 @@ const EditProfile = () => {
     } catch (error) {
       console.error('Update failed:', error);
       
-      // Track update failure
       trackEvent(user.id, 'profile_update_failed', {
         category: 'Error',
         label: 'Profile Update Failed',
         error: error.response?.data?.error || error.message,
         status_code: error.response?.status,
         has_password_change: Boolean(formData.currentPassword)
+      }, user).catch((error) => {
+        console.error('Failed to track profile_update_failed:', error);
       });
 
       if (error.response) {
         if (error.response.status === 401) {
           setErrors({ currentPassword: t('editProfile.errors.incorrectPassword') });
           
-          // Track password change failure
           trackEvent(user.id, 'password_change_failed', {
             category: 'Security',
             label: 'Incorrect Current Password'
+          }, user).catch((error) => {
+            console.error('Failed to track password_change_failed:', error);
           });
         } else if (error.response.data?.error) {
           setErrors({ form: error.response.data.error });
@@ -222,10 +236,17 @@ const EditProfile = () => {
   };
 
   const handleCancel = () => {
-    // Track cancel action
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     trackEvent(user.id, 'profile_edit_cancelled', {
       category: 'Navigation',
       label: 'Profile Edit Cancelled'
+    }, user).catch((error) => {
+      console.error('Failed to track profile_edit_cancelled:', error);
     });
     navigate('/setting');
   };

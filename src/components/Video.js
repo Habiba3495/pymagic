@@ -23,8 +23,15 @@ const Video = () => {
 
   useEffect(() => {
     ReactGA.send({ hitType: 'pageview', page: `/video/${unitId}/${lessonId}` });
+
     const fetchLessonData = async () => {
       try {
+        if (!user || !userId) {
+          console.log('No user, skipping fetch lesson data');
+          setLoading(false);
+          return;
+        }
+
         const response = await apiClient.get(`/api/lessons/${lessonId}`);
         if (response.status !== 200) {
           throw new Error(`Failed to fetch lesson data: ${response.status} ${response.statusText}`);
@@ -37,74 +44,117 @@ const Video = () => {
         setLoading(false);
       }
     };
+
     fetchLessonData();
-  }, [lessonId, unitId]);
+  }, [lessonId, unitId, user, userId]);
 
   useEffect(() => {
     const startTime = Date.now();
     return () => {
-      if (!userId) return; // Skip if no userId
+      if (!user || !userId) {
+        console.log('No user, skipping time_spent tracking');
+        return;
+      }
+
       const duration = Math.floor((Date.now() - startTime) / 1000);
       trackEvent(userId, 'time_spent', {
         category: 'Video',
         label: `Unit ${unitId} - Lesson ${lessonId}`,
-      }, duration);
+      }, user, duration).catch((error) => {
+        console.error('Failed to track time_spent:', error);
+      });
     };
-  }, [unitId, lessonId, userId]);
+  }, [unitId, lessonId, user, userId]);
 
   useEffect(() => {
     let timeout;
     const resetTimeout = () => {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
-        if (!userId) return; // Skip if no userId
+        if (!user || !userId) {
+          console.log('No user, skipping inactive tracking');
+          return;
+        }
+
         trackEvent(userId, 'inactive', {
           category: 'Video',
           label: `Unit ${unitId} - Lesson ${lessonId}`,
-        }, 30);
+        }, user, 30).catch((error) => {
+          console.error('Failed to track inactive:', error);
+        });
       }, 30000);
     };
+
     window.addEventListener('mousemove', resetTimeout);
     window.addEventListener('keydown', resetTimeout);
     resetTimeout();
+
     return () => {
       clearTimeout(timeout);
       window.removeEventListener('mousemove', resetTimeout);
       window.removeEventListener('keydown', resetTimeout);
     };
-  }, [unitId, lessonId, userId]);
+  }, [unitId, lessonId, user, userId]);
 
   const handlePlay = () => {
-    if (!userId) return; // Skip if no userId
+    if (!user || !userId) {
+      console.log('No user, skipping video_started tracking');
+      return;
+    }
+
     trackEvent(userId, 'video_started', {
       category: 'Video',
       label: `Unit ${unitId} - Lesson ${lessonId}`,
+    }, user).catch((error) => {
+      console.error('Failed to track video_started:', error);
     });
   };
 
   const handleVideoEnd = () => {
-    if (!userId) return; // Skip if no userId
+    if (!user || !userId) {
+      console.log('No user, skipping video_completed tracking');
+      return;
+    }
+
     trackEvent(userId, 'video_completed', {
       category: 'Video',
       label: `Unit ${unitId} - Lesson ${lessonId}`,
+    }, user).catch((error) => {
+      console.error('Failed to track video_completed:', error);
     });
   };
 
   const handleExit = () => {
-    if (!userId) return; // Skip if no userId
+    if (!user || !userId) {
+      console.log('No user, skipping exit_video tracking');
+      navigate("/lessons");
+      return;
+    }
+
     trackEvent(userId, 'exit_video', {
       category: 'Video',
       label: `Unit ${unitId} - Lesson ${lessonId}`,
+    }, user).catch((error) => {
+      console.error('Failed to track exit_video:', error);
     });
+
     navigate("/lessons");
   };
 
   const handleStartQuiz = () => {
-    if (!userId) return; // Skip if no userId
+    if (!user || !userId) {
+      console.log('No user, skipping start_quiz_clicked tracking');
+      navigate(`/quiz/${unitId}/${lessonId}`);
+      return;
+    }
+
     trackEvent(userId, 'start_quiz_clicked', {
       category: 'Video',
       label: `Unit ${unitId} - Lesson ${lessonId}`,
+    }, user).catch((error) => {
+      console.error('Failed to track start_quiz_clicked:', error);
     });
+
     navigate(`/quiz/${unitId}/${lessonId}`);
   };
 
@@ -120,24 +170,14 @@ const Video = () => {
         </h1>
 
         <div className="video-container">
-          {/* {loading ? (
-            <p>Loading video...</p>
+          {loading ? (
+            <Loading />
           ) : error ? (
             <>
               <p>Error: {error}</p>
-              <video controls onPlay={handlePlay} onEnded={handleVideoEnd}>
-                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </> */}
-            {loading ? (
-              <Loading />
-             ) : error ? (
-             <>
-              <p>Error: {error}</p>
               <PyMagicRunner />
-               </>
-              ) : lessonData?.video_url ? (
+            </>
+          ) : lessonData?.video_url ? (
             <video controls onPlay={handlePlay} onEnded={handleVideoEnd}>
               <source
                 src={`${apiClient.defaults.baseURL}${lessonData.video_url}`}

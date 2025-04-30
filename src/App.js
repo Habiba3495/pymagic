@@ -31,9 +31,8 @@ import RegisterFailed from "./components/RegisterFailed";
 
 ReactGA.initialize('G-W0C0ZKC21L', { debug_mode: true });
 
-// مكون وسيط للتعامل مع التتبع داخل Router
 const AppContent = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const { i18n } = useTranslation();
   const location = useLocation();
 
@@ -41,6 +40,14 @@ const AppContent = () => {
     document.documentElement.setAttribute("dir", i18n.language === "ar" ? "rtl" : "ltr");
     document.documentElement.setAttribute("lang", i18n.language);
   }, [i18n.language]);
+
+  useEffect(() => {
+    if (user?.id) {
+      ReactGA.set({ userId: user.id });
+    } else {
+      ReactGA.set({ userId: null });
+    }
+  }, [user]);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
@@ -54,6 +61,10 @@ const AppContent = () => {
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [user]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   const noTrackingPages = ['/', '/login', '/register', '/registerfailed'];
   const shouldTrack = user && user.id && !noTrackingPages.includes(location.pathname.toLowerCase());
