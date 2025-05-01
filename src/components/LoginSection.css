@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
 
-.Lheader {
+.Lheader{
   display: flex;
   justify-content: flex-start;
   padding: 10px 20px;
@@ -18,7 +18,7 @@
     align-items: center;
     height: 90vh;
     display: flex;
-    flex-direction: column;
+    flex-direction: column;  
   }
 
   .Lform-container {
@@ -65,6 +65,7 @@
     cursor: pointer;
     font-weight: bold;
     margin-left: 30px;
+    margin-bottom: 7px;
   }
   
   [dir="rtl"] .Lbutton {
@@ -81,7 +82,7 @@
     margin: 10px 0;
     display: flex;
     align-items: center;
-    gap: 185px;
+  
   }
   
   [dir="rtl"] .remember-me{
@@ -149,4 +150,19 @@
   input.error {
     border-color: red;
   }
+
+  .forgot-password-link{
+    color: white;
+    text-decoration: none;
+  }
   
+  .forget_rememberMe{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+  }
+
+  .back-to-login{
+    text-align: center;
+  }

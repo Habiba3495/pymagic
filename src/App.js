@@ -21,6 +21,8 @@ import AchievementsPage from "./components/AchievementsPage";
 import AvatarCustomization from "./components/AvatarCustomization";
 import Setting from "./components/setting";
 import EditProfile from "./components/EditProfile";
+import VerifyEmail from "./components/VerifyEmail";
+import ResetPassword from "./components/ResetPassword";
 import "./i18n";
 import ReactGA from 'react-ga4';
 import TrackPageViews from './components/TrackPageViews';
@@ -66,8 +68,9 @@ const AppContent = () => {
     return <Loading />;
   }
 
-  const noTrackingPages = ['/', '/login', '/register', '/registerfailed'];
-  const shouldTrack = user && user.id && !noTrackingPages.includes(location.pathname.toLowerCase());
+  const noTrackingPages = ['/', '/login', '/register', '/registerfailed', '/verify-email', '/reset-password'];
+const shouldTrack = user && user.id && !noTrackingPages.includes(location.pathname.toLowerCase());
+  console.log('Current Path:', location.pathname, 'Should Track:', shouldTrack);
 
   return (
     <>
@@ -94,6 +97,14 @@ const AppContent = () => {
         <Route
           path="/login"
           element={user ? <Navigate to="/lessons" replace /> : <LoginPage />}
+        />
+        <Route
+          path="/verify-email"
+          element={user ? <Navigate to="/lessons" replace /> : <VerifyEmail />}
+        />
+        <Route
+          path="/reset-password"
+          element={user ? <Navigate to="/lessons" replace /> : <ResetPassword />}
         />
         {user ? (
           <>
