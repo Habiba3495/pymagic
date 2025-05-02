@@ -295,7 +295,7 @@ const LoginSection = () => {
               </button>
 
               {forgotMessage && (
-                <div className="success-message">
+                <div className="RRsuccess-message">
                   {forgotMessage}
                 </div>
               )}
