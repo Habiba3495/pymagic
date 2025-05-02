@@ -57,11 +57,11 @@ const ResetPassword = () => {
 
   return (
     <>
-      <header className="Rheader">
+      <header className="RRheader">
         <img src={logo} alt="PyMagic Logo" className="logo" />
       </header>
-      <section className="ResetPassword-section">
-        <div className="Rform-container">
+      <section className="RResetPassword-section">
+        <div className="RRform-container">
           <form onSubmit={handleSubmit} className="Rform">
             <h2>{t("resetPassword.title")}</h2>
 
@@ -74,19 +74,19 @@ const ResetPassword = () => {
               required
             />
 
-            <button className="Ressetbutton" type="submit">
+            <button className="RRessetbutton" type="submit">
               {t("resetPassword.submitButton")}
             </button>
           </form>
 
           {message && (
-            <div className="Rsuccess-message">
+            <div className="RRsuccess-message">
               {message}
             </div>
           )}
 
           {error && (
-            <div className="Rerror-message">
+            <div className="RRerror-message">
               {error}
             </div>
           )}

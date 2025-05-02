@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import Lsidebar from "./Sidebar.js";
+
+import React, { useEffect, useState, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom"; // أضفنا useLocation
+import Sidebar from "./Sidebar";
 import "./LessonSection.css";
 import unitquizicon from "../components/images/unitquizicon.svg";
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
 import trackEvent from '../utils/trackEvent';
-import PyMagicRunner from "./Pymagic_runnergame.js";
 import Loading from "./Loading.js";
 import { useTranslation } from "react-i18next";
 
 const LessonSection = () => {
   const { user } = useAuth();
+  const location = useLocation(); // استخدام useLocation للحصول على المسار
   const [lessonData, setLessonData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,26 +20,16 @@ const LessonSection = () => {
   const [accessDeniedUnits, setAccessDeniedUnits] = useState(new Set());
   const [nextSectionName, setNextSectionName] = useState("");
   const [prevSectionName, setPrevSectionName] = useState("");
-  const location = useLocation();
   const navigate = useNavigate();
   const [sectionId, setSectionId] = useState(user?.lastSectionId || 1);
   const [popupVisible, setPopupVisible] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
   const { t } = useTranslation();
-  const [hasTrackedPageview, setHasTrackedPageview] = useState(false); // لتتبع Pageview
+  const lastSectionId = useRef(null);
 
   useEffect(() => {
-    // التأكد من وجود user قبل استدعاء trackEvent
-    if (user && user.id && !hasTrackedPageview) {
-      trackEvent(user.id, 'pageview', {
-        page: '/lessons',
-        category: 'Navigation'
-      }, user).catch((error) => {
-        console.error('Failed to track pageview:', error);
-      });
-      setHasTrackedPageview(true);
-    } else if (!user) {
-      console.log('No user, skipping pageview tracking');
+    if (!user || !user.id) {
+      console.log('No user, skipping fetch data');
       navigate("/login");
       return;
     }
@@ -47,12 +38,6 @@ const LessonSection = () => {
       try {
         setLoading(true);
 
-        if (!user || !user.id) {
-          console.log('No user, skipping fetch data');
-          setLoading(false);
-          return;
-        }
-
         const response = await apiClient.get(`/sections/${sectionId}`);
         if (response.status !== 200) throw new Error("Failed to fetch section data");
 
@@ -60,9 +45,39 @@ const LessonSection = () => {
         setLessonData(sectionData);
         setPrevSectionName(sectionData.prevSectionName || "");
         setNextSectionName(sectionData.nextSectionName || "");
+
+        // فحص لو الـ event اتبعت قبل كده في الـ session
+        const eventKey = `lesson_data_loaded-${user.id}-${sectionId}`;
+        const trackedEvents = JSON.parse(sessionStorage.getItem('trackedEvents') || '{}');
+
+        if (
+          lastSectionId.current !== sectionId &&
+          sectionData.units?.length > 0 &&
+          !trackedEvents[eventKey]
+        ) {
+          console.log('Sending lesson_data_loaded event for sectionId:', sectionId);
+          await trackEvent(user.id, 'lesson_data_loaded', {
+            category: 'Lessons',
+            label: 'Lesson Data Loaded',
+            section_id: sectionId,
+            unit_count: sectionData.units.length,
+            lesson_count: sectionData.units.reduce(
+              (sum, unit) => sum + (unit.lessons?.length || 0),
+              0
+            ),
+          }, user).catch((error) => {
+            console.error('Failed to track lesson_data_loaded:', error);
+          });
+
+          // تحديث sessionStorage
+          trackedEvents[eventKey] = true;
+          sessionStorage.setItem('trackedEvents', JSON.stringify(trackedEvents));
+          lastSectionId.current = sectionId;
+        }
       } catch (error) {
         setError(error.message);
         if (user && user.id) {
+          console.log('Sending lesson_data_error event');
           await trackEvent(user.id, 'lesson_data_error', {
             category: 'Error',
             label: 'Lesson Data Error',
@@ -70,8 +85,6 @@ const LessonSection = () => {
           }, user).catch((error) => {
             console.error('Failed to track lesson_data_error:', error);
           });
-        } else {
-          console.log('No user, skipping lesson_data_error tracking');
         }
       } finally {
         setLoading(false);
@@ -79,7 +92,7 @@ const LessonSection = () => {
     };
 
     fetchData();
-  }, [user, sectionId, navigate]);
+  }, [user.id, sectionId, navigate, t]);
 
   const checkLessonAccess = async (lessonId) => {
     try {
@@ -98,6 +111,7 @@ const LessonSection = () => {
       console.log(`Lesson access error: lesson_id=${lessonId}, message=${error.message}`);
       setAccessDeniedLessons((prev) => new Set(prev).add(lessonId));
       if (user && user.id) {
+        console.log('Sending lesson_access_denied event');
         await trackEvent(user.id, 'lesson_access_denied', {
           category: 'Access',
           label: 'Lesson Access Denied',
@@ -131,6 +145,7 @@ const LessonSection = () => {
     } catch (error) {
       setAccessDeniedUnits((prev) => new Set(prev).add(unitId));
       if (user && user.id) {
+        console.log('Sending unit_quiz_access_denied event');
         await trackEvent(user.id, 'unit_quiz_access_denied', {
           category: 'Access',
           label: 'Unit Quiz Access Denied',
@@ -153,6 +168,7 @@ const LessonSection = () => {
       return;
     }
 
+    console.log('Sending lesson_clicked event');
     await trackEvent(user.id, 'lesson_clicked', {
       category: 'Navigation',
       label: 'Lesson Clicked',
@@ -165,6 +181,7 @@ const LessonSection = () => {
 
     const hasAccess = await checkLessonAccess(lessonId);
     if (hasAccess) {
+      console.log('Sending lesson_accessed event');
       await trackEvent(user.id, 'lesson_accessed', {
         category: 'Lesson',
         label: 'Lesson Accessed',
@@ -184,6 +201,7 @@ const LessonSection = () => {
       return;
     }
 
+    console.log('Sending unit_quiz_clicked event');
     await trackEvent(user.id, 'unit_quiz_clicked', {
       category: 'Navigation',
       label: 'Unit Quiz Clicked',
@@ -194,6 +212,7 @@ const LessonSection = () => {
 
     const hasAccess = await checkUnitQuizAccess(unitId);
     if (hasAccess) {
+      console.log('Sending unit_quiz_accessed event');
       await trackEvent(user.id, 'unit_quiz_accessed', {
         category: 'Quiz',
         label: 'Unit Quiz Accessed',
@@ -209,6 +228,7 @@ const LessonSection = () => {
     const nextId = sectionId + 1;
     setSectionId(nextId);
     if (user && user.id) {
+      console.log('Sending next_section_clicked event');
       trackEvent(user.id, 'next_section_clicked', {
         category: 'Navigation',
         label: 'Next Section',
@@ -223,6 +243,7 @@ const LessonSection = () => {
     const prevId = sectionId - 1;
     setSectionId(prevId);
     if (user && user.id) {
+      console.log('Sending previous_section_clicked event');
       trackEvent(user.id, 'previous_section_clicked', {
         category: 'Navigation',
         label: 'Previous Section',
@@ -234,11 +255,11 @@ const LessonSection = () => {
   };
 
   if (loading) return <Loading />;
-  if (error) return <PyMagicRunner />;
+  if (error) return <div className="error-message">{t("error")}: {error}</div>;
 
   return (
     <div className="lesson-container-div">
-      <Lsidebar />
+      <Sidebar />
       <div className="l-content">
         {lessonData.units.map((unit) => {
           let globalIndex = 0;
@@ -365,3 +386,4 @@ const generateColor = (id) => {
 };
 
 export default LessonSection;
+

@@ -31,7 +31,10 @@
     "passwordMismatch": "كلمات السر مش متطابقة",
      "emailExists": "الإيميل ده متسجل قبل كده",
      "parentEmailExists": "إيميل ولي الأمر ده متسجل قبل كده",
-     "registrationSuccess": "تم التسجيل بنجاح"
+     "registrationSuccess": "تم التسجيل بنجاح",
+     "passwordTooShort": "كلمة المرور يجب ألا تقل عن 10 أحرف",
+     "weakPassword": "كلمة المرور يجب أن تحتوي على حرف كبير، حرف صغير، رقم، ورمز"
+
 
   },
 

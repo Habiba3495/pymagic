@@ -64,11 +64,24 @@ const UnitQuiz = () => {
         if (response.status !== 200) {
           throw new Error("Failed to fetch questions");
         }
-        const data = response.data;
-        setQuestions(data.questions || []);
+        if (response.data.success) {
+          setQuestions(response.data.questions || []);
+          if (!response.data.questions || response.data.questions.length === 0) {
+            console.log(`No questions available for unit ${unitId}`);
+          }
+        } else {
+          throw new Error(response.data.message || "Failed to fetch questions");
+        }
       } catch (error) {
         console.error("Error fetching unit quiz questions:", error);
         setQuestions([]);
+        trackEvent(userId, 'fetch_unit_quiz_questions_error', {
+          category: 'Error',
+          label: 'Unit Quiz Questions Fetch Error',
+          error: error.message,
+        }, user).catch((trackError) => {
+          console.error('Failed to track fetch_unit_quiz_questions_error:', trackError);
+        });
       } finally {
         setIsLoading(false);
       }
@@ -142,11 +155,6 @@ const UnitQuiz = () => {
     setHint("");
     setMotivationMessage("");
 
-    if (!user || !userId) {
-      console.log('No user, skipping option_clicked tracking');
-      return;
-    }
-
     trackEvent(userId, 'option_clicked', {
       category: 'UnitQuiz',
       label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId}`,
@@ -207,11 +215,6 @@ const UnitQuiz = () => {
 
     setMotivationMessage(isCorrectAnswer ? "Correct! Well done!" : "Incorrect. Try again!");
 
-    if (!user || !userId) {
-      console.log('No user, skipping answer tracking');
-      return;
-    }
-
     trackEvent(userId, isCorrectAnswer ? 'answer_correct' : 'answer_incorrect', {
       category: 'UnitQuiz',
       label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId}`
@@ -222,14 +225,12 @@ const UnitQuiz = () => {
 
   const handleNextQuestion = async () => {
     if (currentQuestionIndex < questions.length - 1) {
-      if (user && userId) {
-        trackEvent(userId, 'next_question', {
-          category: 'UnitQuiz',
-          label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId}`
-        }, user).catch((error) => {
-          console.error('Failed to track next_question:', error);
-        });
-      }
+      trackEvent(userId, 'next_question', {
+        category: 'UnitQuiz',
+        label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId}`
+      }, user).catch((error) => {
+        console.error('Failed to track next_question:', error);
+      });
 
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedOption(null);
@@ -242,20 +243,13 @@ const UnitQuiz = () => {
       localStorage.setItem("unitQuizAnswers", JSON.stringify(validAnswers));
 
       const score = validAnswers.filter(a => a.is_correct).length / validAnswers.length * 100;
-      if (user && userId) {
-        trackEvent(userId, 'unit_quiz_completed', {
-          category: 'UnitQuiz',
-          label: `Unit ${unitId}`,
-          value: Math.round(score)
-        }, user).catch((error) => {
-          console.error('Failed to track unit_quiz_completed:', error);
-        });
-      }
-
-      if (!user || !userId) {
-        navigate("/login");
-        return;
-      }
+      trackEvent(userId, 'unit_quiz_completed', {
+        category: 'UnitQuiz',
+        label: `Unit ${unitId}`,
+        value: Math.round(score)
+      }, user).catch((error) => {
+        console.error('Failed to track unit_quiz_completed:', error);
+      });
 
       try {
         const response = await apiClient.post("/api/quiz/unit/submit", {
@@ -287,11 +281,6 @@ const UnitQuiz = () => {
 
   const handleHintClick = () => {
     setHint(questions[currentQuestionIndex].hint);
-    if (!user || !userId) {
-      console.log('No user, skipping hint_used tracking');
-      return;
-    }
-
     trackEvent(userId, 'hint_used', {
       category: 'UnitQuiz',
       label: `Question ${questions[currentQuestionIndex].id} - Unit ${unitId}`
@@ -301,12 +290,6 @@ const UnitQuiz = () => {
   };
 
   const handleExit = () => {
-    if (!user || !userId) {
-      console.log('No user, skipping exit_unit_quiz tracking');
-      navigate("/lessons");
-      return;
-    }
-
     trackEvent(userId, 'exit_unit_quiz', {
       category: 'UnitQuiz',
       label: `Unit ${unitId} - Question ${currentQuestionIndex + 1}`

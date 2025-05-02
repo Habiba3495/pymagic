@@ -30,7 +30,9 @@
     "passwordMismatch": "Passwords do not match",
     "emailExists": "Email already exist",
     "parentEmailExists": "Parent email already exist",
-    "registrationSuccess": "Registration successful"
+    "registrationSuccess": "Registration successful",
+    "passwordTooShort":"Password must be at least 10 characters",
+    "weakPassword":"Password must include an uppercase letter, lowercase letter, number, and symbol"
 
   },
 

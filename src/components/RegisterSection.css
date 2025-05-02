@@ -215,14 +215,24 @@ input::placeholder {
 }
 
 /* تصميم صندوق الخطأ */
-.error-box {
-  background-color: #ffe6e6; /* لون خلفية فاتح للأخطاء */
-  border: 1px solid red; /* حدود حمراء */
-  padding: 10px;
+/* .Rerror-box {
+  background-color: #ffe6e6; 
+  border: 1px solid red; 
+  padding: 2px;
   border-radius: 5px;
   max-width: 300px;
   width: 100%;
   text-align: center;
+} */
+.Rerror-box {
+  background-color: #ffe6e6;
+  border: 1px solid red;
+  padding: 2px;
+  border-radius: 5px;
+  /* max-width: 300px; */
+  width: 700px;
+  text-align: center;
+  margin-top: 70px;
 }
 
 /* تنسيق رسالة الخطأ */

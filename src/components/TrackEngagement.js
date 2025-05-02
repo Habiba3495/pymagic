@@ -1,84 +1,54 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
+import { debounce } from 'lodash';
 import trackEvent from '../utils/trackEvent';
 
 const TrackEngagement = ({ userId, user }) => {
-  const longSessionTimer = useRef(null);
+  const interactionCache = useRef(new Set());
 
-  // تتبع جلسة طويلة (long session)
+  // تتبع الجلسة الطويلة
   useEffect(() => {
-    longSessionTimer.current = setTimeout(() => {
-      if (!user || !userId) {
-        console.log('No user or userId, sending long session as anonymous');
-        trackEvent(null, 'long_session', {
-          category: 'Session',
-          action: 'long_session',
-          label: 'Over 60s',
-        }, null);
-        return;
-      }
-
-      trackEvent(userId, 'long_session', {
+    const timer = setTimeout(() => {
+      const eventData = {
         category: 'Session',
-        action: 'long_session',
-        label: 'Over 60s',
-      }, user);
-    }, 60000); // 1 minute
-
-    return () => {
-      if (longSessionTimer.current) {
-        clearTimeout(longSessionTimer.current);
+        label: 'Long Session (60s+)'
+      };
+      
+      if (!interactionCache.current.has('long_session')) {
+        trackEvent(userId, 'long_session', eventData, user);
+        interactionCache.current.add('long_session');
       }
-    };
+    }, 60000);
+
+    return () => clearTimeout(timer);
   }, [userId, user]);
 
-  // تتبع التفاعلات (click events)
+  // معالجة النقرات المثبّتة
+  const handleClick = useCallback(debounce((event) => {
+    const target = event.target.closest('[data-trackable]');
+    if (!target) return;
+
+    const eventData = {
+      category: target.dataset.category || 'General',
+      label: target.dataset.label || target.id || 'Unnamed Element',
+      path: window.location.pathname
+    };
+
+    const eventKey = `click-${eventData.category}-${eventData.label}`;
+    
+    if (!interactionCache.current.has(eventKey)) {
+      trackEvent(userId, 'click', eventData, user);
+      interactionCache.current.add(eventKey);
+      
+      setTimeout(() => {
+        interactionCache.current.delete(eventKey);
+      }, 5000);
+    }
+  }, 300), [userId, user]);
+
   useEffect(() => {
-    const handleClick = (event) => {
-      if (!user || !userId) {
-        console.log('No user or userId, sending click event as anonymous');
-        const target = event.target;
-        let category = 'Unknown';
-        let label = 'Unknown';
-
-        if (target.tagName === 'BUTTON') {
-          category = 'Button';
-          label = target.textContent || target.id || 'Unnamed Button';
-        } else if (target.tagName === 'A') {
-          category = 'Link';
-          label = target.textContent || target.href || 'Unnamed Link';
-        } else if (target.tagName === 'INPUT' || target.tagName === 'SELECT') {
-          category = 'Form';
-          label = target.name || target.id || 'Unnamed Form Element';
-        }
-
-        trackEvent(null, 'click', { category, label }, null);
-        return;
-      }
-
-      const target = event.target;
-      let category = 'Unknown';
-      let label = 'Unknown';
-
-      if (target.tagName === 'BUTTON') {
-        category = 'Button';
-        label = target.textContent || target.id || 'Unnamed Button';
-      } else if (target.tagName === 'A') {
-        category = 'Link';
-        label = target.textContent || target.href || 'Unnamed Link';
-      } else if (target.tagName === 'INPUT' || target.tagName === 'SELECT') {
-        category = 'Form';
-        label = target.name || target.id || 'Unnamed Form Element';
-      }
-
-      trackEvent(userId, 'click', { category, label }, user);
-    };
-
     document.addEventListener('click', handleClick);
-
-    return () => {
-      document.removeEventListener('click', handleClick);
-    };
-  }, [userId, user]);
+    return () => document.removeEventListener('click', handleClick);
+  }, [handleClick]);
 
   return null;
 };

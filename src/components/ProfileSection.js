@@ -76,13 +76,27 @@ const ProfilePage = () => {
       try {
         const response = await apiClient.get(`/api/quiz/progress/${userId}`);
         if (response.status !== 200) throw new Error(t("profile.fetchProgressError"));
-        if (response.data.success && response.data.progress.length > 0) {
-          setProgressData(response.data.progress.slice(0, 3));
+        if (response.data.success) {
+          // لو مافيش بيانات، نسيب progressData فاضي بدل ما نرمي error
+          setProgressData(response.data.progress?.slice(0, 3) || []);
+          if (response.data.progress?.length > 0) {
+            // تبع الـ event بس لو فيه بيانات فعلاً
+            trackEvent(userId, 'progress_data_loaded', {
+              category: 'Progress',
+              label: 'Progress Data Loaded',
+              progress_count: response.data.progress.length,
+            }, user).catch((error) => {
+              console.error('Failed to track progress_data_loaded:', error);
+            });
+          } else {
+            console.log('No progress data available for user:', userId);
+          }
         } else {
-          throw new Error(t("profile.noProgressYet"));
+          throw new Error(response.data.message || t("profile.noProgressYet"));
         }
       } catch (error) {
         console.error("Error fetching progress data:", error);
+        setProgressData([]);
         trackEvent(userId, 'fetch_progress_error', {
           category: 'Error',
           label: 'Progress Data Fetch Error',
@@ -104,6 +118,7 @@ const ProfilePage = () => {
         }
       } catch (error) {
         console.error("Error fetching achievements:", error);
+        setAchievements([]);
         trackEvent(userId, 'fetch_achievements_error', {
           category: 'Error',
           label: 'Achievements Fetch Error',

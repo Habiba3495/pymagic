@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from "react";
-import Lsidebar from "./Sidebar";
+import React, { useState, useEffect, useRef } from "react";
+import Sidebar from "./Sidebar"; // تأكدي إن الاسم والمسار صح
 import "./FlashcardSection.css";
 import cardBack from "./images/Flashcard_black.svg";
 import cardFront from "./images/Flashcard_color.svg";
 import apiClient from "../services";
 import { useAuth } from "../context/AuthContext";
 import trackEvent from "../utils/trackEvent";
-import PyMagicRunner from "./Pymagic_runnergame";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate } from "react-router-dom";
-import Loading from "./Loading.js"; 
+import { useNavigate } from "react-router-dom";
+import Loading from "./Loading.js";
 
 const FlashCardSection = () => {
   const { user } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const location = useLocation();
   const [flashcardData, setFlashcardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,6 +29,8 @@ const FlashCardSection = () => {
   const [selectedCard, setSelectedCard] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
+  const lastSectionId = useRef(null);
+
   useEffect(() => {
     if (!user || !user.id) {
       console.log('No user, redirecting to login');
@@ -41,13 +41,6 @@ const FlashCardSection = () => {
 
   useEffect(() => {
     if (!user || !user.id) return;
-
-    trackEvent(user.id, "pageview", {
-      page: "/flashcards",
-      category: "Navigation",
-    }, user).catch((error) => {
-      console.error('Failed to track pageview:', error);
-    });
 
     const fetchData = async () => {
       try {
@@ -75,21 +68,38 @@ const FlashCardSection = () => {
         setPrevSectionName(data.prevSectionName || "");
         setNextSectionName(data.nextSectionName || "");
 
-        trackEvent(user.id, "flashcards_loaded", {
-          category: "Flashcards",
-          label: "Flashcards Data Loaded",
-          section_count: data.sectionCount || 1,
-          unit_count: data.units.length,
-          flashcard_count: data.units.reduce(
-            (sum, unit) => sum + unit.lessons.length,
-            0
-          ),
-        }, user).catch((error) => {
-          console.error('Failed to track flashcards_loaded:', error);
-        });
+        // فحص لو الـ event اتبعت قبل كده في الـ session
+        const eventKey = `flashcards_loaded-${user.id}-${sectionId}`;
+        const trackedEvents = JSON.parse(sessionStorage.getItem('trackedEvents') || '{}');
+
+        if (
+          lastSectionId.current !== sectionId &&
+          data.units?.length > 0 &&
+          !trackedEvents[eventKey]
+        ) {
+          console.log('Sending flashcards_loaded event for sectionId:', sectionId);
+          await trackEvent(user.id, "flashcards_loaded", {
+            category: "Flashcards",
+            label: "Flashcards Data Loaded",
+            section_id: sectionId,
+            unit_count: data.units.length,
+            flashcard_count: data.units.reduce(
+              (sum, unit) => sum + (unit.lessons?.length || 0),
+              0
+            ),
+          }, user).catch((error) => {
+            console.error('Failed to track flashcards_loaded:', error);
+          });
+
+          // تحديث sessionStorage
+          trackedEvents[eventKey] = true;
+          sessionStorage.setItem('trackedEvents', JSON.stringify(trackedEvents));
+          lastSectionId.current = sectionId;
+        }
       } catch (error) {
         setError(error.message || t("flashcard.fetchError"));
-        trackEvent(user.id, "flashcards_error", {
+        console.log('Sending flashcards_error event');
+        await trackEvent(user.id, "flashcards_error", {
           category: "Error",
           label: "Flashcards Data Error",
           error: error.message,
@@ -106,7 +116,7 @@ const FlashCardSection = () => {
     };
 
     fetchData();
-  }, [user, sectionId, navigate, t]);
+  }, [user.id, sectionId, navigate, t]);
 
   const handleFlashcardClick = async (unitId, flashcard) => {
     if (!user || !user.id) {
@@ -115,7 +125,8 @@ const FlashCardSection = () => {
       return;
     }
 
-    trackEvent(user.id, "flashcard_clicked", {
+    console.log('Sending flashcard_clicked event');
+    await trackEvent(user.id, "flashcard_clicked", {
       category: "Flashcards",
       label: "Flashcard Clicked",
       unit_id: unitId,
@@ -136,7 +147,8 @@ const FlashCardSection = () => {
         setAccessDeniedFlashcards((prev) => new Set(prev).add(flashcard.lessonId));
         setPopupMessage(data.message || t("flashcard.accessDenied"));
         setPopupVisible(true);
-        trackEvent(user.id, "flashcard_access_denied", {
+        console.log('Sending flashcard_access_denied event');
+        await trackEvent(user.id, "flashcard_access_denied", {
           category: "Access",
           label: "Flashcard Access Denied",
           unit_id: unitId,
@@ -150,7 +162,8 @@ const FlashCardSection = () => {
 
       setSelectedCard({ unitId, flashcard });
       setModalOpen(true);
-      trackEvent(user.id, "flashcard_accessed", {
+      console.log('Sending flashcard_accessed event');
+      await trackEvent(user.id, "flashcard_accessed", {
         category: "Flashcards",
         label: "Flashcard Viewed",
         unit_id: unitId,
@@ -163,7 +176,8 @@ const FlashCardSection = () => {
       console.error("Error checking flashcard access:", error);
       setPopupMessage(error.message || t("flashcard.accessError"));
       setPopupVisible(true);
-      trackEvent(user.id, "flashcard_access_error", {
+      console.log('Sending flashcard_access_error event');
+      await trackEvent(user.id, "flashcard_access_error", {
         category: "Error",
         label: "Access Check Error",
         error: error.message,
@@ -181,6 +195,7 @@ const FlashCardSection = () => {
     }
 
     if (selectedCard) {
+      console.log('Sending flashcard_modal_closed event');
       trackEvent(user.id, "flashcard_modal_closed", {
         category: "Flashcards",
         label: "Flashcard Modal Closed",
@@ -203,6 +218,7 @@ const FlashCardSection = () => {
 
     setPopupVisible(false);
     setPopupMessage("");
+    console.log('Sending popup_closed event');
     trackEvent(user.id, "popup_closed", {
       category: "UI",
       label: "Access Denied Popup Closed",
@@ -221,6 +237,7 @@ const FlashCardSection = () => {
     if (sectionId > 1) {
       setSectionId(sectionId - 1);
       setAccessDeniedFlashcards(new Set());
+      console.log('Sending previous_section_clicked event');
       trackEvent(user.id, "previous_section_clicked", {
         category: "Navigation",
         label: "Previous Section",
@@ -241,6 +258,7 @@ const FlashCardSection = () => {
     if (sectionId < sectionCount) {
       setSectionId(sectionId + 1);
       setAccessDeniedFlashcards(new Set());
+      console.log('Sending next_section_clicked event');
       trackEvent(user.id, "next_section_clicked", {
         category: "Navigation",
         label: "Next Section",
@@ -256,7 +274,7 @@ const FlashCardSection = () => {
   if (error) {
     return (
       <div className="flashcard-page-container">
-        <Lsidebar />
+        <Sidebar />
         <div className="flashcard-content">
           <div className="error-message">{t("error")}: {error}</div>
         </div>
@@ -266,7 +284,7 @@ const FlashCardSection = () => {
 
   return (
     <div className="flashcard-page-container">
-      <Lsidebar />
+      <Sidebar />
       <div className="flashcard-content">
         {flashcardData?.units?.length > 0 ? (
           flashcardData.units.map((unit) => (

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import { useTranslation } from "react-i18next";
@@ -38,19 +38,21 @@ const AppContent = () => {
   const { i18n } = useTranslation();
   const location = useLocation();
 
+  // تحسين إدارة اللغة
   useEffect(() => {
-    document.documentElement.setAttribute("dir", i18n.language === "ar" ? "rtl" : "ltr");
-    document.documentElement.setAttribute("lang", i18n.language);
+    const dir = i18n.language === "ar" ? "rtl" : "ltr";
+    const lang = i18n.language;
+    
+    document.documentElement.setAttribute("dir", dir);
+    document.documentElement.setAttribute("lang", lang);
   }, [i18n.language]);
 
+  // تحسين تتبع المستخدم
   useEffect(() => {
-    if (user?.id) {
-      ReactGA.set({ userId: user.id });
-    } else {
-      ReactGA.set({ userId: null });
-    }
+    ReactGA.set({ userId: user?.id || 'anonymous' });
   }, [user]);
 
+  // إدارة حدث إغلاق التطبيق
   useEffect(() => {
     const handleBeforeUnload = () => {
       window.gtag('event', 'app_closed', {
@@ -60,17 +62,22 @@ const AppContent = () => {
         custom_user_id: user?.id,
       });
     };
+
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [user]);
 
-  if (loading) {
-    return <Loading />;
-  }
+  // تحسين التحكم في التتبع
+  const noTrackingPages = useMemo(() => [
+    '/', '/login', '/register', '/registerfailed', 
+    '/verify-email', '/reset-password'
+  ], []);
 
-  const noTrackingPages = ['/', '/login', '/register', '/registerfailed', '/verify-email', '/reset-password'];
-const shouldTrack = user && user.id && !noTrackingPages.includes(location.pathname.toLowerCase());
-  console.log('Current Path:', location.pathname, 'Should Track:', shouldTrack);
+  const shouldTrack = useMemo(() => 
+    user?.id && !noTrackingPages.includes(location.pathname.toLowerCase())
+  , [user, location.pathname, noTrackingPages]);
+
+  if (loading) return <Loading />;
 
   return (
     <>
@@ -81,6 +88,7 @@ const shouldTrack = user && user.id && !noTrackingPages.includes(location.pathna
           <TrackInactivity userId={user.id} user={user} />
         </>
       )}
+      
       <Routes>
         <Route
           path="/"
@@ -134,12 +142,10 @@ const shouldTrack = user && user.id && !noTrackingPages.includes(location.pathna
   );
 };
 
-const App = () => {
-  return (
-    <Router>
-      <AppContent />
-    </Router>
-  );
-};
+const App = () => (
+  <Router>
+    <AppContent />
+  </Router>
+);
 
 export default App;

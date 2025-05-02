@@ -1,19 +1,28 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import trackEvent from '../utils/trackEvent';
 
 const TrackPageViews = ({ userId, user }) => {
   const location = useLocation();
+  const lastPath = useRef('');
 
   useEffect(() => {
-    if (!user || !userId) {
-      console.log('No user or userId, sending page view as anonymous');
-      trackEvent(null, 'pageview', { page: location.pathname }, null);
+    const currentPath = location.pathname;
+
+    // منع الإرسال لو مفيش userId أو user
+    if (!userId || !user || currentPath === lastPath.current) {
       return;
     }
 
-    trackEvent(userId, 'pageview', { page: location.pathname }, user);
-  }, [location, userId, user]);
+    const eventData = {
+      page: currentPath,
+      category: 'Navigation',
+      referrer: lastPath.current,
+    };
+
+    trackEvent(userId, 'pageview', eventData, user);
+    lastPath.current = currentPath;
+  }, [location.pathname, userId, user]); // استخدمنا location.pathname بس
 
   return null;
 };

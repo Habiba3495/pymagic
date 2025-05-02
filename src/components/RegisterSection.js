@@ -53,6 +53,19 @@ const [popupMessage, setPopupMessage] = useState("");
       validationErrors.push(t("register.passwordMismatch"));
     }
 
+        // التحقق من طول وكفاءة الباسورد
+        const password = formData.password;
+
+        if (password.length < 10) {
+          validationErrors.push(t("register.passwordTooShort")); // أضيفي هذا المفتاح في ملف الترجمة
+        }
+    
+        // تحقق من قوة الباسورد: يحتوي على حرف كبير، صغير، رقم، ورمز
+        const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/;
+        if (!strongPasswordRegex.test(password)) {
+          validationErrors.push(t("register.weakPassword")); // أضيفي هذا المفتاح أيضاً
+        }
+    
     return validationErrors;
   };
 
@@ -149,7 +162,10 @@ const [popupMessage, setPopupMessage] = useState("");
   };
   if (apiError) {
     return <RegisterFailed/>;
+    // navigate("/registerfailed");
   }
+
+  
   
   return (
     <>
@@ -163,7 +179,7 @@ const [popupMessage, setPopupMessage] = useState("");
       {/* error overlay */}
       {errors.length > 0 && (
         <div className="error-overlay">
-          <div className="error-box">
+          <div className="Rerror-box">
             {errors.map((error, index) => (
               <div key={index} className="error-message">{error}</div>
             ))}
@@ -247,4 +263,3 @@ const [popupMessage, setPopupMessage] = useState("");
 };
 
 export default RegisterSection;
-

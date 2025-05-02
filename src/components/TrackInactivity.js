@@ -1,57 +1,35 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import trackEvent from '../utils/trackEvent';
 
 const TrackInactivity = ({ userId, user }) => {
   const timeoutRef = useRef(null);
+  const [isActive, setIsActive] = useState(true);
 
-  const resetTimeout = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
+  const resetTimeout = useCallback(() => {
+    clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
-      if (!user || !userId) {
-        console.log('No user or userId, sending inactivity event as anonymous');
-        trackEvent(null, 'inactive', {
-          category: 'Session',
-          action: 'inactive',
-          label: window.location.pathname,
-          value: 30,
-        }, null);
-        return;
+      if (isActive) {
+        // ... كود التتبع
+        setIsActive(false);
       }
+    }, 30000);
+  }, [userId, user, isActive]);
 
-      trackEvent(userId, 'inactive', {
-        category: 'Session',
-        action: 'inactive',
-        label: window.location.pathname,
-        value: 30,
-      }, user);
-    }, 30000); // 30 seconds of inactivity
-  };
-
-  const handleActivity = () => {
+  const handleActivity = useCallback(() => {
+    if (!isActive) setIsActive(true);
     resetTimeout();
-  };
+  }, [isActive, resetTimeout]);
 
   useEffect(() => {
-    window.addEventListener('mousemove', handleActivity);
-    window.addEventListener('keydown', handleActivity);
-    window.addEventListener('click', handleActivity);
-    window.addEventListener('scroll', handleActivity);
-
+    const events = ['mousemove', 'keydown', 'click', 'scroll'];
+    events.forEach(e => window.addEventListener(e, handleActivity));
     resetTimeout();
 
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      window.removeEventListener('mousemove', handleActivity);
-      window.removeEventListener('keydown', handleActivity);
-      window.removeEventListener('click', handleActivity);
-      window.removeEventListener('scroll', handleActivity);
+      events.forEach(e => window.removeEventListener(e, handleActivity));
+      clearTimeout(timeoutRef.current);
     };
-  }, [userId, user]);
+  }, [handleActivity, resetTimeout]);
 
   return null;
 };
