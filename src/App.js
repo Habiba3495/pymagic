@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, Component } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "./context/AuthContext";
+import { useAuth, AuthProvider } from "./context/AuthContext";
+import { ErrorProvider, useError } from "./context/ErrorContext";
 import { useTranslation } from "react-i18next";
 import HomePage from "./components/HomePage";
 import RegisterPage from "./components/RegisterPage";
@@ -23,6 +24,7 @@ import Setting from "./components/setting";
 import EditProfile from "./components/EditProfile";
 import VerifyEmail from "./components/VerifyEmail";
 import ResetPassword from "./components/ResetPassword";
+import PyMagicRunner from "./components/Pymagic_runnergame";
 import "./i18n";
 import ReactGA from 'react-ga4';
 import TrackPageViews from './components/TrackPageViews';
@@ -33,26 +35,46 @@ import RegisterFailed from "./components/RegisterFailed";
 
 ReactGA.initialize('G-W0C0ZKC21L', { debug_mode: true });
 
+class ErrorBoundary extends Component {
+  state = { hasError: false, error: null };
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('ErrorBoundary caught error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <PyMagicRunner
+          errorMessage={this.state.error?.message || 'An unexpected error occurred'}
+        />
+      );
+    }
+    return this.props.children;
+  }
+}
+
 const AppContent = () => {
   const { user, loading } = useAuth();
+  const { error, clearError } = useError();
   const { i18n } = useTranslation();
   const location = useLocation();
 
-  // تحسين إدارة اللغة
   useEffect(() => {
     const dir = i18n.language === "ar" ? "rtl" : "ltr";
     const lang = i18n.language;
-    
     document.documentElement.setAttribute("dir", dir);
     document.documentElement.setAttribute("lang", lang);
   }, [i18n.language]);
 
-  // تحسين تتبع المستخدم
   useEffect(() => {
     ReactGA.set({ userId: user?.id || 'anonymous' });
   }, [user]);
 
-  // إدارة حدث إغلاق التطبيق
   useEffect(() => {
     const handleBeforeUnload = () => {
       window.gtag('event', 'app_closed', {
@@ -67,7 +89,6 @@ const AppContent = () => {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [user]);
 
-  // تحسين التحكم في التتبع
   const noTrackingPages = useMemo(() => [
     '/', '/login', '/register', '/registerfailed', 
     '/verify-email', '/reset-password'
@@ -78,6 +99,14 @@ const AppContent = () => {
   , [user, location.pathname, noTrackingPages]);
 
   if (loading) return <Loading />;
+
+  if (error) {
+    return (
+      <PyMagicRunner
+        errorMessage={error.message}
+      />
+    );
+  }
 
   return (
     <>
@@ -90,30 +119,13 @@ const AppContent = () => {
       )}
       
       <Routes>
-        <Route
-          path="/"
-          element={user ? <Navigate to="/lessons" replace /> : <HomePage />}
-        />
-        <Route
-          path="/register"
-          element={user ? <Navigate to="/lessons" replace /> : <RegisterPage />}
-        />
-        <Route
-          path="/registerfailed"
-          element={user ? <Navigate to="/lessons" replace /> : <RegisterFailed />}
-        />
-        <Route
-          path="/login"
-          element={user ? <Navigate to="/lessons" replace /> : <LoginPage />}
-        />
-        <Route
-          path="/verify-email"
-          element={user ? <Navigate to="/lessons" replace /> : <VerifyEmail />}
-        />
-        <Route
-          path="/reset-password"
-          element={user ? <Navigate to="/lessons" replace /> : <ResetPassword />}
-        />
+        <Route path="/" element={user ? <Navigate to="/lessons" /> : <HomePage />} />
+        <Route path="/register" element={user ? <Navigate to="/lessons" /> : <RegisterPage />} />
+        <Route path="/registerfailed" element={user ? <Navigate to="/lessons" /> : <RegisterFailed />} />
+        <Route path="/login" element={user ? <Navigate to="/lessons" /> : <LoginPage />} />
+        <Route path="/verify-email" element={user ? <Navigate to="/lessons" /> : <VerifyEmail />} />
+        <Route path="/reset-password" element={user ? <Navigate to="/lessons" /> : <ResetPassword />} />
+
         {user ? (
           <>
             <Route path="/lessons" element={<Lessons />} />
@@ -144,7 +156,13 @@ const AppContent = () => {
 
 const App = () => (
   <Router>
-    <AppContent />
+    <ErrorProvider>
+      <AuthProvider>
+        <ErrorBoundary>
+          <AppContent />
+        </ErrorBoundary>
+      </AuthProvider>
+    </ErrorProvider>
   </Router>
 );
 

@@ -1,6 +1,6 @@
-
 import axios from "axios";
 import i18next from "../i18n";
+import { setBackendError } from '../context/ErrorContextManager';
 
 const apiClient = axios.create({
   baseURL: "http://localhost:5000",
@@ -8,16 +8,15 @@ const apiClient = axios.create({
     Accept: "application/json",
     "Content-Type": "application/json",
   },
-  timeout: 10000, // إضافة timeout
+  timeout: 10000,
   withCredentials: true,
 });
 
-// تحسين اعتراضات الطلبات
+// اعتراضات الطلبات
 apiClient.interceptors.request.use(
   (config) => {
     config.headers["Accept-Language"] = i18next.language || "en";
     
-    // إضافة تحقق من الاتصال بالإنترنت
     if (!navigator.onLine) {
       throw new axios.Cancel('No internet connection');
     }
@@ -27,30 +26,40 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// تحسين معالجة الأخطاء
+// اعتراضات الردود
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (axios.isCancel(error)) {
       console.warn('Request canceled:', error.message);
-      return Promise.reject({ isCanceled: true });
+      setBackendError(error.message, null);
+      return Promise.reject({ isCanceled: true, message: error.message });
     }
 
-    // إدارة الأخطاء العامة
-    const errorMessage = error.response?.data?.message || error.message;
-    
-    if (error.response?.status === 401 && error.config.url !== '/api/users/Editprofile') {
+    let errorMessage = error.response?.data?.message || error.message;
+    const status = error.response?.status;
+
+    // معالجة أخطاء الشبكة
+    if (error.message === 'Network Error' || error.code === 'ERR_CONNECTION_REFUSED') {
+      errorMessage = 'No internet connection';
+      setBackendError(errorMessage, null);
+      return Promise.reject({ message: errorMessage, status: null });
+    }
+
+    // معالجة خطأ 401
+    if (status === 401 && error.config.url !== '/api/users/Editprofile') {
       localStorage.removeItem('user');
       document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       window.dispatchEvent(new Event('unauthorized'));
     }
 
-    return Promise.reject({ 
-      ...error,
-      message: errorMessage,
-      status: error.response?.status 
-    });
+    // تحديث ErrorContext للأخطاء الأخرى
+    if (status >= 500) {
+      setBackendError(errorMessage, status);
+    }
+
+    return Promise.reject({ message: errorMessage, status });
   }
 );
 
-export default apiClient
+export default apiClient;

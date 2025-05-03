@@ -1,10 +1,10 @@
-
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // أضفنا useLocation
+import { useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import "./LessonSection.css";
 import unitquizicon from "../components/images/unitquizicon.svg";
 import { useAuth } from '../context/AuthContext';
+import { useError } from '../context/ErrorContext';
 import apiClient from '../services';
 import trackEvent from '../utils/trackEvent';
 import Loading from "./Loading.js";
@@ -12,10 +12,10 @@ import { useTranslation } from "react-i18next";
 
 const LessonSection = () => {
   const { user } = useAuth();
-  const location = useLocation(); // استخدام useLocation للحصول على المسار
+  const { setBackendError } = useError();
+  const location = useLocation();
   const [lessonData, setLessonData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [accessDeniedLessons, setAccessDeniedLessons] = useState(new Set());
   const [accessDeniedUnits, setAccessDeniedUnits] = useState(new Set());
   const [nextSectionName, setNextSectionName] = useState("");
@@ -75,7 +75,10 @@ const LessonSection = () => {
           lastSectionId.current = sectionId;
         }
       } catch (error) {
-        setError(error.message);
+        console.error('Failed to fetch lessons:', error);
+        if (error.message === 'No internet connection' || error.status >= 500) {
+          setBackendError(error.message, error.status || null);
+        }
         if (user && user.id) {
           console.log('Sending lesson_data_error event');
           await trackEvent(user.id, 'lesson_data_error', {
@@ -92,7 +95,7 @@ const LessonSection = () => {
     };
 
     fetchData();
-  }, [user.id, sectionId, navigate, t]);
+  }, [user, sectionId, navigate, t, setBackendError]);
 
   const checkLessonAccess = async (lessonId) => {
     try {
@@ -110,6 +113,9 @@ const LessonSection = () => {
     } catch (error) {
       console.log(`Lesson access error: lesson_id=${lessonId}, message=${error.message}`);
       setAccessDeniedLessons((prev) => new Set(prev).add(lessonId));
+      if (error.message === 'No internet connection' || error.status >= 500) {
+        setBackendError(error.message, error.status || null);
+      }
       if (user && user.id) {
         console.log('Sending lesson_access_denied event');
         await trackEvent(user.id, 'lesson_access_denied', {
@@ -123,7 +129,7 @@ const LessonSection = () => {
       }
 
       setPopupMessage(lessonId === 1
-        ? t("FirstLessonAccessError")
+        ? t("lesson.FirstLessonAccessError")
         : t("lesson.Unlocklessons"));
       setPopupVisible(true);
       return false;
@@ -144,6 +150,9 @@ const LessonSection = () => {
       return true;
     } catch (error) {
       setAccessDeniedUnits((prev) => new Set(prev).add(unitId));
+      if (error.message === 'No internet connection' || error.status >= 500) {
+        setBackendError(error.message, error.status || null);
+      }
       if (user && user.id) {
         console.log('Sending unit_quiz_access_denied event');
         await trackEvent(user.id, 'unit_quiz_access_denied', {
@@ -214,12 +223,12 @@ const LessonSection = () => {
     if (hasAccess) {
       console.log('Sending unit_quiz_accessed event');
       await trackEvent(user.id, 'unit_quiz_accessed', {
-        category: 'Quiz',
-        label: 'Unit Quiz Accessed',
-        unit_id: unitId
-      }, user).catch((error) => {
-        console.error('Failed to track unit_quiz_accessed:', error);
-      });
+      category: 'Quiz',
+      label: 'Unit Quiz Accessed',
+      unit_id: unitId
+    }, user).catch((error) => {
+      console.error('Failed to track unit_quiz_accessed:', error);
+    });
       navigate(`/unit-quiz/${unitId}`);
     }
   };
@@ -255,7 +264,6 @@ const LessonSection = () => {
   };
 
   if (loading) return <Loading />;
-  if (error) return <div className="error-message">{t("error")}: {error}</div>;
 
   return (
     <div className="lesson-container-div">
@@ -386,4 +394,3 @@ const generateColor = (id) => {
 };
 
 export default LessonSection;
-

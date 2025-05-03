@@ -2,49 +2,54 @@ import { useEffect, useRef, useState } from "react";
 import './Pymagic_runnergame.css';
 import wizardImg from "./images/Pax.svg";
 import fireballImg from "./images/Fire.svg";
-import Plant from "./images/Plant.svg";
-import poison from "./images/poison.svg";
+import plantImg from "./images/Plant.svg";
+import poisonImg from "./images/poison.svg";
 import jumpSound from '../Sound/Cartoon-jump-sound-effect.mp3';
 import failSound from '../Sound/Trumpet-fail-sound.mp3';
+import { useTranslation } from 'react-i18next';
 
-export default function PyMagicRunner() {
+export default function PyMagicRunner({ errorMessage, onRetry }) {
+  const { t } = useTranslation();
   const [jumping, setJumping] = useState(false);
   const [gameOver, setGameOver] = useState(false);
-  const wizardRef = useRef(null);
-  const obstacleRef = useRef(null);
   const [time, setTime] = useState(0);
   const [hasInteracted, setHasInteracted] = useState(false);
-
-
   const [bestTime, setBestTime] = useState(() => {
     const saved = localStorage.getItem("bestTime");
     return saved ? parseInt(saved) : 0;
   });
   const [currentObstacle, setCurrentObstacle] = useState(fireballImg);
-  const [obstacleKey, setObstacleKey] = useState(0); // لتجنب مشاكل الـ animation
+  const [obstacleKey, setObstacleKey] = useState(0);
   const [showObstacle, setShowObstacle] = useState(true);
-
-
+  const wizardRef = useRef(null);
+  const obstacleRef = useRef(null);
   const jumpSoundEffect = useRef(new Audio(jumpSound));
   const failSoundEffect = useRef(new Audio(failSound));
+  const obstacles = [fireballImg, plantImg, poisonImg];
+  const isMounted = useRef(true);
 
-  const obstacles = [fireballImg, Plant, poison];
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     const markInteracted = () => setHasInteracted(true);
     window.addEventListener("keydown", markInteracted);
     window.addEventListener("click", markInteracted);
-  
     return () => {
       window.removeEventListener("keydown", markInteracted);
       window.removeEventListener("click", markInteracted);
     };
   }, []);
-  
+
   const generateNewObstacle = () => {
+    if (!isMounted.current) return;
     const randomIndex = Math.floor(Math.random() * obstacles.length);
     setCurrentObstacle(obstacles[randomIndex]);
-    setObstacleKey(prev => prev + 1); // تغيير المفتاح لإعادة تشغيل الـ animation
+    setObstacleKey(prev => prev + 1);
   };
 
   useEffect(() => {
@@ -52,67 +57,58 @@ export default function PyMagicRunner() {
   }, []);
 
   const handleAnimationEnd = () => {
-    if (!gameOver) {
+    if (!gameOver && isMounted.current) {
       generateNewObstacle();
     }
   };
 
   useEffect(() => {
     let timer;
-    if (!gameOver) {
+    if (!gameOver && isMounted.current) {
       timer = setInterval(() => {
         setTime((prev) => prev + 1);
       }, 1000);
     }
     return () => clearInterval(timer);
   }, [gameOver]);
-    
+
   useEffect(() => {
-    if (time > bestTime) {
+    if (time > bestTime && isMounted.current) {
       setBestTime(time);
       localStorage.setItem("bestTime", time);
     }
   }, [time, bestTime]);
 
-  // useEffect(() => {
-  //   const handleKeyPress = (e) => {
-  //     if (e.code === "Space") {
-  //       handleJump();
-  //     }
-  //   };
-  //   window.addEventListener("keydown", handleKeyPress);
-  //   return () => window.removeEventListener("keydown", handleKeyPress);
-  // }, [jumping]);
-
   useEffect(() => {
     const handleKeyPress = (e) => {
-      if (e.code === "Space") {
+      if (e.code === "Space" && !gameOver) {
         handleJump();
       }
     };
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, []);
-  
+  }, [gameOver]);
 
   useEffect(() => {
     let collisionCheck;
-    if (!gameOver) {
+    if (!gameOver && isMounted.current) {
       collisionCheck = setInterval(() => {
         const wizard = wizardRef.current;
         const obstacle = obstacleRef.current;
 
         if (wizard && obstacle) {
           const wizardRect = wizard.getBoundingClientRect();
-          const obstacleRect = obstacle.getBoundingClientRect();
-          
+          const obstacleRect = obstacleRef.current.getBoundingClientRect();
+
           if (
             wizardRect.bottom - 10 > obstacleRect.top &&
             wizardRect.top + 10 < obstacleRect.bottom &&
             wizardRect.right - 20 > obstacleRect.left &&
             wizardRect.left + 20 < obstacleRect.right
           ) {
-            setGameOver(true);
+            if (isMounted.current) {
+              setGameOver(true);
+            }
           }
         }
       }, 10);
@@ -121,96 +117,74 @@ export default function PyMagicRunner() {
   }, [gameOver]);
 
   const handleJump = () => {
-    if (!jumping && !gameOver) {
+    if (!jumping && !gameOver && isMounted.current) {
       jumpSoundEffect.current.currentTime = 0;
-      jumpSoundEffect.current.play();
+      jumpSoundEffect.current.play().catch((err) => console.warn('Error playing sound:', err));
       setJumping(true);
-      setTimeout(() => setJumping(false), 600);
+      setTimeout(() => {
+        if (isMounted.current) {
+          setJumping(false);
+        }
+      }, 600);
     }
   };
 
-  // const restartGame = () => {
-  //   setGameOver(false);
-  //   setTime(0);
-  //   setJumping(false);
-  //   generateNewObstacle();
-  // };
-
   const restartGame = () => {
-    setGameOver(false);
-    setTime(0);
-    setJumping(false);
-    setShowObstacle(false); // أخفي العائق مؤقتًا
-  
-    setTimeout(() => {
-      generateNewObstacle();
-      setShowObstacle(true); // أظهر العائق من جديد
-    }, 50); // ممكن تزيد التأخير لو لسه في delay، مثلاً 100ms
+    if (!isMounted.current) return;
+    window.location.reload();
   };
-  
-  // useEffect(() => {
-  //   if (gameOver) {
-  //     failSoundEffect.current.currentTime = 0;
-  //     failSoundEffect.current.play();
-  //   }
-  // }, [gameOver]);
 
   useEffect(() => {
-    if (gameOver && hasInteracted) {
+    if (gameOver && hasInteracted && isMounted.current) {
       failSoundEffect.current.currentTime = 0;
-      failSoundEffect.current.play();
+      failSoundEffect.current.play().catch((err) => console.warn('Error playing sound:', err));
     }
   }, [gameOver, hasInteracted]);
 
   return (
     <div className="game-container" onClick={handleJump}>
-      {/* <div className="background-loop">
-        <div></div>
-        <div></div>
-      </div> */}
       <div className={`background-loop ${gameOver ? "background-paused" : ""}`}>
-      <div></div>
-      <div></div>
+        <div></div>
+        <div></div>
       </div>
-
+{/* 
+      {errorMessage && (
+        <div className="error-message">
+          {errorMessage}
+          <button className="retry-button" onClick={onRetry}>
+            {t('retry')}
+          </button>
+        </div>
+      )} */}
 
       {gameOver && (
         <div className="runoverlay">
           <div className="game-over">
-            Game Over 🪄
-            <div className="time-display">Time: {time} seconds</div>
-            <div className="best-time-display">Best Time: {bestTime} seconds</div>
-            <button className="restart-button" onClick={restartGame}>Restart</button>
+            {t('gameOver')} 🪄
+            <div className="time-display">{t('time')}: {time} {t('seconds')}</div>
+            <div className="best-time-display">{t('bestTime')}: {bestTime} {t('seconds')}</div>
+            <button className="restart-button" onClick={restartGame}>
+              {t('restart')}
+            </button>
           </div>
         </div>
       )}
 
-      <div className={`wizard ${jumping ? "jump" : ""}`} ref={wizardRef}
+      <div
+        className={`wizard ${jumping ? "jump" : ""}`}
+        ref={wizardRef}
         style={{ backgroundImage: `url(${wizardImg})` }}
       ></div>
-{/* 
-      {!gameOver && (
-        <div 
-          key={obstacleKey} // مهم لإعادة تشغيل الـ animation
-          className="obstacle" 
+
+      {!gameOver && showObstacle && (
+        <div
+          key={obstacleKey}
+          className="obstacle"
           ref={obstacleRef}
-          style={{ 
-            backgroundImage: `url(${currentObstacle})`,
-          }}
+          style={{ backgroundImage: `url(${currentObstacle})` }}
           onAnimationEnd={handleAnimationEnd}
         ></div>
-      )} */}
-
-{!gameOver && showObstacle && (
-  <div 
-    key={obstacleKey}
-    className="obstacle"
-    ref={obstacleRef}
-    style={{ backgroundImage: `url(${currentObstacle})` }}
-    onAnimationEnd={handleAnimationEnd}
-  ></div>
-)}
-
+      )}
     </div>
   );
 }

@@ -15,13 +15,13 @@ const Footer = () => {
         <div className="footer-right">
           <div className="social-links">
             <span>{t("home.followUs")}</span>
-            <a href="#">
+            <a href="https://www.facebook.com/profile.php?id=61575982222893">
               <i className="bi bi-facebook" style={{ fontSize: '20px', margin: '10px' }}></i>
             </a>
             <a href="#">
               <i className="bi bi-twitter" style={{ fontSize: '20px', margin: '10px' }}></i>
             </a>
-            <a href="#">
+            <a href="https://www.instagram.com/pymagic5?igsh=M2x3YzVpYnQyOWc4">
               <i className="bi bi-instagram" style={{ fontSize: '20px', margin: '10px' }}></i>
             </a>
             <a href="#">

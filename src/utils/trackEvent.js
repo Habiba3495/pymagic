@@ -1,22 +1,20 @@
-
 import apiClient from '../services';
 import { debounce } from 'lodash';
+import { setBackendError } from '../context/ErrorContextManager';
 
 const eventCache = new Map();
-const CACHE_DURATION = 60000; // 60 ثانية
+const CACHE_DURATION = 60000;
 
 const debouncedTrackEvent = debounce((userId, eventType, eventData, user, duration, resolve, reject) => {
   const eventKey = `${userId}-${eventType}-${JSON.stringify(eventData)}`;
   
   try {
-    // فحص الـ cache
     if (eventCache.has(eventKey)) {
       console.log(`[Event Cache] Skipping duplicate: ${eventKey}`);
       resolve();
       return;
     }
 
-    // فحص sessionStorage لو الـ event من نوع معين
     const sessionEventKey = `${eventType}-${userId}-${JSON.stringify(eventData)}`;
     const trackedEvents = JSON.parse(sessionStorage.getItem('trackedEvents') || '{}');
     if (['flashcards_loaded', 'lesson_data_loaded'].includes(eventType) && trackedEvents[sessionEventKey]) {
@@ -25,11 +23,9 @@ const debouncedTrackEvent = debounce((userId, eventType, eventData, user, durati
       return;
     }
 
-    // إضافة الـ event للـ cache
     eventCache.set(eventKey, Date.now());
     setTimeout(() => eventCache.delete(eventKey), CACHE_DURATION);
 
-    // إرسال لـ Google Analytics
     const gtagEvent = eventType === 'pageview' ? 'page_view' : eventType;
     if (window.gtag) {
       window.gtag('event', gtagEvent, {
@@ -41,7 +37,6 @@ const debouncedTrackEvent = debounce((userId, eventType, eventData, user, durati
       console.warn('Google Analytics gtag not initialized');
     }
 
-    // إرسال للـ API
     if (user?.id === userId && navigator.onLine) {
       const controller = new AbortController();
       
@@ -60,15 +55,34 @@ const debouncedTrackEvent = debounce((userId, eventType, eventData, user, durati
         )
       ])
         .then(() => resolve())
-        .catch((error) => reject(error));
+        .catch((error) => {
+          if (error.status === 401) {
+            console.log('Authentication error in tracking, skipping...');
+            resolve();
+          } else if (error.message === 'No internet connection' || error.message.includes('aborted')) {
+            console.log('Network error in tracking, updating ErrorContext...');
+            setBackendError('No internet connection', null);
+            resolve();
+          } else {
+            console.error('[Tracking Error]', error);
+            reject(error);
+          }
+        });
     } else {
+      console.log('[Track Event] Skipping request: No connection or user mismatch');
+      if (!navigator.onLine && user?.id === userId) {
+        setBackendError('No internet connection', null);
+      }
       resolve();
     }
   } catch (error) {
-    if (!error.message.includes('aborted')) {
-      console.error('[Tracking Error]', error);
+    console.error('[General Tracking Error]', error);
+    if (error.message === 'No internet connection') {
+      setBackendError('No internet connection', null);
+      resolve();
+    } else {
+      reject(error);
     }
-    reject(error);
   }
 }, 300);
 
