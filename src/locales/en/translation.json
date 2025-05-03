@@ -26,14 +26,16 @@
   },
 
   "register": {
-    "validAgeRequired": "Age Required: atleast 8 ages",
+    "validAgeRequired": "Age Required: at least 8 years",
     "passwordMismatch": "Passwords do not match",
-    "emailExists": "Email already exist",
-    "parentEmailExists": "Parent email already exist",
-    "registrationSuccess": "Registration successful",
-    "passwordTooShort":"Password must be at least 10 characters",
-    "weakPassword":"Password must include an uppercase letter, lowercase letter, number, and symbol"
-
+    "emailExists": "Email already exists",
+    "parentEmailExists": "Parent email already exists",
+    "registrationSuccess": "User created, please verify your email",
+    "passwordTooShort": "Password must be at least 10 characters",
+    "weakPassword": "Password must include an uppercase letter, lowercase letter, number, and symbol",
+    "verifyEmailPrompt": "User created, please verify your email",
+    "weakPasswordBackend": "Password must be at least 10 characters long and include uppercase, lowercase, number, and special character",
+    "registrationFailed": "Registration failed. Please try again."
   },
 
   "login":{
@@ -41,7 +43,9 @@
     "emailLabel": "Email",
     "LpasswordLabel": "Password",
     "rememberMe": "RememberMe",
-    "loginButton": "Log In"
+    "loginButton": "Log In",
+    "invalidCredentials": "The email or password is incorrect"
+    
   },
 
   "forgotPassword": {

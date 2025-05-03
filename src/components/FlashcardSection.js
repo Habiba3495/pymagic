@@ -118,13 +118,82 @@ const FlashCardSection = () => {
     fetchData();
   }, [user.id, sectionId, navigate, t]);
 
+  // const handleFlashcardClick = async (unitId, flashcard) => {
+  //   if (!user || !user.id) {
+  //     console.log('No user, redirecting to login');
+  //     navigate('/login');
+  //     return;
+  //   }
+
+  //   console.log('Sending flashcard_clicked event');
+  //   await trackEvent(user.id, "flashcard_clicked", {
+  //     category: "Flashcards",
+  //     label: "Flashcard Clicked",
+  //     unit_id: unitId,
+  //     lesson_id: flashcard.lessonId,
+  //     lesson_number: flashcard.lessonNumber,
+  //     is_passed: flashcard.isPassed,
+  //   }, user).catch((error) => {
+  //     console.error('Failed to track flashcard_clicked:', error);
+  //   });
+
+  //   try {
+  //     const response = await apiClient.get(
+  //       `/sections/flashcard-access/${user.id}/${flashcard.lessonId}`
+  //     );
+  //     const data = response.data;
+
+  //     if (!data.accessGranted) {
+  //       setAccessDeniedFlashcards((prev) => new Set(prev).add(flashcard.lessonId));
+  //       setPopupMessage(data.message || t("flashcard.accessDenied"));
+  //       setPopupVisible(true);
+  //       console.log('Sending flashcard_access_denied event');
+  //       await trackEvent(user.id, "flashcard_access_denied", {
+  //         category: "Access",
+  //         label: "Flashcard Access Denied",
+  //         unit_id: unitId,
+  //         lesson_id: flashcard.lessonId,
+  //         reason: data.message,
+  //       }, user).catch((error) => {
+  //         console.error('Failed to track flashcard_access_denied:', error);
+  //       });
+  //       return;
+  //     }
+
+  //     setSelectedCard({ unitId, flashcard });
+  //     setModalOpen(true);
+  //     console.log('Sending flashcard_accessed event');
+  //     await trackEvent(user.id, "flashcard_accessed", {
+  //       category: "Flashcards",
+  //       label: "Flashcard Viewed",
+  //       unit_id: unitId,
+  //       lesson_id: flashcard.lessonId,
+  //       lesson_name: flashcard.lessonName,
+  //     }, user).catch((error) => {
+  //       console.error('Failed to track flashcard_accessed:', error);
+  //     });
+  //   } catch (error) {
+  //     console.error("Error checking flashcard access:", error);
+  //     setPopupMessage(error.message || t("flashcard.accessError"));
+  //     setPopupVisible(true);
+  //     console.log('Sending flashcard_access_error event');
+  //     await trackEvent(user.id, "flashcard_access_error", {
+  //       category: "Error",
+  //       label: "Access Check Error",
+  //       error: error.message,
+  //     }, user).catch((error) => {
+  //       console.error('Failed to track flashcard_access_error:', error);
+  //     });
+  //   }
+  // };
+
   const handleFlashcardClick = async (unitId, flashcard) => {
     if (!user || !user.id) {
       console.log('No user, redirecting to login');
       navigate('/login');
       return;
     }
-
+  
     console.log('Sending flashcard_clicked event');
     await trackEvent(user.id, "flashcard_clicked", {
       category: "Flashcards",
@@ -136,16 +205,17 @@ const FlashCardSection = () => {
     }, user).catch((error) => {
       console.error('Failed to track flashcard_clicked:', error);
     });
-
+  
     try {
       const response = await apiClient.get(
         `/sections/flashcard-access/${user.id}/${flashcard.lessonId}`
       );
       const data = response.data;
-
+  
       if (!data.accessGranted) {
         setAccessDeniedFlashcards((prev) => new Set(prev).add(flashcard.lessonId));
-        setPopupMessage(data.message || t("flashcard.accessDenied"));
+        // Use the translated accessError message
+        setPopupMessage(t("flashcard.accessError"));
         setPopupVisible(true);
         console.log('Sending flashcard_access_denied event');
         await trackEvent(user.id, "flashcard_access_denied", {
@@ -159,7 +229,7 @@ const FlashCardSection = () => {
         });
         return;
       }
-
+  
       setSelectedCard({ unitId, flashcard });
       setModalOpen(true);
       console.log('Sending flashcard_accessed event');
@@ -174,19 +244,36 @@ const FlashCardSection = () => {
       });
     } catch (error) {
       console.error("Error checking flashcard access:", error);
-      setPopupMessage(error.message || t("flashcard.accessError"));
-      setPopupVisible(true);
-      console.log('Sending flashcard_access_error event');
-      await trackEvent(user.id, "flashcard_access_error", {
-        category: "Error",
-        label: "Access Check Error",
-        error: error.message,
-      }, user).catch((error) => {
-        console.error('Failed to track flashcard_access_error:', error);
-      });
+      // Check if the error is due to 403 status and use translated message
+      if (error.response?.status === 200) {
+        setAccessDeniedFlashcards((prev) => new Set(prev).add(flashcard.lessonId));
+        setPopupMessage(t("flashcard.accessError"));
+        setPopupVisible(true);
+        console.log('Sending flashcard_access_denied event');
+        await trackEvent(user.id, "flashcard_access_denied", {
+          category: "Access",
+          label: "Flashcard Access Denied",
+          unit_id: unitId,
+          lesson_id: flashcard.lessonId,
+          reason: error.response?.data?.message || 'Access denied',
+        }, user).catch((error) => {
+          console.error('Failed to track flashcard_access_denied:', error);
+        });
+      } else {
+        // Handle other errors
+        setPopupMessage(error.response?.data?.message || t("flashcard.accessError"));
+        setPopupVisible(true);
+        console.log('Sending flashcard_access_error event');
+        await trackEvent(user.id, "flashcard_access_error", {
+          category: "Error",
+          label: "Access Check Error",
+          error: error.response?.data?.message || error.message,
+        }, user).catch((error) => {
+          console.error('Failed to track flashcard_access_error:', error);
+        });
+      }
     }
   };
-
   const handleModalClose = () => {
     if (!user || !user.id) {
       console.log('No user, redirecting to login');
