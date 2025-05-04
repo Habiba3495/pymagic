@@ -1,6 +1,5 @@
 import apiClient from '../services';
 import { debounce } from 'lodash';
-import { setBackendError } from '../context/ErrorContextManager';
 
 const eventCache = new Map();
 const CACHE_DURATION = 60000;
@@ -59,9 +58,8 @@ const debouncedTrackEvent = debounce((userId, eventType, eventData, user, durati
           if (error.status === 401) {
             console.log('Authentication error in tracking, skipping...');
             resolve();
-          } else if (error.message === 'No internet connection' || error.message.includes('aborted')) {
-            console.log('Network error in tracking, updating ErrorContext...');
-            setBackendError('No internet connection', null);
+          } else if (error.message === 'Network unavailable' || error.message.includes('aborted')) {
+            console.log('Network error in tracking, skipping...');
             resolve();
           } else {
             console.error('[Tracking Error]', error);
@@ -70,15 +68,11 @@ const debouncedTrackEvent = debounce((userId, eventType, eventData, user, durati
         });
     } else {
       console.log('[Track Event] Skipping request: No connection or user mismatch');
-      if (!navigator.onLine && user?.id === userId) {
-        setBackendError('No internet connection', null);
-      }
       resolve();
     }
   } catch (error) {
     console.error('[General Tracking Error]', error);
-    if (error.message === 'No internet connection') {
-      setBackendError('No internet connection', null);
+    if (error.message === 'Network unavailable') {
       resolve();
     } else {
       reject(error);

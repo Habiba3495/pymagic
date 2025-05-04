@@ -5,10 +5,8 @@ export function setErrorContextCallback(callback) {
 }
 
 export function setBackendError(message, status) {
-  if (setErrorCallback) {
+  if (setErrorCallback && message !== 'Network unavailable') {
     setErrorCallback({ message, status });
-  } else {
-    console.warn('ErrorContext callback not initialized');
   }
 }
 

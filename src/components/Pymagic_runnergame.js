@@ -8,7 +8,7 @@ import jumpSound from '../Sound/Cartoon-jump-sound-effect.mp3';
 import failSound from '../Sound/Trumpet-fail-sound.mp3';
 import { useTranslation } from 'react-i18next';
 
-export default function PyMagicRunner({ errorMessage, onRetry }) {
+export default function PyMagicRunner() {
   const { t } = useTranslation();
   const [jumping, setJumping] = useState(false);
   const [gameOver, setGameOver] = useState(false);
@@ -147,15 +147,6 @@ export default function PyMagicRunner({ errorMessage, onRetry }) {
         <div></div>
         <div></div>
       </div>
-{/* 
-      {errorMessage && (
-        <div className="error-message">
-          {errorMessage}
-          <button className="retry-button" onClick={onRetry}>
-            {t('retry')}
-          </button>
-        </div>
-      )} */}
 
       {gameOver && (
         <div className="runoverlay">
