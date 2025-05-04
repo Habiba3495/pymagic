@@ -86,9 +86,9 @@ const RegisterSection = () => {
       if (response.status === 201) {
         setPopupMessage(t("register.registrationSuccess"));
         setPopupVisible(true);
-        setTimeout(() => {
-          navigate("/Login");
-        }, 2000);
+        // setTimeout(() => {
+        //   // navigate("/Login");
+        // }, 2000);
       }
     } catch (error) {
       console.error("Registration Error:", error);

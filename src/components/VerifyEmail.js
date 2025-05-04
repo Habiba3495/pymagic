@@ -36,7 +36,7 @@ const VerifyEmail = () => {
 
   return (
     <div className="verify-email-container">
-      <h2>{t("verifyEmail.title")}</h2>
+      {/* <h2>{t("verifyEmail.title")}</h2> */}
       {message && <p className="success-message">{message}</p>}
       {error && <p className="error-message">{error}</p>}
     </div>

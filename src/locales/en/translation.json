@@ -30,12 +30,16 @@
     "passwordMismatch": "Passwords do not match",
     "emailExists": "Email already exists",
     "parentEmailExists": "Parent email already exists",
-    "registrationSuccess": "User created, please verify your email",
+    "registrationSuccess": "User created, please check your email to verify (maybe in spam)",
     "passwordTooShort": "Password must be at least 10 characters",
     "weakPassword": "Password must include an uppercase letter, lowercase letter, number, and symbol",
     "verifyEmailPrompt": "User created, please verify your email",
     "weakPasswordBackend": "Password must be at least 10 characters long and include uppercase, lowercase, number, and special character",
     "registrationFailed": "Registration failed. Please try again."
+  },
+
+  "verifyEmail":{
+  "error":"time verify is out, please register agin to have a new link"
   },
 
   "login":{
@@ -128,13 +132,13 @@
     "feedbackTitle":"How was your experience?",
     "feedbackCommentPlaceholder":"Add your comment here...",
     "skip":"Skip",
-    "submit":"Submit",
-
+    "submit":"Submit"
+    },
     "reward":{
     "newRewardsTitle":"New Rewards Unlocked!",
     "continue": "Continue"
     }
-  }},
+  },
   
   "review":{
     "quizReview": "Quiz Review",
@@ -183,7 +187,7 @@
     "noAchievementsYet" :" No Achievements Yet"
   },
 
-  "avatar":{
+  "avatr":{
     "pointsIconAlt": "points icon",
     "points": "points",
     "headdresses": "Headdresses",

@@ -24,6 +24,7 @@ const UnitQuizComplete = () => {
   const [showRewardsPopup, setShowRewardsPopup] = useState(false);
   const { t } = useTranslation();
   const { user } = useAuth();
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     // التحقق من وجود المستخدم
@@ -302,7 +303,7 @@ const UnitQuizComplete = () => {
     }
 
     if (!feedbackScore || isNaN(feedbackScore)) {
-      alert(t("quizcomplete.selectFeedbackScore"));
+      setErrorMessage(t("quizcomplete.selectFeedbackScore")); 
       return;
     }
 
@@ -515,7 +516,7 @@ const UnitQuizComplete = () => {
       {showFeedbackModal && (
         <div className="feedback-modal-overlay">
           <div className="feedback-modal">
-            <h3>{t("unitcomplete.feedback.feedbackTitle")}</h3>
+            <p>{t("unitcomplete.feedback.feedbackTitle")}</p>
             <div className="emoji-container">
               {[1, 2, 3, 4, 5].map(score => (
                 <span
@@ -556,6 +557,14 @@ const UnitQuizComplete = () => {
               <button onClick={submitFeedback} className="submit-btn">
                 {t("unitcomplete.feedback.submit")}
               </button>
+              {errorMessage && (
+              <div className="alert-popup-overlay">
+              <div className="alert-popup-content">
+             <span className="alert-popup-close" onClick={() => setErrorMessage("")}>×</span>
+             {errorMessage}
+            </div>
+            </div>
+            )}
             </div>
           </div>
         </div>
@@ -564,9 +573,9 @@ const UnitQuizComplete = () => {
       {showRewardsPopup && (
         <div className="rewards-popup-overlay">
           <div className="rewards-popup">
-            <h3>
-              {t("newRewardsTitle", { defaultValue: "New Rewards Unlocked!" })}
-            </h3>
+            <p>
+              {t("quizcomplete.reward.newRewardsTitle")}
+            </p>
             <div className="rewards-list">
               {newRewards.map((reward) => (
                 <div key={reward.id} className="reward-item">

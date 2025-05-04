@@ -24,6 +24,7 @@ const QuizComplete = () => {
   const [showRewardsPopup, setShowRewardsPopup] = useState(false); // حالة للتحكم في النافذة المنبثقة
   const { t } = useTranslation();
   const { user } = useAuth();
+  const [errorMessage, setErrorMessage] = useState("");
 
   // Track page view on component mount
   useEffect(() => {
@@ -344,7 +345,7 @@ const QuizComplete = () => {
     }
 
     if (!feedbackScore || isNaN(feedbackScore)) {
-      alert(t("quizcomplete.selectFeedbackScore"));
+      setErrorMessage(t("quizcomplete.selectFeedbackScore")); 
       return;
     }
 
@@ -557,7 +558,7 @@ const QuizComplete = () => {
       {showFeedbackModal && (
         <div className="feedback-modal-overlay">
           <div className="feedback-modal">
-            <h3>{t("quizcomplete.feedback.feedbackTitle")}</h3>
+            <p>{t("quizcomplete.feedback.feedbackTitle")}</p>
             <div className="emoji-container">
               {[1, 2, 3, 4, 5].map((score) => (
                 <span
@@ -602,6 +603,15 @@ const QuizComplete = () => {
               <button onClick={submitFeedback} className="submit-btn">
                 {t("quizcomplete.feedback.submit")}
               </button>
+              {errorMessage && (
+              <div className="alert-popup-overlay">
+              <div className="alert-popup-content">
+             <span className="alert-popup-close" onClick={() => setErrorMessage("")}>×</span>
+             {errorMessage}
+            </div>
+            </div>
+            )}
+
             </div>
           </div>
         </div>
@@ -610,9 +620,9 @@ const QuizComplete = () => {
       {showRewardsPopup && (
         <div className="rewards-popup-overlay">
           <div className="rewards-popup">
-            <h3>
+            <p>
               {t("quizcomplete.reward.newRewardsTitle")}
-            </h3>
+            </p>
             <div className="rewards-list">
               {newRewards.map((reward) => (
                 <div key={reward.id} className="reward-item">
