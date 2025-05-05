@@ -10,27 +10,48 @@ const VerifyEmail = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
+  // useEffect(() => {
+  //   const verifyEmail = async () => {
+  //     const urlParams = new URLSearchParams(window.location.search);
+  //     const token = urlParams.get("token");
+
+  //     if (!token) {
+  //       setError(t("verifyEmail.noToken"));
+  //       return;
+  //     }
+
+  //     try {
+  //       const response = await apiClient.get(`/api/users/verify-email?token=${token}`);
+  //       setMessage(response.data.message);
+  //       setTimeout(() => {
+  //         navigate("/Login");
+  //       }, 3000);
+  //     } catch (err) {
+  //       setError(err.response?.data?.error || t("verifyEmail.error"));
+  //     }
+  //   };
+
+  //   verifyEmail();
+  // }, [navigate, t]);
+
   useEffect(() => {
     const verifyEmail = async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const token = urlParams.get("token");
-
+  
       if (!token) {
         setError(t("verifyEmail.noToken"));
         return;
       }
-
+  
       try {
         const response = await apiClient.get(`/api/users/verify-email?token=${token}`);
-        setMessage(response.data.message);
-        setTimeout(() => {
-          navigate("/Login");
-        }, 3000);
+        setMessage(response.data.message); 
+        setTimeout(() => navigate("/login"), 3000);
       } catch (err) {
         setError(err.response?.data?.error || t("verifyEmail.error"));
       }
     };
-
     verifyEmail();
   }, [navigate, t]);
 
