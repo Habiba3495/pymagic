@@ -29,14 +29,13 @@ const AvatarCustomization = () => {
     eye: "/assets/eyes/eyes_1.svg",
     hairstyle: "/assets/hairstyles/hairstyles_1.svg",
     lip: "/assets/lips/lips_1.svg",
-    nose: "/assets/nose/nose_1.svg",
     headdress: null,
   };
   const [equippedAssets, setEquippedAssets] = useState(defaultAssets);
   const [userPoints, setUserPoints] = useState(0);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
-  const [selectedTab, setSelectedTab] = useState("face");
+  const [selectedTab, setSelectedTab] = useState("hairstyle");
   const userId = user?.id;
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(null);
@@ -87,12 +86,11 @@ const AvatarCustomization = () => {
 
         if (preferencesRes.data) {
           setEquippedAssets({
-            face: preferencesRes.data.face || defaultAssets.face,
+            face: defaultAssets.face,
             brow: preferencesRes.data.brow || defaultAssets.brow,
             eye: preferencesRes.data.eye || defaultAssets.eye,
             hairstyle: preferencesRes.data.hairstyle || defaultAssets.hairstyle,
             lip: preferencesRes.data.lip || defaultAssets.lip,
-            nose: preferencesRes.data.nose || defaultAssets.nose,
             headdress: preferencesRes.data.headdress || defaultAssets.headdress,
           });
         } else {
@@ -296,12 +294,10 @@ const AvatarCustomization = () => {
     apiClient
       .post("/save-preferences", {
         userId,
-        face: equippedAssets.face,
         brow: equippedAssets.brow,
         eye: equippedAssets.eye,
         hairstyle: equippedAssets.hairstyle,
         lip: equippedAssets.lip,
-        nose: equippedAssets.nose,
         headdress: equippedAssets.headdress,
       })
       .then((response) => {
@@ -334,12 +330,10 @@ const AvatarCustomization = () => {
     }
 
     if (
-      equippedAssets.face ||
       equippedAssets.brow ||
       equippedAssets.eye ||
       equippedAssets.hairstyle ||
       equippedAssets.lip ||
-      equippedAssets.nose ||
       equippedAssets.headdress
     ) {
       setShowBackConfirmation(true);
@@ -365,35 +359,73 @@ const AvatarCustomization = () => {
     navigate("/profile");
   };
 
-  const getStyleForType = (type) => {
+  const getStyleForType = (type, imageUrl) => {
     switch (type) {
       case "face":
         return { position: "absolute", top: "0", left: "0", width: "300px", zIndex: 0 };
       case "eye":
-        return { position: "absolute", top: "121px", left: "64px", width: "176px", zIndex: 2 };
+        return { position: "absolute", top: "121px", left: "62px", width: "176px", zIndex: 2 };
       case "brow":
         return { position: "absolute", top: "90px", left: "51px", width: "197px", zIndex: 3 };
       case "hairstyle":
-        return { position: "absolute", top: "-69px", left: "-3px", width: "303px", zIndex: 4 };
+        if (imageUrl === "/assets/hairstyles/hairstyles_15.svg") {
+          return {
+            position: "absolute",
+            top: "-50px",
+            left: "-46px",
+            width: "388px",
+            zIndex: 4
+          };
+        }
+        if (imageUrl === "/assets/hairstyles/hairstyles_13.svg") {
+          return {
+            position: "absolute",
+            top: "-68px",
+            left: "-18px",
+            width: "330px",
+            zIndex: 4
+          };
+        }
+        if (imageUrl === "/assets/hairstyles/hairstyles_14.svg") {
+          return {
+            position: "absolute",
+            top: "-91px",
+            left: "-13px",
+            width: "351px",
+            zIndex: 4
+          };
+        }
+        if (imageUrl === "/assets/hairstyles/hairstyles_24.svg") {
+          return {
+            position: "absolute",
+            top: "-147px",
+            left: "4px",
+            width: "263px",
+            zIndex: 4
+          };
+        }
+        return {
+          position: "absolute",
+          top: "-69px",
+          left: "-3px",
+          width: "303px",
+          zIndex: 4
+        };
       case "lip":
         return { position: "absolute", top: "226px", left: "103px", width: "93px", zIndex: 2 };
-      case "nose":
-        return { position: "absolute", top: "185px", left: "130px", width: "45px", zIndex: 1 };
       case "headdress":
-        return { position: "absolute", top: "-80px", left: "-10px", width: "325px", zIndex: 5 };
+        return { position: "absolute", top: "-265px", left: "-36px", width: "380px", zIndex: 5 };
       default:
         return {};
     }
   };
 
   const assetTypes = [
-    { type: "face", icon: FacesIcon },
     { type: "hairstyle", icon: HairstylesIcon },
     { type: "headdress", icon: Headdress },
     { type: "brow", icon: BrowsIcon },
     { type: "eye", icon: EyesIcon },
     { type: "lip", icon: LipsIcon },
-    { type: "nose", icon: NoseIcon },
   ];
 
   if (loading) return <Loading />;
@@ -483,12 +515,12 @@ const AvatarCustomization = () => {
         </div>
 
         <div className="avatar-preview">
-          <div style={{ position: "relative", width: "300px", height: "350px", margin: "0 auto" }}>
+          <div style={{ position: "relative", width: "300px", height: "350px", margin: "0px 0px 40px 0px" }}>
             {equippedAssets.face && (
               <img
                 src={equippedAssets.face}
                 alt={t("faceAlt")}
-                style={getStyleForType("face")}
+                style={getStyleForType("face", equippedAssets.face)}
                 onError={(e) => {
                   e.target.src = "https://via.placeholder.com/50";
                   e.target.alt = "Face (Image not found)";
@@ -502,7 +534,7 @@ const AvatarCustomization = () => {
                     key={index}
                     src={equippedAssets[type]}
                     alt={t(`${type}Alt`)}
-                    style={getStyleForType(type)}
+                    style={getStyleForType(type, equippedAssets[type])}
                     onError={(e) => {
                       e.target.src = "https://via.placeholder.com/50";
                       e.target.alt = `${type} (Image not found)`;

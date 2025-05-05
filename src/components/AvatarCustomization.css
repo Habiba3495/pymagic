@@ -50,8 +50,14 @@
 }
 
 .Anavigation-tabs button {
+  /* background-color: #e6e6fa;
+  width: 100px; 
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer; */
   background-color: #e6e6fa;
-  width: 85px; 
+  width: 130px;
   border: none;
   padding: 10px;
   border-radius: 10px;
@@ -83,9 +89,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
 }
-
+.avatar-preview img {
+  object-fit: contain;
+}
 .asset-section {
   flex: 2;
   background-color: #fff;
@@ -136,7 +144,7 @@
 
 .asset-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* زيادة العرض الأدنى إلى 200px */
   gap: 15px;
 }
  
@@ -333,7 +341,8 @@ button:hover {
 }
 
 .avatar-preview, .asset-section {
-  min-height: 500px; /* يمنع النمو الزائد */
+  min-height: 590px; /* يمنع النمو الزائد */
+width: 580px;
 }
 
 [dir="rtl"] .assetoptionname {

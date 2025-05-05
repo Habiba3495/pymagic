@@ -147,7 +147,6 @@
 .achievement-image {
   width: 60px;
   height: 60px;
-  object-fit: cover;
   margin-bottom: 12px;
   border-radius: 8px;
 }

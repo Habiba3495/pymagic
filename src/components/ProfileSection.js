@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import "./ProfileSection.css";
 import Lsidebar from "./Sidebar";
@@ -24,7 +25,6 @@ const ProfilePage = () => {
     eye: "/assets/eyes/eyes_1.svg",
     hairstyle: "/assets/hairstyles/hairstyles_1.svg",
     lip: "/assets/lips/lips_1.svg",
-    nose: "/assets/nose/nose_1.svg",
     headdress: null,
   };
   const [equippedAssets, setEquippedAssets] = useState(defaultAssets);
@@ -77,10 +77,8 @@ const ProfilePage = () => {
         const response = await apiClient.get(`/api/quiz/progress/${userId}`);
         if (response.status !== 200) throw new Error(t("profile.fetchProgressError"));
         if (response.data.success) {
-          // لو مافيش بيانات، نسيب progressData فاضي بدل ما نرمي error
           setProgressData(response.data.progress?.slice(0, 3) || []);
           if (response.data.progress?.length > 0) {
-            // تبع الـ event بس لو فيه بيانات فعلاً
             trackEvent(userId, 'progress_data_loaded', {
               category: 'Progress',
               label: 'Progress Data Loaded',
@@ -134,12 +132,11 @@ const ProfilePage = () => {
         const response = await apiClient.get(`/user-preferences/${userId}`);
         if (response.data) {
           setEquippedAssets({
-            face: response.data.face || defaultAssets.face,
+            face: defaultAssets.face,
             brow: response.data.brow || defaultAssets.brow,
             eye: response.data.eye || defaultAssets.eye,
             hairstyle: response.data.hairstyle || defaultAssets.hairstyle,
             lip: response.data.lip || defaultAssets.lip,
-            nose: response.data.nose || defaultAssets.nose,
             headdress: response.data.headdress || defaultAssets.headdress,
           });
         } else {
@@ -218,7 +215,7 @@ const ProfilePage = () => {
     };
   }, [user, userId]);
 
-  const getStyleForType = (type) => {
+  const getStyleForType = (type, imageUrl) => {
     switch (type) {
       case "face":
         return { position: "absolute", top: "0", left: "0", width: "150px", zIndex: 0 };
@@ -227,13 +224,47 @@ const ProfilePage = () => {
       case "brow":
         return { position: "absolute", top: "45px", left: "25px", width: "98px", zIndex: 3 };
       case "hairstyle":
+        if (imageUrl === "/assets/hairstyles/hairstyles_13.svg") {
+          return {
+            position: "absolute",
+            top: "-34px",
+            left: "-9px",
+            width: "165px",
+            zIndex: 4
+          };
+        }
+        if (imageUrl === "/assets/hairstyles/hairstyles_14.svg") {
+          return {
+            position: "absolute",
+            top: "-45.5px",
+            left: "-6.5px",
+            width: "175.5px",
+            zIndex: 4
+          };
+        }
+        if (imageUrl === "/assets/hairstyles/hairstyles_24.svg") {
+          return {
+            position: "absolute",
+            top: "-73.5px",
+            left: "2px",
+            width: "131.5px",
+            zIndex: 4
+          };
+        }
+        if (imageUrl === "/assets/hairstyles/hairstyles_15.svg") {
+          return {
+            position: "absolute",
+            top: "-22px",
+            left: "-21px",
+            width: "190px",
+            zIndex: 4
+          };
+        }
         return { position: "absolute", top: "-35px", left: "-2px", width: "152px", zIndex: 4 };
       case "lip":
         return { position: "absolute", top: "113px", left: "52px", width: "46px", zIndex: 2 };
-      case "nose":
-        return { position: "absolute", top: "92px", left: "65px", width: "22px", zIndex: 1 };
       case "headdress":
-        return { position: "absolute", top: "-40px", left: "-5px", width: "162px", zIndex: 5 };
+        return { position: "absolute", top: "-130px", left: "-16px", width: "185px", zIndex: 5 };
       default:
         return {};
     }
@@ -272,7 +303,7 @@ const ProfilePage = () => {
                 <img
                   src={equippedAssets.face}
                   alt="Equipped face"
-                  style={getStyleForType("face")}
+                  style={getStyleForType("face", equippedAssets.face)}
                   onError={(e) => {
                     e.target.src = "https://via.placeholder.com/50";
                     e.target.alt = "Face (Image not found)";
@@ -286,7 +317,7 @@ const ProfilePage = () => {
                       key={index}
                       src={equippedAssets[type]}
                       alt={`Equipped ${type}`}
-                      style={getStyleForType(type)}
+                      style={getStyleForType(type, equippedAssets[type])}
                       onError={(e) => {
                         e.target.src = "https://via.placeholder.com/50";
                         e.target.alt = `${type} (Image not found)`;
