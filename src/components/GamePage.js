@@ -312,7 +312,7 @@ const GamePage = ({ onExit }) => {
       return;
     }
 
-    console.log("Executing Python code:", code);
+    console.log("Executing | Python code:", code);
 
     try {
       await pyodide.runPythonAsync(`
@@ -428,6 +428,23 @@ const GamePage = ({ onExit }) => {
     };
   }, []);
 
+  // Ensure canvas takes full container size
+  useEffect(() => {
+    const resizeCanvas = () => {
+      if (canvasRef.current) {
+        canvasRef.current.width = window.innerWidth;
+        canvasRef.current.height = window.innerHeight;
+      }
+    };
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+    };
+  }, []);
+
   return (
     <div className="unity-game-container" ref={gameContainerRef}>
       <button className="exit-game-btn" onClick={() => {
@@ -454,16 +471,16 @@ const GamePage = ({ onExit }) => {
           </div>
         </div>
       )}
-
+{/* 
       {unityReady && (
-        <button
-          className="fullscreen-btn"
-          onClick={toggleFullScreen}
-          title={isFullScreen ? t("exitFullscreen") : t("enterFullscreen")}
-        >
-          {isFullScreen ? <FaCompress /> : <FaExpand />}
-        </button>
-      )}
+        // <button
+        //   className="fullscreen-btn"
+        //   onClick={toggleFullScreen}
+        //   title={isFullScreen ? t("exitFullscreen") : t("enterFullscreen")}
+        // >
+        //   {isFullScreen ? <FaCompress /> : <FaExpand />}
+        // </button>
+      )} */}
 
       <canvas id="unity-canvas" ref={canvasRef} />
     </div>

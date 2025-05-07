@@ -8,6 +8,7 @@
   height: 100vh;
   background-color: #e9d5ff;
   padding: 1rem;
+  padding-left: 2rem;
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -31,7 +32,7 @@
   display: block;
   width: clamp(6rem, 30vw, 9.375rem); /* عرض متجاوب */
   height: auto;
-  margin: 1.25rem auto;
+  margin: 1.25rem;
 }
 
 .menu {

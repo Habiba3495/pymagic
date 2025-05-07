@@ -1,92 +1,98 @@
 .unity-game-container {
-  position: fixed; 
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;    /* عرض الشاشة بالكامل */
-  height: 100vh;   /* ارتفاع الشاشة بالكامل */
-  background: #000;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background-color: #000;
   overflow: hidden;
-  z-index: 999;    /* عشان تظهر فوق العناصر التانية */
-}
-
-#unity-canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-  background: #000;
 }
 
 .unity-loading-overlay {
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(10, 10, 10, 0.85);
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  z-index: 10;
-  color: #fff;
-  font-size: 1.2rem;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 10000;
+  padding: 2%;
+  box-sizing: border-box;
 }
 
 .loading-progress-bar {
   width: 80%;
+  max-width: 400px;
   height: 20px;
-  background-color: #444;
+  background-color: #333;
   border-radius: 10px;
-  margin-bottom: 20px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background-color: #2ecc71;
-  transition: width 0.3s ease-in-out;
-}
-
-.loading-status {
-  color: #fff;
-  font-size: 1rem;
-  text-align: center;
+  background-color: #4caf50;
+  transition: width 0.3s ease;
 }
 
 .exit-game-btn {
   position: absolute;
-  bottom: 15px;
-  left: 15px;
-  padding: 10px 15px;
-  background-color: #e74c3c;
-  color: #fff;
+  bottom: 5%;
+  left: 7%;
+  transform: translateX(-50%);
+  z-index: 10001;
+  padding: 1em 2em;
+  background-color: #ff4d4d;
+  color: white;
   border: none;
-  font-weight: bold;
-  border-radius: 6px;
+  border-radius: 5px;
   cursor: pointer;
-  z-index: 20;
-  transition: background 0.3s;
+  font-size: 1rem;
 }
 
 .exit-game-btn:hover {
-  background-color: #c0392b;
+  background-color: #e63939;
 }
 
 .fullscreen-btn {
   position: absolute;
-  top: 15px;
-  right: 15px;
-  /* background-color: #3498db; */
-  color: white;
+  top: 2%;
+  left: 2%;
+  z-index: 10001;
+  background: none;
   border: none;
-  padding: 10px;
-  border-radius: 6px;
-  font-size: 1.2rem;
+  color: white;
   cursor: pointer;
-  z-index: 20;
-  transition: background 0.3s;
+  font-size: 1.5rem;
 }
 
 .fullscreen-btn:hover {
-  background-color: #5B287C;
+  color: #ccc;
+}
+
+#unity-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .loading-progress-bar {
+    width: 90%;
+  }
+
+  .exit-game-btn {
+    font-size: 0.9rem;
+    padding: 0.7em 1.5em;
+    bottom: 6%;
+    left: 16%;
+    transform: translateX(-50%);
+  }
+
+  .fullscreen-btn {
+    font-size: 1.2rem;
+  }
 }

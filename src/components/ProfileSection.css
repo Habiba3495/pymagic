@@ -118,6 +118,7 @@
   font-size: clamp(0.75rem, 3vw, 0.875rem);
   font-family: 'Germania One', cursive;
   transition: background 0.3s, transform 0.2s;
+  z-index: 8;
 }
 
 .edit-button:hover {
