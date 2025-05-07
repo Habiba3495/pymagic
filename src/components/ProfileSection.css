@@ -11,12 +11,32 @@
   align-items: center;
   padding: 0rem 4rem;
   box-sizing: border-box;
+  background-color: #f3e8ff;
+  min-height: 100vh;
+  display: flex
+;
+  align-items: center;
+  padding: 0rem 4rem;
+  box-sizing: border-box;
+  justify-content: center;
+  flex-wrap: nowrap;
+  flex-direction: column;
 }
 
 .profile-content {
-  width: 100%;
-  max-width: 37.5rem; /* 600px */
-  margin-top: 3rem; /* مساحة لزر Hamburger */
+  display: grid
+  ;
+      /* display: contents; */
+      direction: co;
+      justify-content: center;
+      align-items: center;
+      /* justify-content: space-between; */
+      width: 100%;
+      max-width: 53rem;
+      /* margin: 88px; */
+      justify-items: center;
+      margin-top: 3rem;
+
 }
 
 .profile-header {
@@ -38,7 +58,7 @@
   align-items: center;
   width: 100%;
   max-width: 37.5rem; /* 600px */
-  height: clamp(12rem, 50vw, 18.75rem); /* 300px */
+  height: clamp(17rem, 50vw, 18.75rem); /* 300px */
   overflow: hidden;
 }
 
@@ -52,7 +72,7 @@
 
 .profile-name-container {
   background: white;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.5rem;
   border-radius: 1rem;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
   width: 100%;
@@ -60,7 +80,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
 }
 
 .profile-name {
@@ -124,15 +143,15 @@
   padding: 0.75rem 1rem;
   margin-right: -1rem;
   border-radius: 0.5rem;
-  display: flex
-;
+  display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  width: 100%;
+  margin: 0px 0rem;
+  width: 90%;
   max-width: 35rem;
   font-family: 'Germania One', cursive;
-  font-size: clamp(1rem, 4vw, 1.25rem);
+  font-size: clamp(1rem, 3vw, 1.25rem);
 }
 
 .achievements-grid,

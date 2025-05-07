@@ -357,7 +357,7 @@ span .emoji:hover {
   }
 
   .feedback-modal-overlay {
-    width: 29.375rem; /* 470px */
+    width: 100%; /* 470px */
     padding: 2.5rem; /* 40px */
   }
 

@@ -247,8 +247,7 @@ button:hover {
   margin: 0 0.5rem;
 }
 
-.confirmation-modal button:first-of-type {
-  background-color: #FFA500;
+.confirmation-modal button{
   color: black;
 }
 
@@ -292,6 +291,24 @@ button:hover {
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   z-index: 999;
+}
+
+.close-button {
+  background-color: transparent;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #000;
+  padding: 0;
+  line-height: 1;
+}
+
+.close-button:hover {
+  color: #ff0000; /* Optional: Changes color on hover */
 }
 
 [dir="rtl"] .assetoptionname,

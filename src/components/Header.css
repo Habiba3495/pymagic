@@ -1,8 +1,10 @@
 .header {
-    background: #2E0452;
-    display: flex;
-    justify-content: flex-start;
-    padding: 10px 20px;
+  background: #2E0452;
+  display: flex
+;
+  justify-content: flex-start;
+  padding: 10px 20px;
+  align-items: center;
   }
 .logo{
     height: 50px;

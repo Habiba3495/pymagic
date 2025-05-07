@@ -300,12 +300,12 @@
   }
 
   .check-answer-button {
-    margin-left: 6.875rem; /* 110px */
+    margin-left: 5.875rem; /* 110px */
   }
 
   .next-buttonc,
   .next-buttonw {
-    margin-left: 4.375rem; /* 70px */
+    margin-left: 3.375rem; /* 70px */
   }
 
   [dir="rtl"] .check-answer-button {
