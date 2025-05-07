@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, Component } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth, AuthProvider } from "./context/AuthContext";
 import { ErrorProvider, useError } from "./context/ErrorContext";
 import { useTranslation } from "react-i18next";
@@ -55,11 +55,24 @@ class ErrorBoundary extends Component {
 }
 
 const AppContent = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { error, clearError } = useError();
   const { i18n } = useTranslation();
   const location = useLocation();
   const [isOffline, setIsOffline] = React.useState(!navigator.onLine);
+  const navigate = useNavigate(); // Add this
+
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      logout(); // Clear the user state
+      navigate('/'); // Redirect to home page
+    };
+
+    window.addEventListener('unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('unauthorized', handleUnauthorized);
+  }, [navigate]);
+
+  
 
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
@@ -68,6 +81,8 @@ const AppContent = () => {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
+
+    
     // اختبار الاتصال بالـ backend
     // const checkBackend = async () => {
     //   try {
@@ -78,6 +93,7 @@ const AppContent = () => {
     //   }
     // };
 
+  
     const checkBackend = async () => {
       try {
         const response = await fetch('http://localhost:5000/ping', {
