@@ -1,239 +1,323 @@
-.flashcard-page-container {
-    display: flex;
-    justify-content: space-between;
-    min-height: 100vh;
-  }
-  
-  .flashcard-content {
-    flex: 1;
-    padding: 20px;
-    margin-left: 250px;
-    background-color: #f3e5f5; /* Light purple background */
-  }
-  
-  .section-navigation {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 30px; /* Space above buttons when at the bottom */
-    padding: 0 150px; /* Match unit-title margins for alignment */
-  }
-  
-  .nav-button {
-    padding: 20px 18px;
-    background-color: #ffc145; /* Yellow button background */
-    color: #5b287c; /* Dark purple text */
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-weight: bold;
-    font-family: "Fredoka", sans-serif;
-    font-size: 18px;
-  }
-  
-  .nav-button:hover {
-    background-color: #e6a93c; /* Darker yellow on hover */
-  }
-  
-  .prev-button {
-    margin-right: auto;
-  }
-  
-  .next-button {
-    margin-left: auto;
-  }
-  
-  .unit-container {
-    width: 100%;
-    margin-bottom: 20px;
-    padding: 15px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #f3e5f5; /* Matches section-container */
-  }
-  
-  .unit-title {
-    background: #5b287c; /* Dark purple background */
-    color: white;
-    padding: 33px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    margin-left: 150px;
-    margin-right: 100px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: "Germania One", sans-serif;
-    font-size: 28px;
-  }
-  
-  .flashcards-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    padding: 10px;
-    background-color: #f3e5f5; /* Matches cards-container */
-  }
-  
-  .flashcard-wrapper {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .flashcard-wrapper.denied {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-  
-  .lesson-number {
-    position: absolute;
-    top: 60px; /* Centered vertically on card */
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 30px;
-    font-weight: bold;
-    color: #000; /* Black for contrast */
-  }
-  
-  .flashcard {
-    width: 120px;
-    height: 160px;
-    cursor: pointer;
-  }
-  
-  .flashcard.passed {
-    filter: brightness(1.2); /* Brighten passed flashcards */
-  }
-  
-  .no-flashcards {
-    font-size: 1.2rem;
-    text-align: center;
-    margin-top: 20px;
-    color: #5b287c; /* Dark purple text */
-    font-family: "Fredoka", sans-serif;
-  }
-  
-  .error-message {
-    font-size: 1.2rem;
-    color: red;
-    text-align: center;
-    margin-top: 20px;
-    font-family: "Fredoka", sans-serif;
-  }
-  
-  .popup-overlay,
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .popup-window {
-    background: white;
-    color: red; /* Red text for access denial */
-    padding: 20px;
-    border-radius: 10px;
-    width: 50%;
-    max-width: 400px;
-    position: relative;
-    text-align: center;
-    border: 4px solid #fdc82e; /* Yellow border */
-  }
-  
-  .modal-window {
-    background: #5e2b97; /* Dark purple background */
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 50%;
-    max-width: 400px;
-    position: relative;
-    text-align: center;
-    border: 4px solid #fdc82e; /* Yellow border */
-  }
-  
-  .popup-close-button,
-  .modal-close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: #fdc82e; /* Yellow for popup */
-    cursor: pointer;
-  }
-  
-  .modal-close-button {
-    color: red; /* Red for modal */
-  }
-  
-  .modal-flashcard-wrapper {
-    position: relative;
-    display: inline-block;
-    margin-bottom: 15px; /* Space below the card */
-  }
-  
-  .modal-lesson-number {
-    position: absolute;
-    top: 60px; /* Match lesson-number positioning */
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 30px;
-    font-weight: bold;
-    color: #000; /* Black for contrast */
-    display: none;
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
 
+/* Mobile-First Approach */
+.flashcard-page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.flashcard-content {
+  flex: 1;
+  padding: 1rem;
+  background-color: #f3e5f5;
+  box-sizing: border-box;
+}
+
+.unit-container {
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  background-color: #f3e5f5;
+}
+
+.unit-title {
+  background: #5b287c;
+  color: white;
+  padding: 1.5rem;
+  border-radius: 0.625rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Germania One', sans-serif;
+  font-size: clamp(1.25rem, 5vw, 1.75rem);
+  margin: 0 auto;
+  max-width: 90%;
+}
+
+.flashcards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 0.625rem;
+  background-color: #f3e5f5;
+}
+
+.flashcard-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.flashcard-wrapper.denied {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.flashcard {
+  width: clamp(6rem, 25vw, 7.5rem);
+  height: clamp(8rem, 33vw, 10rem);
+  cursor: pointer;
+}
+
+.flashcard.passed {
+  filter: brightness(1.2);
+}
+
+.lesson-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(1.5rem, 6vw, 1.875rem);
+  font-weight: bold;
+  color: #000;
+}
+
+.no-flashcards {
+  font-size: clamp(1rem, 4vw, 1.2rem);
+  text-align: center;
+  margin-top: 1.25rem;
+  color: #5b287c;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.error-message {
+  font-size: clamp(1rem, 4vw, 1.2rem);
+  color: red;
+  text-align: center;
+  margin-top: 1.25rem;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.section-navigation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.875rem;
+  padding: 1rem;
+}
+
+.nav-button {
+  padding: 0.75rem 1rem;
+  background-color: #ffc145;
+  color: #5b287c;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: bold;
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(0.875rem, 4vw, 1rem);
+  width: 100%;
+  max-width: 20rem;
+  text-align: center;
+}
+
+.nav-button:hover {
+  background-color: #e6a93c;
+}
+
+.prev-button {
+  margin-right: auto;
+}
+
+.next-button {
+  margin-left: auto;
+}
+
+.popup-overlay,
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-window {
+  background: white;
+  color: red;
+  padding: 1.25rem;
+  border-radius: 0.625rem;
+  width: clamp(15rem, 80vw, 25rem);
+  max-width: 90%;
+  position: relative;
+  text-align: center;
+  border: 0.25rem solid #fdc82e;
+}
+
+.modal-window {
+  background: #5e2b97;
+  color: white;
+  padding: 1.25rem;
+  border-radius: 0.625rem;
+  width: clamp(15rem, 80vw, 25rem);
+  max-width: 90%;
+  position: relative;
+  text-align: center;
+  border: 0.25rem solid #fdc82e;
+}
+
+.popup-close-button,
+.modal-close-button {
+  position: absolute;
+  top: 0.625rem;
+  right: 0.625rem;
+  background: none;
+  border: none;
+  font-size: clamp(1rem, 4vw, 1.5rem);
+  color: #fdc82e;
+  cursor: pointer;
+}
+
+.modal-close-button {
+  color: red;
+}
+
+.modal-flashcard-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0.9375rem;
+}
+
+.modal-lesson-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(1.5rem, 6vw, 1.875rem);
+  font-weight: bold;
+  color: #000;
+  display: none;
+}
+
+.modal-flashcard {
+  width: clamp(6rem, 25vw, 7.5rem);
+  height: clamp(8rem, 33vw, 10rem);
+  display: none;
+}
+
+.popup-title,
+.modal-title {
+  font-size: clamp(1.25rem, 5vw, 1.5625rem);
+  font-weight: bold;
+  margin-bottom: 0.625rem;
+  font-family: 'Germania One', cursive;
+}
+
+.popup-text,
+.modal-text {
+  font-size: clamp(0.875rem, 4vw, 1rem);
+  line-height: 1.5;
+  font-family: 'Fredoka', sans-serif;
+}
+
+/* دعم RTL */
+[dir="rtl"] .flashcard-content {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+[dir="rtl"] .unit-title {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+[dir="rtl"] .prev-button {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+[dir="rtl"] .next-button {
+  margin-right: auto;
+  margin-left: 0;
+}
+
+/* Media Queries للشاشات الأكبر */
+@media (min-width: 768px) {
+  .flashcard-page-container {
+    flex-direction: row;
   }
-  
-  .modal-flashcard {
-    width: 120px;
-    height: 160px;
-    display: none;
+
+  .flashcard-content {
+    margin-left: 15%;
+    width: calc(100% - 15%);
+    padding: 1.5rem;
+    margin-top: 0; /* إزالة المساحة العلوية مع وجود Sidebar */
   }
-  
-  .popup-title,
-  .modal-title {
-    font-size: 25px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    font-family: "Germania One", cursive;
-  }
-  
-  .popup-text,
-  .modal-text {
-    font-size: 16px;
-    line-height: 1.5;
-    font-family: "Fredoka", sans-serif;
-  }
-  
+
   [dir="rtl"] .flashcard-content {
+    margin-right: 15%;
     margin-left: 0;
-    margin-right: 16%;
   }
-  
+
+  .unit-title {
+    margin-left: 9.375rem;
+    margin-right: 6.25rem;
+    font-size: 1.75rem;
+  }
+
   [dir="rtl"] .unit-title {
-    margin-left: 100px;
-    margin-right: 150px;
+    margin-left: 6.25rem;
+    margin-right: 9.375rem;
   }
-  
-  [dir="rtl"] .prev-button {
-    margin-left: auto;
-    margin-right: 0;
+
+  .flashcards-container {
+    gap: 1rem;
+    padding: 1rem;
   }
-  
-  [dir="rtl"] .next-button {
-    margin-right: auto;
-    margin-left: 0;
+
+  .flashcard {
+    width: 7.5rem;
+    height: 10rem;
   }
+
+  .modal-flashcard {
+    width: 7.5rem;
+    height: 10rem;
+  }
+
+  .section-navigation {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 9.375rem;
+  }
+
+  .nav-button {
+    width: auto;
+    padding: 1rem 1.125rem;
+    font-size: 1.125rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .flashcard-content {
+    padding: 2rem;
+  }
+
+  .unit-title {
+    max-width: 80%;
+  }
+
+  .flashcard {
+    width: 8.75rem;
+    height: 11.25rem;
+  }
+
+  .modal-flashcard {
+    width: 8.75rem;
+    height: 11.25rem;
+  }
+}

@@ -1,127 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
+
+/* Mobile-First Approach */
 .quiz-review-container {
-  background-image: url("../components/images/video_bg.svg"); 
+  background-image: url("../components/images/video_bg.svg");
   background-color: #f2ddff;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  width: 100%; 
-  max-width: 100%; /* حتى لا يتجاوز عرض الشاشة */
-  min-height: 100vh; /* ليغطي الشاشة بالكامل في البداية */
-  height: auto; /* للسماح بالتمرير عند الحاجة */
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* يبدأ المحتوى من الأعلى */
-  padding: 10px;
-  overflow-y: auto; /* تفعيل التمرير العمودي عند الحاجة */
-}
-
-.quiz-review-container h1 {
-  color: #5B287C; /* Dark purple for title */
-  font-size: 24px;
-  margin-bottom: 20px;
-  font-family: 'Germania One', cursive;
+  justify-content: flex-start;
+  padding: 0.625rem; /* 10px */
+  overflow-y: auto;
 }
 
 .quiz-box-review {
   background-color: #5B287C;
-  border-radius: 10px;
-  padding: 20px;
+  border-radius: 0.625rem; /* 10px */
+  padding: 1.25rem; /* 20px */
   width: 90%;
-  max-width: 600px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  border: 2px solid #9370DB; 
+  max-width: 37.5rem; /* 600px */
+  box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+  border: 0.125rem solid #9370DB; /* 2px */
   align-items: center;
 }
-.Reviewheader{
-  background-color: #f2ddff;
-  padding: 15px;
-  border-radius: 5px;
-  text-align: center;
-}
-[dir="rtl"] .Reviewheader {
-  font-family: 'Marhey', cursive;
 
+.Reviewheader {
+  background-color: #f2ddff;
+  padding: 0.9375rem; /* 15px */
+  border-radius: 0.3125rem; /* 5px */
+  text-align: center;
+  color: #5B287C;
+  font-size: clamp(1.5rem, 6vw, 1.5rem); /* 24px */
+  margin-bottom: 1.25rem; /* 20px */
+  font-family: 'Germania One', cursive;
 }
 
 .question-box {
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem; /* 20px */
   background-color: white;
-  border-radius: 3px;
+  border-radius: 0.1875rem; /* 3px */
+  padding: 0.0625rem 1.125rem 0.625rem 1.125rem; /* 1px 18px 10px 18px */
   align-items: center;
-  padding: 1px;
-  padding-left: 18px;
-  padding-bottom: 10px;
 }
 
 .question-text {
   font-weight: bold;
   color: black;
+  font-size: clamp(1rem, 4vw, 1rem); /* 16px */
 }
 
 .options-container {
-  margin-top: 10px;
-  /* color: black; */
+  margin-top: 0.625rem; /* 10px */
 }
 
 .option {
-  padding: 5px;
-  border-radius: 5px;
+  padding: 0.3125rem; /* 5px */
+  border-radius: 0.3125rem; /* 5px */
+  font-size: clamp(0.875rem, 3.5vw, 0.875rem); /* 14px */
 }
 
 .option.user-answer {
-  color: #FF6B6C; /* Yellow for user answer */
+  color: #FF6B6C;
 }
 
 .option.correct-answer {
-  color: #009082;  }
-
-.buttons-container {
-  margin-top: 20px;
-  display: flex;
-  gap: 10px;
+  color: #009082;
 }
 
-/* .lbutton {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #5B287C; 
-  color: #FFC145;
-  border: #FFC145;
-  cursor: pointer;
-} */
+.buttons-container {
+  margin-top: 1.25rem; /* 20px */
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem; /* 10px */
+  align-items: center;
+}
 
 .lbutton {
   background-color: #FFC145;
   color: #5B287C;
   cursor: pointer;
-  padding: 15px 90px;
-  border-radius: 5px;
+  padding: 0.9375rem 1.25rem; /* 15px 20px */
+  border-radius: 0.3125rem; /* 5px */
   font-family: 'Germania One', cursive;
-  /* border: none; */
+  border: none;
   outline: none;
-  font-size: 18px;
-}
-[dir="rtl"] .lbutton {
-  font-family: 'Marhey', cursive;
-
+  font-size: clamp(1rem, 4vw, 1.125rem); /* 16px to 18px */
+  width: clamp(12.5rem, 50vw, 15rem); /* Responsive width */
 }
 
 .pbutton {
-  padding: 15px 70px;
-  border: 2px solid #FFC145; /* تصحيح الحدود */
-  border-radius: 5px;
-  background-color: #5B287C; 
+  padding: 0.9375rem 1.25rem; /* 15px 20px */
+  border: 0.125rem solid #FFC145; /* 2px */
+  border-radius: 0.3125rem; /* 5px */
+  background-color: #5B287C;
   color: #FFC145;
   cursor: pointer;
   font-family: 'Germania One', cursive;
-  /* border: none; */
   outline: none;
-  font-size: 18px;
+  font-size: clamp(1rem, 4vw, 1.125rem); /* 16px to 18px */
+  width: clamp(12.5rem, 50vw, 15rem); /* Responsive width */
 }
-[dir="rtl"] .pbutton {
-  font-family: 'Marhey', cursive;
 
+/* RTL Support */
+[dir="rtl"] .Reviewheader,
+[dir="rtl"] .lbutton,
+[dir="rtl"] .pbutton {
+  font-family: 'Noto Sans Arabic', sans-serif;
+}
+
+/* Media Queries for Larger Screens */
+@media (min-width: 768px) {
+  .quiz-box-review {
+    padding: 1.875rem; /* 30px */
+  }
+
+  .buttons-container {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .lbutton,
+  .pbutton {
+  }
+}
+
+@media (min-width: 1024px) {
+  .quiz-review-container {
+    padding: 1.25rem; /* 20px */
+  }
 }

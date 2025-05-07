@@ -260,11 +260,16 @@ const AvatarCustomization = () => {
     }
 
     setEquippedAssets((prev) => ({ ...prev, [type]: imageUrl }));
-    trackEvent(userId, 'asset_equipped', {
+
+    const asset = assets.find((a) => a.image_url === imageUrl);
+    const isOwned = asset && (asset.price === 0 || ownedAssets.some((owned) => owned.image_url === imageUrl));
+
+    trackEvent(userId, isOwned ? 'asset_equipped' : 'asset_tried', {
       category: 'AvatarCustomization',
-      label: `${type} - User ${userId}`
+      label: `${type} - ${asset?.id || 'unknown'} - User ${userId}`,
+      value: asset?.price || 0
     }, user).catch((error) => {
-      console.error('Failed to track asset_equipped:', error);
+      console.error(`Failed to track ${isOwned ? 'asset_equipped' : 'asset_tried'}:`, error);
     });
   };
 
@@ -284,42 +289,67 @@ const AvatarCustomization = () => {
     });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!user || !user.id) {
       console.log('No user, redirecting to login');
       navigate('/login');
-      return;
+      return false;
     }
 
-    apiClient
-      .post("/save-preferences", {
+    const equippedAssetUrls = [
+      equippedAssets.brow,
+      equippedAssets.eye,
+      equippedAssets.hairstyle,
+      equippedAssets.lip,
+      equippedAssets.headdress,
+    ].filter(Boolean);
+
+    const isValid = equippedAssetUrls.every((url) => {
+      const asset = assets.find((a) => a.image_url === url);
+      if (!asset) return true;
+      return asset.price === 0 || ownedAssets.some((owned) => owned.image_url === url);
+    });
+
+    if (!isValid) {
+      setMessage(t("avatr.mustPurchaseAssetFirst"));
+      trackEvent(userId, 'save_failed_non_owned_asset', {
+        category: 'Error',
+        label: 'Attempted to save non-owned asset',
+      }, user).catch((error) => {
+        console.error('Failed to track save_failed_non_owned_asset:', error);
+      });
+      return false;
+    }
+
+    try {
+      const response = await apiClient.post("/save-preferences", {
         userId,
         brow: equippedAssets.brow,
         eye: equippedAssets.eye,
         hairstyle: equippedAssets.hairstyle,
         lip: equippedAssets.lip,
         headdress: equippedAssets.headdress,
-      })
-      .then((response) => {
-        setMessage(t("SuccessfullySaved!"));
-        trackEvent(userId, 'preferences_saved', {
-          category: 'AvatarCustomization',
-          label: `User ${userId}`
-        }, user).catch((error) => {
-          console.error('Failed to track preferences_saved:', error);
-        });
-      })
-      .catch((error) => {
-        setMessage(t("saveError"));
-        console.error(t("saveError"), error);
-        trackEvent(userId, 'preferences_save_error', {
-          category: 'Error',
-          label: 'Preferences Save Error',
-          error: error.message,
-        }, user).catch((error) => {
-          console.error('Failed to track preferences_save_error:', error);
-        });
       });
+      setMessage(t("SuccessfullySaved!"));
+      trackEvent(userId, 'preferences_saved', {
+        category: 'AvatarCustomization',
+        label: `User ${userId}`
+      }, user).catch((error) => {
+        console.error('Failed to track preferences_saved:', error);
+      });
+      return true;
+    } catch (error) {
+      setMessage(t("saveError"));
+      console.error(t("saveError"), error);
+      trackEvent(userId, 'preferences_save_error', {
+        category: 'Error',
+        label: 'Preferences Save Error',
+        error: error.message,
+      }, user).catch((error) => {
+        console.error('Failed to track preferences_save_error:', error);
+      });
+      return false;
+    }
   };
 
   const handleBackClick = () => {
@@ -342,16 +372,18 @@ const AvatarCustomization = () => {
     }
   };
 
-  const confirmBackSave = () => {
+  const confirmBackSave = async () => {
     if (!user || !user.id) {
       console.log('No user, redirecting to login');
       navigate('/login');
       return;
     }
 
-    handleSave();
-    setShowBackConfirmation(false);
-    navigate("/profile");
+    const saveSuccessful = await handleSave();
+    if (saveSuccessful) {
+      setShowBackConfirmation(false);
+      navigate("/profile");
+    }
   };
 
   const cancelBackSave = () => {
@@ -395,7 +427,7 @@ const AvatarCustomization = () => {
             zIndex: 4
           };
         }
-        if (imageUrl === "/assets/hairstyles/hairstyles_24.svg") {
+        if (imageUrl === "/assets/hairstyles/hairstyles_16.svg") {
           return {
             position: "absolute",
             top: "-147px",
@@ -445,6 +477,38 @@ const AvatarCustomization = () => {
       </div>
 
       <div className="main-content">
+        <div className="avatar-preview">
+          <div style={{ position: "relative", width: "100%", maxWidth: "300px", aspectRatio: "6 / 7", margin: "0 0 40px 0" }}>
+            {equippedAssets.face && (
+              <img
+                src={equippedAssets.face}
+                alt={t("faceAlt")}
+                style={getStyleForType("face", equippedAssets.face)}
+                onError={(e) => {
+                  e.target.src = "https://via.placeholder.com/50";
+                  e.target.alt = "Face (Image not found)";
+                }}
+              />
+            )}
+            {Object.keys(equippedAssets).map((type, index) => {
+              if (type !== "face" && equippedAssets[type]) {
+                return (
+                  <img
+                    key={index}
+                    src={equippedAssets[type]}
+                    alt={t(`${type}Alt`)}
+                    style={getStyleForType(type, equippedAssets[type])}
+                    onError={(e) => {
+                      e.target.src = "https://via.placeholder.com/50";
+                      e.target.alt = `${type} (Image not found)`;
+                    }}
+                  />
+                );
+              }
+              return null;
+            })}
+          </div>
+        </div>
         <div className="asset-section">
           <div className="Anavigation-tabs">
             {assetTypes.map(({ type, icon }) => (
@@ -480,6 +544,8 @@ const AvatarCustomization = () => {
                     <img
                       src={asset.image_url}
                       alt={asset.name}
+                      onClick={() => handleEquip(asset.image_url, asset.type)}
+                      style={{ cursor: "pointer" }}
                       onError={(e) => {
                         e.target.src = "https://via.placeholder.com/50";
                         e.target.alt = `${asset.name} (Image not found)`;
@@ -513,39 +579,6 @@ const AvatarCustomization = () => {
             </div>
           </div>
         </div>
-
-        <div className="avatar-preview">
-          <div style={{ position: "relative", width: "300px", height: "350px", margin: "0px 0px 40px 0px" }}>
-            {equippedAssets.face && (
-              <img
-                src={equippedAssets.face}
-                alt={t("faceAlt")}
-                style={getStyleForType("face", equippedAssets.face)}
-                onError={(e) => {
-                  e.target.src = "https://via.placeholder.com/50";
-                  e.target.alt = "Face (Image not found)";
-                }}
-              />
-            )}
-            {Object.keys(equippedAssets).map((type, index) => {
-              if (type !== "face" && equippedAssets[type]) {
-                return (
-                  <img
-                    key={index}
-                    src={equippedAssets[type]}
-                    alt={t(`${type}Alt`)}
-                    style={getStyleForType(type, equippedAssets[type])}
-                    onError={(e) => {
-                      e.target.src = "https://via.placeholder.com/50";
-                      e.target.alt = `${type} (Image not found)`;
-                    }}
-                  />
-                );
-              }
-              return null;
-            })}
-          </div>
-        </div>
       </div>
 
       <div className="action-buttons">
@@ -553,6 +586,16 @@ const AvatarCustomization = () => {
           {t("avatr.save")}
         </button>
       </div>
+
+      {showBackConfirmation && (
+        <div className="confirmation-modal-overlay">
+          <div className="confirmation-modal">
+            <p>{t("avatr.confirmSaveBeforeExit")}</p>
+            <button onClick={confirmBackSave}>{t("avatr.yes")}</button>
+            <button onClick={cancelBackSave}>{t("avatr.no")}</button>
+          </div>
+        </div>
+      )}
 
       {message && (
         <div className="message-modal_overlay">
@@ -568,16 +611,6 @@ const AvatarCustomization = () => {
             <p>{t("avatr.confirmPurchase", { price: selectedAsset.price })}</p>
             <button onClick={confirmPurchase}>{t("avatr.yes")}</button>
             <button onClick={cancelPurchase}>{t("avatr.no")}</button>
-          </div>
-        </div>
-      )}
-
-      {showBackConfirmation && (
-        <div className="confirmation-modal-overlay">
-          <div className="confirmation-modal">
-            <p>{t("avatr.confirmSaveBeforeExit")}</p>
-            <button onClick={confirmBackSave}>{t("avatr.yes")}</button>
-            <button onClick={cancelBackSave}>{t("avatr.no")}</button>
           </div>
         </div>
       )}

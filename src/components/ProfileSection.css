@@ -1,23 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
+
+/* Mobile-First Approach */
 .profile-container {
   background-color: #f3e8ff;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px;
-  margin-left: 16.5%; /* Adjusted for sidebar */
+  padding: 0rem 4rem;
+  box-sizing: border-box;
 }
 
-.profile-name{
-  color: #6b21a8;
-  font-family: Germania One;
-  font-size: 20px;
-  margin-left: 30px;
-}
-
-[dir="rtl"] .profile-name {
-  font-family: 'Marhey', cursive;
-
+.profile-content {
+  width: 100%;
+  max-width: 37.5rem; /* 600px */
+  margin-top: 3rem; /* مساحة لزر Hamburger */
 }
 
 .profile-header {
@@ -25,225 +24,307 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 640px;
-  gap: 16px;
+  gap: 1rem;
 }
 
-/* Avatar Box */
 .profile-avatar-container {
   position: relative;
-  background: url("../components/images/Avatar\ bg.svg" )no-repeat center center/cover;
-  padding: 16px;
-  border-radius: 16px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: url("../components/images/Avatar bg.svg") no-repeat center center/cover;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
-  width: 600px;
-  height: 300px;
-  overflow: hidden; /* مهم لو الصورة أكبر */
+  width: 100%;
+  max-width: 37.5rem; /* 600px */
+  height: clamp(12rem, 50vw, 18.75rem); /* 300px */
+  overflow: hidden;
 }
 
-/* Avatar Styling */
 .profile-avatar {
-  width: 80px;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-}
-
-/* Edit Button */
-.edit-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #5B287C; /* Transparent purple */
-  color: #facc15; /* Yellow text */
-  padding: 6px 12px;
-  border-radius: 8px;
-  border: 2px solid #facc15;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s, transform 0.2s;
-}
-[dir="rtl"] .edit-button  {
-  font-family: 'Marhey', cursive;
+  position: relative;
+  width: clamp(10rem, 25vw, 15rem); /* 150px - 240px */
+  height: clamp(12.5rem, 31.25vw, 18.75rem); /* 200px - 300px */
+  margin-bottom: -1rem;
 
 }
-/* .edit-button:hover {
-  background: rgba(76, 29, 149, 0.9);
-  transform: scale(1.1);
-} */
 
-/* Name and Points Box */
 .profile-name-container {
   background: white;
-  padding: 0px 8px;
-  border-radius: 16px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 600px;
+  max-width: 37.5rem; /* 600px */
   display: flex;
-  justify-content: space-between; /* Name on right, points on left */
+  justify-content: space-between;
   align-items: center;
-  min-width: 625px;
-  gap: 8px;
+  gap: 0.5rem;
+}
+
+.profile-name {
+  color: #6b21a8;
+  font-family: 'Germania One', cursive;
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  margin: 0;
 }
 
 .profile-points {
-  color: #FFC145;
-  margin-right: 30px; /* Push points to the left */
+  color: #ffc145;
   font-family: 'Germania One', cursive;
+  font-size: clamp(0.875rem, 3.5vw, 1rem);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
-/* Section Styling */
+.userpointstow,
+.points {
+  width: clamp(1rem, 4vw, 1.25rem);
+  height: clamp(1rem, 4vw, 1.25rem);
+}
+
+.edit-button {
+  position: absolute;
+  top: 0.625rem;
+  right: 0.625rem;
+  background: #5b287c;
+  color: #facc15;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 2px solid #facc15;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: clamp(0.75rem, 3vw, 0.875rem);
+  font-family: 'Germania One', cursive;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.edit-button:hover {
+  background: #4b1e6a;
+  transform: scale(1.05);
+}
+
 .section {
   background: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 16px;
-  padding: 24px;
-  max-width: 600px;
-  margin-top: 24px;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 37.5rem; /* 600px */
+  margin-top: 1.5rem;
+  margin-right: -1rem;
+
 }
 
-/* Section Titles with Purple Rectangle */
 .section-title {
-  background: #5B287C; /* Purple background */
-  color: white; /* White text */
-  padding: 15px 16px;
-  border-radius: 8px;
-  display: flex;
+  background: #5b287c;
+  color: white;
+  padding: 0.75rem 1rem;
+  margin-right: -1rem;
+  border-radius: 0.5rem;
+  display: flex
+;
   justify-content: center;
   align-items: center;
   text-align: center;
-  width: 560px;
+  width: 100%;
+  max-width: 35rem;
   font-family: 'Germania One', cursive;
-  font-size: 20px;
+  font-size: clamp(1rem, 4vw, 1.25rem);
 }
-[dir="rtl"] .section-title  {
-  font-family: 'Marhey', cursive;
 
-}
-/* Achievements Grid */
-.achievements-grid {
+.achievements-grid,
+.progress-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-top: 16px;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-.pachievement-card {
-  background-color: #f3e8ff;;
-  padding: 12px 35px;
-  border-radius: 8px;
+.pachievement-card,
+.progress-card {
+  background-color: #f3e8ff;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
   text-align: center;
-  justify-content: center;
   display: flex;
-  align-items: center; 
   flex-direction: column;
+  align-items: center;
 }
+
 .achievement-image {
-  width: 60px;
-  height: 60px;
-  margin-bottom: 12px;
-  border-radius: 8px;
+  width: clamp(2.5rem, 10vw, 3.75rem); /* 60px */
+  height: clamp(2.5rem, 10vw, 3.75rem); /* 60px */
+  margin-bottom: 0.75rem;
+  border-radius: 0.5rem;
 }
 
 .achievement-title {
-  /* font-weight: bold; */
-  font-size: 16px;
+  font-size: clamp(0.75rem, 3vw, 1rem);
   font-family: 'Germania One', cursive;
 }
 
-.achievement-description {
-  font-size: 12px;
-  color: #6b7280;
+.lesson-info,
+.points-earned {
+  font-size: clamp(0.625rem, 2.5vw, 0.75rem);
+  font-family: 'Fredoka', sans-serif;
 }
 
-/* Progress Report Grid */
-.progress-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-top: 16px;
-}
-
-.progress-card {
-  background-color: #f3e8ff;
-  padding: 12px;
-  border-radius: 8px;
-  text-align: center;
-}
-
-.progress-score {
+.pscore-circle {
   font-weight: bold;
-  font-size: 16px;
+  font-size: clamp(0.75rem, 3vw, 1rem);
+  margin-bottom: 0.5rem;
 }
 
-.progress-description {
-  font-size: 12px;
-  color: #6b7280;
+.no-achievements,
+.no-progress {
+  text-align: center;
+  color: #888;
+  font-size: clamp(0.75rem, 3vw, 1rem);
+  font-family: 'Fredoka', sans-serif;
+  grid-column: 1 / -1;
 }
 
-/* View All Button */
 .view-all-button {
-  margin-top: 16px;
-  background: #FFC145;
-  padding: 10px;
-  border-radius: 8px;
+  margin-top: 1rem;
+  background: #ffc145;
+  padding: 0.625rem;
+  border-radius: 0.5rem;
   width: 100%;
   border: none;
   cursor: pointer;
   transition: background 0.3s;
   font-family: 'Germania One', cursive;
-  color: #5B287C;
-  font-size: 16px;
+  color: #5b287c;
+  font-size: clamp(0.75rem, 3vw, 1rem);
 }
 
 .view-all-button:hover {
   background: #eab308;
 }
-[dir="rtl"] .view-all-button  {
-  font-family: 'Marhey', cursive;
 
-}
-/* Style for the logout button */
 .settings-button {
-position: absolute;
-top: 20px;
-right: 20px;
-background: none;
-border: none;
-cursor: pointer;
-color: #6b21a8;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b21a8;
+  font-size: clamp(1rem, 4vw, 1.5rem);
 }
 
 .settings-button:hover {
-color: #822cc9; 
+  color: #822cc9;
 }
 
+/* دعم RTL */
 [dir="rtl"] .profile-container {
-margin-right: 16.5%;
-margin-left: 0;
+  margin-right: 0;
+  margin-left: 0;
+}
 
+/* [dir="rtl"] .profile-name,
+[dir="rtl"] .section-title,
+[dir="rtl"] .edit-button,
+[dir="rtl"] .view-all-button {
+} */
+
+[dir="rtl"] .profile-name-container {
+  flex-direction: row;
+  align-items: center;
+  font-family:' Germania One', cursive;
+}
+
+[dir="rtl"] .profile-points {
+  margin-left: 1rem;
+  margin-right: 0;
 }
 
 [dir="rtl"] .settings-button {
-left: 20px;
-right: auto;
+  left: 1rem;
+  right: auto;
+}
 
+[dir="rtl"] .edit-button {
+  left: 0.625rem;
+  right: auto;
 }
-.no-achievements {
-  text-align: center;
-  color: #888;
-  font-size: 18px;
-  grid-column: span 3;
+
+/* Media Queries للشاشات الأكبر */
+@media (min-width: 768px) {
+  .profile-container {
+  }
+
+  .profile-content {
+    margin-left: 16.5%;
+    width: calc(100% - 16.5%);
+    margin-top: 0;
+  }
+
+  [dir="rtl"] .profile-content {
+    margin-right: 16.5%;
+    margin-left: 0;
+  }
+
+  .profile-header {
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 40rem; /* 640px */
+  }
+
+  .profile-avatar-container {
+    max-width: 37.5rem; /* 600px */
+    height: 18.75rem; /* 300px */
+  }
+
+  .profile-avatar {
+    width: 15rem; /* 240px */
+    height: 18.75rem; /* 300px */
+    /* margin-bottom: -2rem; */
+
+  }
+
+  .profile-name-container {
+    flex-direction: row;
+    justify-content: space-between;
+    min-width: unset;
+    max-width: 37.5rem; /* 600px */
+  }
+
+  .profile-points {
+    margin-right: 1.875rem;
+  }
+
+  .achievements-grid,
+  .progress-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .achievement-image {
+    width: 3.75rem; /* 60px */
+    height: 3.75rem; /* 60px */
+  }
+
+  .section-title {
+    max-width: 35rem; /* 560px */
+  }
 }
-.no-progress{
-  text-align: center;
-  color: #888;
-  font-size: 18px;
-  grid-column: span 3;
+
+@media (min-width: 1024px) {
+  .profile-content {
+    max-width: 43.75rem; /* 700px */
+    padding: 1.5rem;
+  }
+
+  .profile-name-container {
+    max-width: 37.5rem; /* 600px */
+  }
+
+  .section {
+    max-width: 37.5rem; /* 600px */
+  }
 }

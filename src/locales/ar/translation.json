@@ -200,7 +200,8 @@
     "confirmPurchase": "هل أنت متأكد أنك تريد شراء هذا العنصر مقابل {{price}} نقطة؟",
     "yes": "نعم",
     "no": "لا",
-    "confirmSaveBeforeExit":"عايز تحفظ الحاجات اللي غيرتها؟"
+    "confirmSaveBeforeExit":"عايز تحفظ الحاجات اللي غيرتها؟",
+    "mustPurchaseAssetFirst": "لازم تشترى الأول!"
   },
    
   "setting":{

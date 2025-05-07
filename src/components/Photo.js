@@ -10,10 +10,10 @@ const ImageSection = () => {
 
   return (
     <section className="image-section">
-      <img
+      <img className="image-section"
         src={isArabic ? photo_front_ar : photo_front_en} 
         alt="photo_front"
-        className="photo_front"
+        // className="photo_front"
       />
     </section>
   );

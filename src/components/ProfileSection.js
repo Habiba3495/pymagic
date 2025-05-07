@@ -242,7 +242,7 @@ const ProfilePage = () => {
             zIndex: 4
           };
         }
-        if (imageUrl === "/assets/hairstyles/hairstyles_24.svg") {
+        if (imageUrl === "/assets/hairstyles/hairstyles_16.svg") {
           return {
             position: "absolute",
             top: "-73.5px",

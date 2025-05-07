@@ -1,131 +1,116 @@
 .settings-container {
   background: white;
-  width: 80%;
-  max-width: 900px;
-  padding: 30px;
-  border-radius: 15px;
+  width: clamp(300px, 80%, 900px);
+  padding: clamp(15px, 3vw, 30px);
+  border-radius: clamp(8px, 1.5vw, 15px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-
 }
-  .settings-title {
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    color: #4b1665; 
-    margin-top: 10px;
-  }
-  .settings-grid {
-    display: grid;
-    gap: 1.5rem;
-    max-width: 1200px;
-    margin: auto;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
 
-  .settings-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    justify-content: center;
-  }
-  
-  .settings-card {
-    background: #f2ddff;
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: 0.3s;
-    border: 1px solid #facc15; 
-  }
-  
-  .settings-card:hover {
-    box-shadow: 0 0 15px #f2ddff;
-    transform: translateY(-5px);
-  }
-
-  .settings-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: #facc15;
-    font-size: 30px;
-  }
-
-  .settings-heading {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-
-  /* .settings-bg {
-    background-color: #f2ddff; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;       
-    min-height: 92.5vh; 
-    width: 95%;        
-    min-width: 80vh;
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-  } */
-  .settings-bg {
-    background-color: #f2ddff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    min-height: 94.5vh;
-    min-width: 90vh;
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
+.settings-title {
+  text-align: center;
+  font-size: clamp(16px, 2.5vw, 18px);
+  font-weight: bold;
+  color: #4b1665;
+  margin-top: clamp(5px, 1vw, 10px);
 }
-  
-  .back-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .back-icon {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .back-button:hover .back-icon {
-    opacity: 0.7;
-  }
 
-  .settings-header {
-    background: #5c2685; 
-    color: white;
-    font-size: 25px;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    font-family: Germania One;
-  }
-  
-   [dir="rtl"] .settings-header {
-    font-family: 'Marhey', cursive;
-  
-  } 
-  
-  /* Dark background for the entire screen */
+.settings-grid {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  max-width: clamp(300px, 90%, 1200px);
+  margin: auto;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.settings-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: clamp(10px, 2vw, 20px);
+  justify-content: center;
+}
+
+.settings-card {
+  background: #f2ddff;
+  padding: clamp(10px, 2vw, 15px);
+  border-radius: clamp(5px, 1vw, 10px);
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+  border: 1px solid #facc15;
+}
+
+.settings-card:hover {
+  box-shadow: 0 0 15px #f2ddff;
+  transform: translateY(-5px);
+}
+
+.settings-icon {
+  font-size: clamp(20px, 4vw, 30px);
+  margin-bottom: clamp(0.5rem, 1vw, 1rem);
+  color: #facc15;
+}
+
+.settings-heading {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 600;
+  margin-bottom: clamp(0.3rem, 0.5vw, 0.5rem);
+}
+
+.settings-bg {
+  background-color: #f2ddff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: clamp(500px, 94.5vh, 94.5vh);
+  min-width: clamp(300px, 90vw, 90vh);
+  padding: clamp(10px, 2vw, 20px);
+  position: relative;
+  overflow: hidden;
+}
+
+.back-button {
+  position: absolute;
+  top: clamp(10px, 2vw, 20px);
+  left: clamp(10px, 2vw, 20px);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.back-icon {
+  width: clamp(30px, 5vw, 40px);
+  height: clamp(30px, 5vw, 40px);
+}
+
+.back-button:hover .back-icon {
+  opacity: 0.7;
+}
+
+.settings-header {
+  background: #5c2685;
+  color: white;
+  font-size: clamp(20px, 3vw, 25px);
+  padding: clamp(10px, 2vw, 15px);
+  border-radius: clamp(5px, 1vw, 10px);
+  margin-bottom: clamp(10px, 2vw, 20px);
+  font-family: 'Germania One', cursive;
+}
+
+[dir="rtl"] .settings-header {
+  font-family: 'Marhey', cursive;
+}
+
+/* Dark background for the entire screen */
 .confirmation-popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);  /* Dark background for the screen */
-  z-index: 999; /* Ensure this overlay is on top of other content */
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 999;
 }
 
 /* Popup styling */
@@ -134,26 +119,26 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #5B287C;  /* Dark purple background for the message box */
+  background-color: #5B287C;
   color: white;
-  padding: 20px;
-  border-radius: 10px;
+  padding: clamp(10px, 3vw, 20px);
+  border-radius: clamp(5px, 1vw, 10px);
   text-align: center;
-  width: 300px;
-  z-index: 1000; /* Make sure popup is on top of the overlay */
-  border:2px solid #FFC145;
+  width: clamp(200px, 80vw, 300px);
+  z-index: 1000;
+  border: 2px solid #FFC145;
 }
 
 /* Title style */
 .popup-title {
-  font-size: 18px;
-  margin-bottom: 20px;
+  font-size: clamp(16px, 2.5vw, 18px);
+  margin-bottom: clamp(10px, 2vw, 20px);
 }
 
-[dir="rtl"] .popup-title  {
+[dir="rtl"] .popup-title {
   font-family: 'Marhey', cursive;
-
 }
+
 /* Buttons container */
 .popup-buttons {
   display: flex;
@@ -162,34 +147,63 @@
 
 /* Button styling */
 .popup-buttons button {
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
+  padding: clamp(5px, 1.5vw, 10px) clamp(10px, 3vw, 20px);
+  font-size: clamp(14px, 2vw, 16px);
+  border-radius: clamp(3px, 0.5vw, 5px);
   border: none;
   cursor: pointer;
 }
 
 /* Confirm button style */
 .popup-buttons button:not(.cancel) {
-  background-color: #FFC145; /* Yellow for the confirm button */
+  background-color: #FFC145;
   color: black;
 }
 
 /* Cancel button style */
 .popup-buttons button.cancel {
-  background-color: white; /* White for the cancel button */
+  background-color: white;
   color: black;
-  border: 1px solid #ccc; /* Optional border for the cancel button */
+  border: 1px solid #ccc;
 }
- 
+
+.language-switcher-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: clamp(10px, 3vw, 20px);
+  border-radius: clamp(5px, 1vw, 8px);
+  z-index: 1000;
+  width: clamp(200px, 80vw, 400px);
+}
+
+@media (max-width: 768px) {
+  .settings-bg {
+    min-width: 100%;
+    height: 100vh;
+    padding: clamp(5px, 1vw, 10px);
+  }
+
+  .settings-container {
+    width: clamp(250px, 90%, 600px);
+    padding: clamp(10px, 2vw, 20px);
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .confirmation-popup {    
+    width: clamp(150px, 90vw, 250px);
+    margin: 0.5rem;
+}
+
   .language-switcher-box {
-    position: fixed; /* يجعل الصندوق ثابت في الصفحة */
-    top: 50%; /* تحديد المسافة من أعلى الصفحة */
-    left: 50%; /* تحديد المسافة من يسار الصفحة */
-    transform: translate(-50%, -50%); /* يتم نقل الصندوق لتوسيطه تمامًا في الصفحة */
-    padding: 20px; /* إضافة مساحة حول المحتوى */
-    border-radius: 8px; /* لتنعيم الحواف */
-    z-index: 1000; /* التأكد من أن الصندوق يظهر فوق باقي العناصر */
-  } 
- 
-  
+    width: clamp(150px, 90vw, 300px);
+  }
+}

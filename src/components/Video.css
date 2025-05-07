@@ -1,79 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
+
+/* Mobile-First Approach */
 .lesson-container {
-    background-color: #f2ddff;
-    background-image: url("./images/video_bg.svg"); 
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background-color: #f2ddff;
+  background-image: url("./images/video_bg.svg");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 .vlesson-content {
-    background: #f2ddff;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  background: #f2ddff;
+  padding: 1.25rem; /* 20px */
+  border-radius: 0.625rem; /* 10px */
+  text-align: center;
+  box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 50rem; /* 800px */
 }
 
 .lesson-header {
-
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    font-family: 'Germania One', cursive;
+  color: white;
+  padding: 0.625rem; /* 10px */
+  border-radius: 0.3125rem; /* 5px */
+  font-family: 'Germania One', cursive;
+  font-size: clamp(1.5rem, 6vw, 1.875rem); /* 24px to 30px */
 }
 
 .video-container {
-    margin: 20px 0;
-    max-width: 800px;
-    margin: 20px auto;
-    background-color: transparent; /* Remove black background if desired */
-    border-radius: 8px;
-    overflow: hidden;
+  margin: 1.25rem 0; /* 20px */
+  max-width: 50rem; /* 800px */
+  margin: 1.25rem auto;
+  background-color: transparent;
+  border-radius: 0.5rem; /* 8px */
+  overflow: hidden;
 }
 
 video {
-    width: 100%;
-    border-radius: 10px;
-    height: auto;
+  width: 100%;
+  border-radius: 0.625rem; /* 10px */
+  height: auto;
 }
 
 .quiz-button {
-    background-color: #FBBF24;
-    color: #5B287C;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-left: 650px;
-    font-family: 'Germania One', cursive;
+  background-color: #FBBF24;
+  color: #5B287C;
+  padding: 0.625rem 1.25rem; /* 10px 20px */
+  border: none;
+  border-radius: 0.3125rem; /* 5px */
+  cursor: pointer;
+  font-size: clamp(1rem, 4vw, 1rem); /* 16px */
+  margin-left: 0;
+  font-family: 'Germania One', cursive;
+  width: clamp(10rem, 30vw, 15rem); /* Responsive width */
+  margin-top: 1rem;
 }
 
 .quiz-button:hover {
-    background-color: #d89f1b;
+  background-color: #d89f1b;
 }
 
 .back-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background: none;
-    border: none;
-    cursor: pointer;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.back-icon {
+  width: clamp(2.5rem, 6vw, 2.5rem); /* 40px */
+  height: clamp(2.5rem, 6vw, 2.5rem); /* 40px */
+}
+
+.back-button:hover .back-icon {
+  opacity: 0.7;
+}
+
+/* RTL Support */
+
+
+[dir="rtl"] .back-button {
+  left: auto;
+  right: 1rem;
+}
+
+/* Media Queries for Larger Screens */
+@media (min-width: 768px) {
+  .vlesson-content {
+    padding: 2rem; /* 32px */
   }
-  
-  .back-icon {
-    width: 40px;  /* حجم الأيقونة */
-    height: 40px;
+
+  .quiz-button {
+    margin-left: 34.625rem; /* 650px */
   }
-  
-  .back-button:hover .back-icon {
-    opacity: 0.7; /* تأثير عند التمرير */
-  }
+
   [dir="rtl"] .quiz-button {
-    font-family: 'Marhey', cursive;
-  
+   
   }
+}
+
+@media (min-width: 1024px) {
+  .lesson-container {
+    padding: 1.5rem;
+  }
+}

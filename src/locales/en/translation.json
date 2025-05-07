@@ -199,7 +199,8 @@
     "confirmPurchase": "Are you sure you want to buy this item for {{price}} points?",
     "yes": "Yes",
     "no": "No",
-    "confirmSaveBeforeExit":"Are you want to save your changes?"
+    "confirmSaveBeforeExit":"Are you want to save your changes?",
+    "mustPurchaseAssetFirst": "You must purchase this asset first!"
   },
 
   "setting":{

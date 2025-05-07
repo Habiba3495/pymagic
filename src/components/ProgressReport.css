@@ -1,124 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
+
+/* Mobile-First Approach */
 .progress-report-bg {
-  background-color: #f2ddff; /* موف فاتح */
+  background-color: #f2ddff;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   width: 100%;
-  padding: 20px;
+  padding: 1rem;
   position: relative;
   box-sizing: border-box;
 }
 
-/* زر الرجوع */
 .back-button {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 1rem;
+  left: 1rem;
   background: none;
   border: none;
   cursor: pointer;
 }
 
 .back-icon {
-  width: 40px;  /* حجم الأيقونة */
-  height: 40px;
-}
-.back-button:hover .back-icon {
-  opacity: 0.7; /* تأثير عند التمرير */
+  width: clamp(2.5rem, 6vw, 2.5rem); /* 40px */
+  height: clamp(2.5rem, 6vw, 2.5rem); /* 40px */
 }
 
-/* الصندوق الأبيض في المنتصف */
+.back-button:hover .back-icon {
+  opacity: 0.7;
+}
+
 .progress-report-container {
   background: white;
-  width: 80%;
-  max-width: 900px;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 56.25rem; /* 900px */
+  padding: 1.875rem; /* 30px */
+  border-radius: 0.9375rem; /* 15px */
+  box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-/* هيدر العنوان */
 .progress-report-header {
-  background: #5c2685; /* بنفسجي غامق */
+  background: #5c2685;
   color: white;
-  font-size: 24px;
-  /* font-weight: bold; */
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 20px;
+  font-size: clamp(1.5rem, 6vw, 1.875rem); /* 24px to 30px */
+  padding: 0.9375rem; /* 15px */
+  border-radius: 0.625rem; /* 10px */
+  margin-bottom: 1.25rem; /* 20px */
   font-family: 'Germania One', cursive;
-  font-size: 30px;
 }
-[dir="rtl"] .progress-report-header  {
-  font-family: 'Marhey', cursive;
 
-}
-/* الشبكة التي تحتوي على الكروت */
 .progress-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 1.25rem; /* 20px */
   justify-content: center;
 }
 
-/* تصميم الكارت */
 .progress-card {
-  background: #f2ddff; /* بنفسجي فاتح */
-  padding: 15px;
-  border-radius: 10px;
+  background: #f2ddff;
+  padding: 0.9375rem; /* 15px */
+  border-radius: 0.625rem; /* 10px */
   text-align: center;
   cursor: pointer;
-  transition: 0.3s;
+  transition: transform 0.3s ease;
 }
 
 .progress-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-0.3125rem); /* -5px */
 }
 
-/* الدائرة التي تعرض النتيجة */
 .pscore-circle {
-  background: #4b1665; /* بنفسجي غامق */
+  background: #4b1665;
   color: #ffcc5c;
-  font-size: 20px;
+  font-size: clamp(1.25rem, 5vw, 1.25rem); /* 20px */
   font-weight: bold;
-  width: 80px;
-  height: 80px;
+  width: clamp(5rem, 12vw, 5rem); /* 80px */
+  height: clamp(5rem, 12vw, 5rem); /* 80px */
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  margin: 10px auto;
-  border: 5px solid #ffcc5c; /* إطار أصفر */
+  margin: 0.625rem auto; /* 10px */
+  border: 0.3125rem solid #ffcc5c; /* 5px */
 }
 
-/* معلومات الدرس */
 .lesson-info {
-  font-size: 16px;
+  font-size: clamp(1rem, 4vw, 1rem); /* 16px */
   font-weight: bold;
-  color: #4b1665; /* بنفسجي غامق */
-  margin-top: 10px;
+  color: #4b1665;
+  margin-top: 0.625rem; /* 10px */
 }
 
-/* النقاط المكتسبة */
 .points-earned {
-  font-size: 14px;
+  font-size: clamp(0.875rem, 3.5vw, 0.875rem); /* 14px */
   color: #4b1665;
   font-weight: bold;
   display: flex;
-  display: flex;
   justify-content: center;
   align-items: center;
+  gap: 0.3125rem; /* 5px */
 }
 
-.points{
-  width: 20px;  /* حجم الأيقونة */
-  height: 20px;
+.points {
+  width: clamp(1.25rem, 4vw, 1.25rem); /* 20px */
+  height: clamp(1.25rem, 4vw, 1.25rem); /* 20px */
 }
+
 .no-progress-message {
   text-align: center;
   color: #555;
-  font-size: 1.2rem;
-  margin-top: 2rem;
+  font-size: clamp(1rem, 4vw, 1.2rem); /* 16px to 19.2px */
+  margin-top: 1.25rem; /* 20px */
+}
+
+/* RTL Support */
+[dir="rtl"] .progress-report-header {
+  font-family: 'Noto Sans Arabic', sans-serif;
+}
+
+[dir="rtl"] .back-button {
+  left: auto;
+  right: 1rem;
+}
+
+/* Media Queries for Larger Screens */
+@media (min-width: 768px) {
+  .progress-cards {
+    grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr)); /* 200px */
+  }
+
+  .progress-report-container {
+    padding: 2.5rem; /* 40px */
+  }
+
+  .progress-report-header {
+    margin-bottom: 1.875rem; /* 30px */
+  }
+}
+
+@media (min-width: 1024px) {
+  .progress-report-bg {
+    padding: 1.5rem;
+  }
 }

@@ -1,10 +1,26 @@
 .image-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* padding: 50px 0; */
-    background: url("../components/images/photo_back.svg") no-repeat center center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background: url("../components/images/photo_back.svg") no-repeat center center/cover; */
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  min-height: 50vh;
+  width: 100%;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .image-section {
+    min-height: 1vh;
   }
+}
+
+@media (max-width: 480px) {
+  .image-section {
+  }
+}
 /*   
   .image-section {
     max-width: 80%;

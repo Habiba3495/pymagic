@@ -2,28 +2,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
 
+/* Mobile-First Approach */
 .sidebar {
-  width: 15%;
+  width: 70%; /* عرض مناسب للموبايل */
   height: 100vh;
-  background-color: #E9D5FF;
-  padding: 20px;
+  background-color: #e9d5ff;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   position: fixed;
   top: 0;
-  left: 0; 
+  left: 0;
+  transform: translateX(-100%); /* إخفاء الـ Sidebar افتراضيًا على الموبايل */
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar.open {
+  transform: translateX(0); /* إظهار الـ Sidebar عند فتح */
 }
 
 .Ltitle {
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
   text-align: center;
 }
 
 .logoo {
   display: block;
-  width: 150px;
+  width: clamp(6rem, 30vw, 9.375rem); /* عرض متجاوب */
   height: auto;
-  margin: 20px auto;
+  margin: 1.25rem auto;
 }
 
 .menu {
@@ -32,7 +40,7 @@
 }
 
 .menu li {
-  margin: 10px 0;
+  margin: 0.625rem 0;
 }
 
 .menu-button {
@@ -40,12 +48,12 @@
   align-items: center;
   border: none;
   background: none;
-  padding: 10px;
-  font-size: 18px;
-  color: #B8B8D1;
+  padding: 0.625rem;
+  font-size: clamp(0.875rem, 4vw, 1.125rem);
+  color: #b8b8d1;
   font-weight: normal;
   cursor: pointer;
-  transition: font-weight 0.3s ease, color 0.3s ease;
+  transition: font-weight 0.3s ease, color 0.3s ease, font-size 0.3s ease;
   width: 100%;
   text-align: left;
   border: none;
@@ -54,11 +62,11 @@
 
 .menu-button.active {
   font-weight: bold;
-  color: #5B287C;
+  color: #5b287c;
 }
 
-.menu-button :hover{
-  font-size: 20px;
+.menu-button:hover {
+  font-size: clamp(0.9375rem, 4.5vw, 1.25rem);
 }
 
 .menu-button.active .menu-icon {
@@ -71,9 +79,9 @@
 }
 
 .menu-icon {
-  width: 60px;
-  height: 60px;
-  margin-right: 10px;
+  width: clamp(2.5rem, 12vw, 3.75rem);
+  height: clamp(2.5rem, 12vw, 3.75rem);
+  margin-right: 0.625rem;
   transition: opacity 0.3s ease;
 }
 
@@ -85,14 +93,87 @@
   font-weight: bold;
 }
 
+.hamburger-btn {
+  display: block;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1100;
+  padding: 0.5rem;
+}
+
+.hamburger-icon,
+.hamburger-icon::before,
+.hamburger-icon::after {
+  display: block;
+  width: 1.5rem;
+  height: 0.1875rem;
+  background-color: #5b287c;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.hamburger-icon {
+  position: relative;
+}
+
+.hamburger-icon::before,
+.hamburger-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+}
+
+.hamburger-icon::before {
+  top: -0.5rem;
+}
+
+.hamburger-icon::after {
+  top: 0.5rem;
+}
+
+.open .hamburger-icon {
+  background: transparent;
+}
+
+.open .hamburger-icon::before {
+  transform: rotate(45deg);
+  top: 0;
+}
+
+.open .hamburger-icon::after {
+  transform: rotate(-45deg);
+  top: 0;
+}
+
+/* Media Queries للشاشات الأكبر */
+@media (min-width: 768px) {
+  .sidebar {
+    width: 15%;
+    transform: translateX(0); /* إظهار الـ Sidebar افتراضيًا */
+  }
+
+  .hamburger-btn {
+    display: none; /* إخفاء زر Hamburger */
+  }
+}
+
+/* دعم RTL */
 [dir="rtl"] .sidebar {
   left: auto;
-  right: 0; 
+  right: 0;
+  transform: translateX(100%); /* إخفاء من اليمين في الموبايل */
+}
+
+[dir="rtl"] .sidebar.open {
+  transform: translateX(0);
 }
 
 [dir="rtl"] .menu {
-    padding-right: 30px;
-  }
+  padding-right: 1.875rem;
+}
 
 [dir="rtl"] .menu-button {
   text-align: right;
@@ -100,11 +181,20 @@
 
 [dir="rtl"] .menu-icon {
   margin-right: 0;
-  margin-left: 10px;
+  margin-left: 0.625rem;
 }
 
 [dir="rtl"] .menu-label {
-  font-family: 'Marhey', cursive;
-
+  font-family: 'Noto Sans Arabic', sans-serif;
 }
 
+[dir="rtl"] .hamburger-btn {
+  left: auto;
+  right: 1rem;
+}
+
+@media (min-width: 768px) {
+  [dir="rtl"] .sidebar {
+    transform: translateX(0);
+  }
+}
