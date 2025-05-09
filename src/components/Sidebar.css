@@ -152,7 +152,7 @@
 /* Media Queries للشاشات الأكبر */
 @media (min-width: 768px) {
   .sidebar {
-    width: 15%;
+    width: 18%;
     transform: translateX(0); /* إظهار الـ Sidebar افتراضيًا */
   }
 

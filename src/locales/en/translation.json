@@ -87,7 +87,8 @@
   "Ok": "Ok",
   "Previous":"Previous",
   "Unlockunitquiz": "You need to complete all the lessons before taking the unit quiz",
-  "Unlocklessons": "Complete the previous lessons to unlock this lesson."
+  "Unlocklessons": "Complete the previous lessons to unlock this lesson.",
+  "UnlockNextSection": "You must pass the last unit quiz in this section to access the next section."
 
 
   },
@@ -96,7 +97,8 @@
   "accessError":"Watch the lesson first, and then the card will magically open!",
   "next":"Next",
   "previous":"Previous",
-  "noFlashcardsAvailable":"No Flashcards Available"
+  "noFlashcardsAvailable":"No Flashcards Available",
+  "UnlockNextSection": "You must pass the last unit quiz in this section to access the next section."
   },
 
   "game":{

@@ -46,7 +46,6 @@ const LessonSection = () => {
         setPrevSectionName(sectionData.prevSectionName || "");
         setNextSectionName(sectionData.nextSectionName || "");
 
-        // فحص لو الـ event اتبعت قبل كده في الـ session
         const eventKey = `lesson_data_loaded-${user.id}-${sectionId}`;
         const trackedEvents = JSON.parse(sessionStorage.getItem('trackedEvents') || '{}');
 
@@ -69,7 +68,6 @@ const LessonSection = () => {
             console.error('Failed to track lesson_data_loaded:', error);
           });
 
-          // تحديث sessionStorage
           trackedEvents[eventKey] = true;
           sessionStorage.setItem('trackedEvents', JSON.stringify(trackedEvents));
           lastSectionId.current = sectionId;
@@ -170,6 +168,40 @@ const LessonSection = () => {
     }
   };
 
+  const checkNextSectionAccess = async () => {
+    try {
+      if (!user || !user.id) {
+        console.log('No user, skipping next section access check');
+        return false;
+      }
+
+      const response = await apiClient.get(`/sections/check-next-section-access/${user.id}/${sectionId}`);
+      if (response.status !== 200 || !response.data.success) {
+        throw new Error(response.data.message || "Access denied to next section");
+      }
+      return true;
+    } catch (error) {
+      console.log(`Next section access error: section_id=${sectionId}, message=${error.message}`);
+      if (error.message === 'No internet connection' || error.status >= 500) {
+        setBackendError(error.message, error.status || null);
+      }
+      if (user && user.id) {
+        console.log('Sending next_section_access_denied event');
+        await trackEvent(user.id, 'next_section_access_denied', {
+          category: 'Access',
+          label: 'Next Section Access Denied',
+          section_id: sectionId,
+          error: error.message
+        }, user).catch((error) => {
+          console.error('Failed to track next_section_access_denied:', error);
+        });
+      }
+      setPopupMessage(t("lesson.UnlockNextSection"));
+      setPopupVisible(true);
+      return false;
+    }
+  };
+
   const handleLessonClick = async (unitId, lessonId, lessonNumber) => {
     if (!user || !user.id) {
       console.log('No user, skipping lesson tracking');
@@ -233,12 +265,19 @@ const LessonSection = () => {
     }
   };
 
-  const getNextSection = () => {
-    const nextId = sectionId + 1;
-    setSectionId(nextId);
-    if (user && user.id) {
+  const getNextSection = async () => {
+    if (!user || !user.id) {
+      console.log('No user, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
+    const hasAccess = await checkNextSectionAccess();
+    if (hasAccess) {
+      const nextId = sectionId + 1;
+      setSectionId(nextId);
       console.log('Sending next_section_clicked event');
-      trackEvent(user.id, 'next_section_clicked', {
+      await trackEvent(user.id, 'next_section_clicked', {
         category: 'Navigation',
         label: 'Next Section',
         section_id: nextId
@@ -280,7 +319,7 @@ const LessonSection = () => {
               </div>
               <div className="lesson-list">
                 {unit.lessons
-                  .sort((a, b) => a.id - b.id) // إضافة ترتيب حسب lesson.id
+                  .sort((a, b) => a.id - b.id)
                   .map((lesson, index) => {
                     globalIndex++;
                     if (globalIndex % 5 === 1) isLeft = !isLeft;
@@ -361,7 +400,7 @@ const LessonSection = () => {
           {lessonData.sectionCount !== sectionId && (
             <div className="nav-button-wrapper">
               <button
-                onClick={() => getNextSection()}
+                onClick={getNextSection}
                 className="nav-button next-button"
               >
                 {t("lesson.Next")}: {nextSectionName}
