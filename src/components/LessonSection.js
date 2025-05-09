@@ -223,12 +223,12 @@ const LessonSection = () => {
     if (hasAccess) {
       console.log('Sending unit_quiz_accessed event');
       await trackEvent(user.id, 'unit_quiz_accessed', {
-      category: 'Quiz',
-      label: 'Unit Quiz Accessed',
-      unit_id: unitId
-    }, user).catch((error) => {
-      console.error('Failed to track unit_quiz_accessed:', error);
-    });
+        category: 'Quiz',
+        label: 'Unit Quiz Accessed',
+        unit_id: unitId
+      }, user).catch((error) => {
+        console.error('Failed to track unit_quiz_accessed:', error);
+      });
       navigate(`/unit-quiz/${unitId}`);
     }
   };
@@ -279,66 +279,68 @@ const LessonSection = () => {
                 <p className="lesson-unit-title">{unit.name}</p>
               </div>
               <div className="lesson-list">
-                {unit.lessons.map((lesson, index) => {
-                  globalIndex++;
-                  if (globalIndex % 5 === 1) isLeft = !isLeft;
-
-                  const marginLeft = globalIndex % 5 === 2 || globalIndex % 5 === 4 ? "50px" : globalIndex % 5 === 3 ? "100px" : "0px";
-                  const marginRight = globalIndex % 5 === 2 || globalIndex % 5 === 4 ? "50px" : globalIndex % 5 === 3 ? "100px" : "0px";
-                  const margin = isLeft ? { marginLeft } : { marginRight };
-
-                  let quizMargin = null;
-                  if (index === unit.lessons.length - 1) {
+                {unit.lessons
+                  .sort((a, b) => a.id - b.id) // إضافة ترتيب حسب lesson.id
+                  .map((lesson, index) => {
                     globalIndex++;
                     if (globalIndex % 5 === 1) isLeft = !isLeft;
-                    const quizMarginValue = globalIndex % 5 === 2 || globalIndex % 5 === 4 ? "50px" : globalIndex % 5 === 3 ? "100px" : "0px";
-                    quizMargin = isLeft ? { marginLeft: quizMarginValue } : { marginRight: quizMarginValue };
-                  }
 
-                  const isActiveLesson = location.pathname === `/lesson/${unit.id}/${lesson.id}`;
-                  const lessonQuiz = lesson.quizzes && lesson.quizzes.length > 0 ? lesson.quizzes[0] : null;
-                  const isLessonPassed = lessonQuiz && lessonQuiz.is_passed;
-                  const unitQuiz = unit.quizzes && unit.quizzes.length > 0 ? unit.quizzes[0] : null;
-                  const isUnitQuizPassed = unitQuiz && unitQuiz.is_passed;
-                  const isAccessDeniedLesson = accessDeniedLessons.has(lesson.id);
-                  const isAccessDeniedUnit = accessDeniedUnits.has(unit.id);
+                    const marginLeft = globalIndex % 5 === 2 || globalIndex % 5 === 4 ? "50px" : globalIndex % 5 === 3 ? "100px" : "0px";
+                    const marginRight = globalIndex % 5 === 2 || globalIndex % 5 === 4 ? "50px" : globalIndex % 5 === 3 ? "100px" : "0px";
+                    const margin = isLeft ? { marginLeft } : { marginRight };
 
-                  return (
-                    <React.Fragment key={lesson.id}>
-                      <button
-                        className={`lesson-button ${isActiveLesson ? "active-lesson" : ""} ${
-                          isLessonPassed ? "passed-lesson" : ""
-                        } ${isAccessDeniedLesson ? "disabled-lesson" : ""}`}
-                        style={{
-                          ...margin,
-                          "--unit-color": isLessonPassed ? generateColor(unit.id) : "#B8B8D1",
-                          cursor: isAccessDeniedLesson ? "not-allowed" : "pointer",
-                        }}
-                        onClick={() => handleLessonClick(unit.id, lesson.id, index + 1)}
-                        disabled={isAccessDeniedLesson}
-                      >
-                        {index + 1}
-                      </button>
+                    let quizMargin = null;
+                    if (index === unit.lessons.length - 1) {
+                      globalIndex++;
+                      if (globalIndex % 5 === 1) isLeft = !isLeft;
+                      const quizMarginValue = globalIndex % 5 === 2 || globalIndex % 5 === 4 ? "50px" : globalIndex % 5 === 3 ? "100px" : "0px";
+                      quizMargin = isLeft ? { marginLeft: quizMarginValue } : { marginRight: quizMarginValue };
+                    }
 
-                      {index === unit.lessons.length - 1 && (
+                    const isActiveLesson = location.pathname === `/lesson/${unit.id}/${lesson.id}`;
+                    const lessonQuiz = lesson.quizzes && lesson.quizzes.length > 0 ? lesson.quizzes[0] : null;
+                    const isLessonPassed = lessonQuiz && lessonQuiz.is_passed;
+                    const unitQuiz = unit.quizzes && unit.quizzes.length > 0 ? unit.quizzes[0] : null;
+                    const isUnitQuizPassed = unitQuiz && unitQuiz.is_passed;
+                    const isAccessDeniedLesson = accessDeniedLessons.has(lesson.id);
+                    const isAccessDeniedUnit = accessDeniedUnits.has(unit.id);
+
+                    return (
+                      <React.Fragment key={lesson.id}>
                         <button
-                          className={`unit-button ${isUnitQuizPassed ? "passed-unit" : ""} ${
-                            isAccessDeniedUnit ? "disabled-unit" : ""
-                          }`}
+                          className={`lesson-button ${isActiveLesson ? "active-lesson" : ""} ${
+                            isLessonPassed ? "passed-lesson" : ""
+                          } ${isAccessDeniedLesson ? "disabled-lesson" : ""}`}
                           style={{
-                            ...quizMargin,
-                            "--unit-color": isUnitQuizPassed ? generateColor(unit.id) : "#B8B8D1",
-                            cursor: isAccessDeniedUnit ? "not-allowed" : "pointer",
+                            ...margin,
+                            "--unit-color": isLessonPassed ? generateColor(unit.id) : "#B8B8D1",
+                            cursor: isAccessDeniedLesson ? "not-allowed" : "pointer",
                           }}
-                          onClick={() => handleUnitQuizClick(unit.id)}
-                          disabled={isAccessDeniedUnit}
+                          onClick={() => handleLessonClick(unit.id, lesson.id, index + 1)}
+                          disabled={isAccessDeniedLesson}
                         >
-                          <img src={unitquizicon} alt="unitquiz" className="unitquizicon" />
+                          {index + 1}
                         </button>
-                      )}
-                    </React.Fragment>
-                  );
-                })}
+
+                        {index === unit.lessons.length - 1 && (
+                          <button
+                            className={`unit-button ${isUnitQuizPassed ? "passed-unit" : ""} ${
+                              isAccessDeniedUnit ? "disabled-unit" : ""
+                            }`}
+                            style={{
+                              ...quizMargin,
+                              "--unit-color": isUnitQuizPassed ? generateColor(unit.id) : "#B8B8D1",
+                              cursor: isAccessDeniedUnit ? "not-allowed" : "pointer",
+                            }}
+                            onClick={() => handleUnitQuizClick(unit.id)}
+                            disabled={isAccessDeniedUnit}
+                          >
+                            <img src={unitquizicon} alt="unitquiz" className="unitquizicon" />
+                          </button>
+                        )}
+                      </React.Fragment>
+                    );
+                  })}
               </div>
             </div>
           );

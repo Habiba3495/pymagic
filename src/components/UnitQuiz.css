@@ -361,17 +361,16 @@
   }
 
   .unit-next-button {
-    margin-left: 3.125rem; /* 50px */
+    margin-left: 2.125rem; /* 50px */
   }
 
   [dir="rtl"] .unit-check-answer-button {
-    margin-left: 0;
-    margin-right: 5.625rem; /* 90px */
+    /* margin-left: 0;
+    margin-right: 5.625rem; 90px */
   }
 
   [dir="rtl"] .unit-next-button {
-    margin-left: 0;
-    margin-right: 3.125rem; /* 50px */
+
   }
 }
 
