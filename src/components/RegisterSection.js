@@ -86,15 +86,11 @@ const RegisterSection = () => {
       if (response.status === 201) {
         setPopupMessage(t("register.registrationSuccess"));
         setPopupVisible(true);
-        // setTimeout(() => {
-        //   // navigate("/Login");
-        // }, 2000);
       }
     } catch (error) {
       console.error("Registration Error:", error);
       console.log("🔥 Error Response Data:", error.response?.data);
 
-      // استخدام error.message مباشرة
       const errorMsg = error.message;
 
       console.log("Backend Error Message:", errorMsg);
@@ -111,6 +107,11 @@ const RegisterSection = () => {
     }
   };
 
+  // دالة جديدة لإخفاء الـ error عند النقر على الـ overlay
+  const handleOverlayClick = () => {
+    setErrors([]); // إفراغ قائمة الأخطاء
+  };
+
   if (apiError) {
     return <RegisterFailed />;
   }
@@ -125,7 +126,7 @@ const RegisterSection = () => {
         <h2>{t("registerTitle")}</h2>
 
         {errors.length > 0 && (
-          <div className="error-overlay">
+          <div className="error-overlay" onClick={handleOverlayClick}>
             <div className="Rerror-box">
               {errors.map((error, index) => (
                 <div key={index} className="error-message">{error}</div>

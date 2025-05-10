@@ -25,7 +25,6 @@ const LoginSection = () => {
     setErrors([]);
     const tempErrors = [];
 
-    // التحقق من الإدخال في الـ frontend
     if (!formData.email.includes("@")) {
       tempErrors.push(t("invalidEmail"));
     }
@@ -40,12 +39,10 @@ const LoginSection = () => {
 
     try {
       const response = await apiClient.post('/api/users/login', formData).catch((error) => {
-                throw error;
+        throw error;
       });
 
       if (response.status !== 200 || !response.data?.token) {
-        console.log(response);
-        
         throw new Error(response.data?.error || t("login.loginError"));
       }
 
@@ -53,26 +50,8 @@ const LoginSection = () => {
       login(user, token);
       navigate("/lessons", { replace: true });
     } catch (err) {
-      console.log('Full error:', err);
-      console.log('Translation for invalidCredentials:', t("login.invalidCredentials"));
       const newErrors = [];
       newErrors.push(err.message);
-      
-
-      if (err.response) {
-      //   if (err.response.status === 401 || err.response.status === 403 || err.response.status == 200) {
-      //     newErrors.push(err.message);
-      //   } else if (err.response.status === 500) {
-      //     newErrors.push(err.message || t("login.serverErrorDetail"));
-      //   } else {
-      //     newErrors.push(err.message || t("login.loginError"));
-      //   }
-      // } else if (err.request) {
-      //   newErrors.push(t("login.networkError"));
-      // } else {
-      //   newErrors.push(t("login.unexpectedError"));
-      }
-
       setErrors(newErrors);
     }
   };
@@ -89,33 +68,31 @@ const LoginSection = () => {
     e.preventDefault();
     setErrors([]);
     setForgotMessage("");
-  
+
     try {
       const response = await apiClient.post('/api/users/forgot-password', { email: forgotEmail });
-  
+
       if (response.status !== 200 || response.data?.error) {
         throw new Error(response.data?.error || t("forgotPassword.error"));
       }
-  
+
       setForgotMessage(t("forgotPassword.success"));
     } catch (err) {
-      console.log(err);
-      
-      console.log('Error response:', err.response?.data); // Log for debugging
       const newErrors = [];
-  
       if (err.message) {
-        console.log("1");
-        
-        newErrors.push(err.message) //isplay backend error (e.g., "User not found")
+        newErrors.push(err.message);
       } else if (err.request) {
         newErrors.push(t("forgotPassword.networkError"));
       } else {
         newErrors.push(t("forgotPassword.unexpectedError"));
       }
-  
       setErrors(newErrors);
     }
+  };
+
+  // دالة جديدة لإخفاء الـ error عند النقر على الـ overlay
+  const handleOverlayClick = () => {
+    setErrors([]); // إفراغ قائمة الأخطاء
   };
 
   return (
@@ -200,7 +177,7 @@ const LoginSection = () => {
           )}
 
           {errors.length > 0 && (
-            <div className="error-overlay">
+            <div className="error-overlay" onClick={handleOverlayClick}>
               <div className="error-box">
                 {errors.map((error, index) => (
                   <div key={index} className="error-message">{error}</div>
