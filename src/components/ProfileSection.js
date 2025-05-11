@@ -129,7 +129,7 @@ const ProfilePage = () => {
 
     const fetchAvatarPreferences = async () => {
       try {
-        const response = await apiClient.get(`/user-preferences/${userId}`);
+        const response = await apiClient.get(`/avatar/user-preferences/${userId}`);
         if (response.data) {
           setEquippedAssets({
             face: defaultAssets.face,

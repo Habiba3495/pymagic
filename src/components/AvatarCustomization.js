@@ -698,9 +698,9 @@ const AvatarCustomization = () => {
     const fetchData = async () => {
       try {
         const [assetsRes, ownedAssetsRes, preferencesRes, userProfileRes] = await Promise.all([
-          apiClient.get("/assets"),
-          apiClient.get(`/user/${userId}/owned-assets`),
-          apiClient.get(`/user-preferences/${userId}`),
+          apiClient.get("/avatar/assets"),
+          apiClient.get(`/avatar/user/${userId}/owned-assets`),
+          apiClient.get(`/avatar/user-preferences/${userId}`),
           apiClient.get(`/api/users/profile/${userId}`),
         ]);
 
@@ -840,7 +840,7 @@ const AvatarCustomization = () => {
     }
 
     try {
-      const response = await apiClient.post("/buy", { userId, assetId });
+      const response = await apiClient.post("/avatar/buy", { userId, assetId });
 
       if (response.data.success) {
         setOwnedAssets((prev) => [...prev, response.data.asset]);
@@ -945,7 +945,7 @@ const AvatarCustomization = () => {
     }
 
     try {
-      const response = await apiClient.post("/save-preferences", {
+      const response = await apiClient.post("/avatar/save-preferences", {
         userId,
         brow: equippedAssets.brow,
         eye: equippedAssets.eye,

@@ -96,7 +96,7 @@ const AppContent = () => {
   
     const checkBackend = async () => {
       try {
-        const response = await fetch('http://localhost:5000/ping', {
+        const response = await fetch('https://pymagicnodejs-production.up.railway.app', {
           method: 'GET',
           credentials: 'include', // Include cookies/credentials
           headers: {
