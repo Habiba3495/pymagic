@@ -96,13 +96,14 @@ const AppContent = () => {
   
     const checkBackend = async () => {
       try {
-        const response = await fetch('https://pymagicnodejs-production.up.railway.app', {
+        const response = await fetch('https://pymagicnodejs-production.up.railway.app/ping', {
           method: 'GET',
-          credentials: 'include', // Include cookies/credentials
+          credentials: 'include',
           headers: {
             'Accept': 'application/json',
           },
         });
+
         if (response.ok) {
           setIsOffline(false); // Server is reachable and responded with 200 OK
         } else if (response.status === 401) {
