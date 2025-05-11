@@ -86,7 +86,7 @@ const AppContent = () => {
     // اختبار الاتصال بالـ backend
     const checkBackend = async () => {
       try {
-        await fetch('https://pymagicnodejs-production.up.railway.app/ping', { mode: 'no-cors' });
+        await fetch('https://pymagicnodejs-production-dc27.up.railway.app/ping', { mode: 'no-cors' });
         setIsOffline(false);
       } catch {
         setIsOffline(true);
