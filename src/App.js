@@ -84,37 +84,37 @@ const AppContent = () => {
 
     
     // اختبار الاتصال بالـ backend
-    // const checkBackend = async () => {
-    //   try {
-    //     await fetch('http://localhost:5000/ping', { mode: 'no-cors' });
-    //     setIsOffline(false);
-    //   } catch {
-    //     setIsOffline(true);
-    //   }
-    // };
-
-  
     const checkBackend = async () => {
       try {
-        const response = await fetch('https://pymagicnodejs-production.up.railway.app/ping', {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            'Accept': 'application/json',
-          },
-        });
-
-        if (response.ok) {
-          setIsOffline(false); // Server is reachable and responded with 200 OK
-        } else if (response.status === 401) {
-          setIsOffline(false); // Server is reachable, but user is unauthorized
-        } else {
-          setIsOffline(true); // Server responded with another error (e.g., 500)
-        }
-      } catch (error) {
-        setIsOffline(true); // Server is unreachable (e.g., network error)
+        await fetch('https://pymagicnodejs-production.up.railway.app/ping', { mode: 'no-cors' });
+        setIsOffline(false);
+      } catch {
+        setIsOffline(true);
       }
     };
+
+  
+    // const checkBackend = async () => {
+    //   try {
+    //     const response = await fetch('https://pymagicnodejs-production.up.railway.app/ping', {
+    //       method: 'GET',
+    //       credentials: 'include',
+    //       headers: {
+    //         'Accept': 'application/json',
+    //       },
+    //     });
+
+    //     if (response.ok) {
+    //       setIsOffline(false); // Server is reachable and responded with 200 OK
+    //     } else if (response.status === 401) {
+    //       setIsOffline(false); // Server is reachable, but user is unauthorized
+    //     } else {
+    //       setIsOffline(true); // Server responded with another error (e.g., 500)
+    //     }
+    //   } catch (error) {
+    //     setIsOffline(true); // Server is unreachable (e.g., network error)
+    //   }
+    // };
 
     checkBackend();
     const interval = setInterval(checkBackend, 5000); // فحص كل 5 ثواني
