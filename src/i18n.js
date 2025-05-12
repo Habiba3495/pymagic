@@ -32,6 +32,7 @@ i18n
   .then(() => {
     console.log("i18n initialized successfully:", i18n);
     console.log("i18n.changeLanguage exists:", typeof i18n.changeLanguage === "function");
+    i18n.changeLanguage('en'); // غيّر اللغة بعد ما التهيئة تخلّص
   })
   .catch((error) => {
     console.error("Error initializing i18n:", error);
