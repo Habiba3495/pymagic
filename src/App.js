@@ -33,7 +33,7 @@ import TrackInactivity from './components/TrackInactivity';
 import Loading from "./components/Loading";
 import RegisterFailed from "./components/RegisterFailed";
 
-ReactGA.initialize('G-W0C0ZKC21L', { debug_mode: true });
+ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_ID, { debug_mode: true });
 
 class ErrorBoundary extends Component {
   state = { hasError: false, error: null };
@@ -86,8 +86,8 @@ const AppContent = () => {
     // اختبار الاتصال بالـ backend
     const checkBackend = async () => {
       try {
-        await fetch('https://pymagicnodejs-production-dc27.up.railway.app/ping', { mode: 'no-cors' });
-      // await fetch('http://localhost:5000/ping', { mode: 'no-cors' });
+        // await fetch('https://pymagicnodejs-production-dc27.up.railway.app/ping', { mode: 'no-cors' });
+      await fetch('http://localhost:5000/ping', { mode: 'no-cors' });
         setIsOffline(false);
       } catch {
         setIsOffline(true);

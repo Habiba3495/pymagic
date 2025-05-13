@@ -22,7 +22,9 @@
      "termsConditions": "Terms & Conditions",
      "privacyPolicy": "Privacy Policy",
      "footerBottom": "© 2024 PyMagic. All spells reserved.",
-     "haveQuestions": "Have questions? Reach out to us at <strong>pymagic5@gmail.com</strong>"
+     "haveQuestions": "Have questions? Reach out to us at <strong>pymagic5@gmail.com</strong>",
+     "educationalNote": "This website is for educational purposes only and is not intended for profit."
+
   },
 
   "register": {

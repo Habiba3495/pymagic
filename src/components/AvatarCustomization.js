@@ -1101,7 +1101,7 @@ const AvatarCustomization = () => {
 
       <div className="main-content">
         <div className="avatar-preview">
-          <div style={{ position: "relative", width: "100%", maxWidth: "300px", aspectRatio: "6 / 7", margin: "0 0 40px 0" }}>
+          <div style={{ position: "relative", width: "100%", maxWidth: "300px", aspectRatio: "6 / 8", margin: "0 0 40px 0" }}>
             {equippedAssets.face && (
               <img
                 src={equippedAssets.face}

@@ -37,6 +37,9 @@ const Footer = () => {
           <p dangerouslySetInnerHTML={{ __html: t("home.haveQuestions") }} />
         </div>
       </div>
+        <div className="footer-bottom">
+        {t("home.educationalNote")}
+      </div>
       <div className="footer-bottom">
         {t("home.footerBottom")}
       </div>
