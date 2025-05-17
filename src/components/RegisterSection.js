@@ -65,13 +65,58 @@ const RegisterSection = () => {
     return validationErrors;
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setErrors([]);
+
+  //   const validationErrors = validateForm();
+  //   if (validationErrors.length > 0) {
+  //     setErrors(validationErrors);
+  //     return;
+  //   }
+
+  //   try {
+  //     const { confirmPassword, ...registrationData } = {
+  //       ...formData,
+  //       age: parseInt(formData.age),
+  //     };
+
+  //     const response = await apiClient.post("/api/users/register", registrationData);
+
+  //     if (response.status === 201) {
+  //       setPopupMessage(t("register.registrationSuccess"));
+  //       setPopupVisible(true);
+  //     }
+  //   } catch (error) {
+  //     console.error("Registration Error:", error);
+  //     console.log("🔥 Error Response Data:", error.response?.data);
+
+  //     const errorMsg = error.message;
+
+  //     console.log("Backend Error Message:", errorMsg);
+
+  //     if (errorMsg === "Email already exists") {
+  //       setErrors([t("register.emailExists")]);
+  //     } else if (errorMsg === "Parent email already exists") {
+  //       setErrors([t("register.parentEmailExists")]);
+  //     } else if (!error.response || error.response.status >= 500) {
+  //       setApiError(true);
+  //     } else {
+  //       setErrors([errorMsg || t("registrationFailed")]);
+  //     }
+  //   }
+  // };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors([]);
+    console.log('Submitting form with data:', formData);
 
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
       setErrors(validationErrors);
+      console.log('Validation errors:', validationErrors);
       return;
     }
 
@@ -80,27 +125,29 @@ const RegisterSection = () => {
         ...formData,
         age: parseInt(formData.age),
       };
+      console.log('Sending registration data to server:', registrationData);
 
       const response = await apiClient.post("/api/users/register", registrationData);
+      console.log('Server response:', response);
 
       if (response.status === 201) {
         setPopupMessage(t("register.registrationSuccess"));
         setPopupVisible(true);
       }
     } catch (error) {
-      console.error("Registration Error:", error);
-      console.log("🔥 Error Response Data:", error.response?.data);
-
-      const errorMsg = error.message;
-
-      console.log("Backend Error Message:", errorMsg);
+      console.error('Registration Error:', error.response?.data || error.message);
+      const errorMsg = error.response?.data?.error || error.message;
+      console.log('Error message received:', errorMsg);
 
       if (errorMsg === "Email already exists") {
         setErrors([t("register.emailExists")]);
       } else if (errorMsg === "Parent email already exists") {
         setErrors([t("register.parentEmailExists")]);
+      } else if (errorMsg.includes("Password must be at least 10 characters")) {
+        setErrors([t("register.weakPassword")]);
       } else if (!error.response || error.response.status >= 500) {
         setApiError(true);
+        console.log('Server error or no response, redirecting to error page');
       } else {
         setErrors([errorMsg || t("registrationFailed")]);
       }
