@@ -137,7 +137,7 @@
 
 
 
-// last version 
+// last version
 
 // import axios from "axios";
 // import i18next from "../i18n";
@@ -199,7 +199,7 @@ import axios from "axios";
 import i18next from "../i18n";
 
 const apiClient = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "http://localhost:5000",
+  baseURL: "https://pymagicnodejs-production-dc27.up.railway.app",
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",

@@ -74,58 +74,93 @@ const AppContent = () => {
 
   
 
-  useEffect(() => {
-    const handleOnline = () => setIsOffline(false);
-    const handleOffline = () => setIsOffline(true);
+  // useEffect(() => {
+  //   const handleOnline = () => setIsOffline(false);
+  //   const handleOffline = () => setIsOffline(true);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+  //   window.addEventListener('online', handleOnline);
+  //   window.addEventListener('offline', handleOffline);
 
 
     
     // اختبار الاتصال بالـ backend
-    const checkBackend = async () => {
-      try {
-        await fetch('https://pymagicnodejs-production-dc27.up.railway.app/ping', { mode: 'no-cors' });
-      // await fetch('http://localhost:5000/ping', { mode: 'no-cors' });
-        setIsOffline(false);
-      } catch {
-        setIsOffline(true);
-      }
-    };
+  //   const checkBackend = async () => {
+  //     try {
+  //       await fetch('https://pymagicnodejs-production-dc27.up.railway.app/ping', { mode: 'no-cors' });
+  //     // await fetch('http://localhost:5000/ping', { mode: 'no-cors' });
+  //       setIsOffline(false);
+  //     } catch {
+  //       setIsOffline(true);
+  //     }
+  //   };
 
   
-    // const checkBackend = async () => {
-    //   try {
-    //     const response = await fetch('https://pymagicnodejs-production.up.railway.app/ping', {
-    //       method: 'GET',
-    //       credentials: 'include',
-    //       headers: {
-    //         'Accept': 'application/json',
-    //       },
-    //     });
+  //   // const checkBackend = async () => {
+  //   //   try {
+  //   //     const response = await fetch('https://pymagicnodejs-production.up.railway.app/ping', {
+  //   //       method: 'GET',
+  //   //       credentials: 'include',
+  //   //       headers: {
+  //   //         'Accept': 'application/json',
+  //   //       },
+  //   //     });
 
-    //     if (response.ok) {
-    //       setIsOffline(false); // Server is reachable and responded with 200 OK
-    //     } else if (response.status === 401) {
-    //       setIsOffline(false); // Server is reachable, but user is unauthorized
-    //     } else {
-    //       setIsOffline(true); // Server responded with another error (e.g., 500)
-    //     }
-    //   } catch (error) {
-    //     setIsOffline(true); // Server is unreachable (e.g., network error)
-    //   }
-    // };
+  //   //     if (response.ok) {
+  //   //       setIsOffline(false); // Server is reachable and responded with 200 OK
+  //   //     } else if (response.status === 401) {
+  //   //       setIsOffline(false); // Server is reachable, but user is unauthorized
+  //   //     } else {
+  //   //       setIsOffline(true); // Server responded with another error (e.g., 500)
+  //   //     }
+  //   //   } catch (error) {
+  //   //     setIsOffline(true); // Server is unreachable (e.g., network error)
+  //   //   }
+  //   // };
 
-    checkBackend();
-    const interval = setInterval(checkBackend, 5000); // فحص كل 5 ثواني
+  //   checkBackend();
+  //   const interval = setInterval(checkBackend, 5000); // فحص كل 5 ثواني
 
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-      clearInterval(interval);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener('online', handleOnline);
+  //     window.removeEventListener('offline', handleOffline);
+  //     clearInterval(interval);
+  //   };
+  // }, []);
+
+  useEffect(() => {
+  const handleOnline = () => setIsOffline(false);
+  const handleOffline = () => setIsOffline(true);
+
+  window.addEventListener('online', handleOnline);
+  window.addEventListener('offline', handleOffline);
+
+  const checkBackend = async () => {
+    try {
+      const response = await fetch('https://pymagicnodejs-production-dc27.up.railway.app/ping', {
+        method: 'GET',
+        mode: 'cors', // استخدم cors بدلاً من no-cors
+        credentials: 'include', // أرسل ملفات تعريف الارتباط
+        headers: {
+          'Accept': 'application/json',
+        },
+      });
+      console.log('Ping response:', response.status); // سجل الاستجابة
+      setIsOffline(!response.ok);
+    } catch (err) {
+      console.error('Ping failed:', err);
+      setIsOffline(true);
+    }
+  };
+
+  checkBackend();
+  const interval = setInterval(checkBackend, 5000);
+
+  return () => {
+    window.removeEventListener('online', handleOnline);
+    window.removeEventListener('offline', handleOffline);
+    clearInterval(interval);
+  };
+}, []);
 
   useEffect(() => {
     const dir = i18n.language === "ar" ? "rtl" : "ltr";

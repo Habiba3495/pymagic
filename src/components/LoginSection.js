@@ -267,12 +267,15 @@ const LoginSection = () => {
     setForgotMessage("");
 
     try {
+      console.log('Sending forgot password request:', { email: forgotEmail });
       const response = await apiClient.post('/api/users/forgot-password', { email: forgotEmail });
+      console.log('Forgot password response:', response.data);
       if (response.status !== 200 || response.data?.error) {
         throw new Error(response.data?.error || t("forgotPassword.error"));
       }
       setForgotMessage(t("forgotPassword.success"));
     } catch (err) {
+      console.error('Forgot password error:', err);
       const newErrors = [];
       if (err.message) {
         newErrors.push(err.message);
