@@ -59,7 +59,7 @@ export function AuthProvider({ children }) {
 
   const login = (userData, token) => {
     setUser(userData);
-    console.log('Setting cookie with token:', token);
+    console.log('Storing token in cookie:', token); // سجل لتأكيد تخزين التوكن
     document.cookie = `token=${encodeURIComponent(token)}; max-age=604800; path=/; Secure; SameSite=None;`;
     localStorage.setItem('user', JSON.stringify(userData));
   };
@@ -68,6 +68,7 @@ export function AuthProvider({ children }) {
     setUser(null);
     localStorage.removeItem('user');
     document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; Secure; SameSite=None;';
+    console.log('User logged out, cookie cleared');
   };
 
   const updateUser = (updatedUserData) => {

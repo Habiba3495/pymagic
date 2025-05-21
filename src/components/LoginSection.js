@@ -243,7 +243,8 @@ const LoginSection = () => {
 
       const { token, user } = response.data;
       login(user, token);
-      console.log('Login successful, navigating to /lessons');
+      console.log('Login successful, token stored:', token);
+      console.log('Current cookies:', document.cookie); // سجل لتأكيد تخزين التوكن
       navigate("/lessons", { replace: true });
     } catch (err) {
       console.error('Login error:', err);
