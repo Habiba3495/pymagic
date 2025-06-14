@@ -363,8 +363,7 @@ const ProfilePage = () => {
                 <div key={achievement.id} className="pachievement-card">
                   {achievement.image && (
                     <img
-                      // src={`http://localhost:5000${achievement.image}`}
-                      src={`https://pymagicnodejs-production-dc27.up.railway.app${achievement.image}`}
+                      src={`http://localhost:5000${achievement.image}`}
                       alt={achievement.title}
                       className="achievement-image"
                       onError={(e) => {

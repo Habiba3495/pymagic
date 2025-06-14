@@ -84,15 +84,14 @@ const AppContent = () => {
 
     
     // اختبار الاتصال بالـ backend
-  //   const checkBackend = async () => {
-  //     try {
-  //       await fetch('https://pymagicnodejs-production-dc27.up.railway.app/ping', { mode: 'no-cors' });
-  //     // await fetch('http://localhost:5000/ping', { mode: 'no-cors' });
-  //       setIsOffline(false);
-  //     } catch {
-  //       setIsOffline(true);
-  //     }
-  //   };
+    const checkBackend = async () => {
+      try {
+      await fetch('http://localhost:5000/ping', { mode: 'no-cors' });
+        setIsOffline(false);
+      } catch {
+        setIsOffline(true);
+      }
+    };
 
   
   //   // const checkBackend = async () => {
@@ -134,23 +133,23 @@ const AppContent = () => {
   window.addEventListener('online', handleOnline);
   window.addEventListener('offline', handleOffline);
 
-  const checkBackend = async () => {
-    try {
-      const response = await fetch('https://pymagicnodejs-production-dc27.up.railway.app/ping', {
-        method: 'GET',
-        mode: 'cors', // استخدم cors بدلاً من no-cors
-        credentials: 'include', // أرسل ملفات تعريف الارتباط
-        headers: {
-          'Accept': 'application/json',
-        },
-      });
-      console.log('Ping response:', response.status); // سجل الاستجابة
-      setIsOffline(!response.ok);
-    } catch (err) {
-      console.error('Ping failed:', err);
-      setIsOffline(true);
-    }
-  };
+  // const checkBackend = async () => {
+  //   try {
+  //       const response = await fetch('https://pymagicnodejs-production-dc27.up.railway.app/ping', {
+  //       method: 'GET',
+  //       mode: 'cors', 
+  //       credentials: 'include', 
+  //       headers: {
+  //         'Accept': 'application/json',
+  //       },
+  //     });
+  //     console.log('Ping response:', response.status); 
+  //     setIsOffline(!response.ok);
+  //   } catch (err) {
+  //     console.error('Ping failed:', err);
+  //     setIsOffline(true);
+  //   }
+  // };
 
   checkBackend();
   const interval = setInterval(checkBackend, 5000);
