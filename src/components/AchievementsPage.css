@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
 
-/* Mobile-First Approach */
 .achievements-bg {
   background-color: #f3e8ff;
   min-height: 100vh;
@@ -14,7 +13,7 @@
 .back-button {
   background: none;
   cursor: pointer;
-  font-size: clamp(1rem, 4vw, 1rem); /* 16px */
+  font-size: clamp(1rem, 4vw, 1rem); 
   color: #6b21a8;
   margin-bottom: 1rem;
   border: none;
@@ -28,8 +27,8 @@
   border-radius: 1rem;
   padding: 1.5rem;
   width: 80%;
-  max-width: 37.5rem; /* 600px */
-  min-height: 25rem; /* 400px */
+  max-width: 37.5rem; 
+  min-height: 25rem; 
 }
 
 .achievements-header {
@@ -40,7 +39,7 @@
   text-align: center;
   margin-bottom: 1.5rem;
   font-family: 'Germania One', cursive;
-  font-size: clamp(1.5rem, 6vw, 1.875rem); /* 24px to 30px */
+  font-size: clamp(1.5rem, 6vw, 1.875rem); 
 }
 
 .achievements-grid {
@@ -49,7 +48,7 @@
   gap: 1rem;
   justify-content: center;
   align-items: center;
-  min-height: 10rem; /* 160px */
+  min-height: 10rem;
 }
 
 .achievement-card {
@@ -68,8 +67,8 @@
 }
 
 .achievement-image {
-  width: clamp(3.75rem, 10vw, 3.75rem); /* 60px */
-  height: clamp(4.6875rem, 12vw, 4.6875rem); /* 75px */
+  width: clamp(3.75rem, 10vw, 3.75rem); 
+  height: clamp(4.6875rem, 12vw, 4.6875rem); 
   margin-bottom: 0;
   object-fit: contain;
   display: block;
@@ -77,13 +76,13 @@
 
 .achievement-title {
   font-weight: bold;
-  font-size: clamp(0.875rem, 3.5vw, 1rem); /* 14px to 16px */
+  font-size: clamp(0.875rem, 3.5vw, 1rem); 
   color: #6b21a8;
   margin-bottom: 0.5rem;
 }
 
 .achievement-description {
-  font-size: clamp(0.75rem, 3vw, 0.75rem); /* 12px */
+  font-size: clamp(0.75rem, 3vw, 0.75rem); 
   color: #6b7280;
 }
 
@@ -92,13 +91,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 18.75rem; /* 300px */
+  min-height: 18.75rem;
 }
 
 .ano-achievements {
   text-align: center;
   color: #555;
-  font-size: clamp(1rem, 4vw, 1.2rem); /* 16px to 19.2px */
+  font-size: clamp(1rem, 4vw, 1.2rem); 
   margin-top: 1.25rem;
 }
 
@@ -110,7 +109,7 @@
   border: none;
   cursor: pointer;
   transition: background 0.3s;
-  font-size: clamp(1rem, 4vw, 1rem); /* 16px */
+  font-size: clamp(1rem, 4vw, 1rem);
 }
 
 .view-all-button:hover {
@@ -122,10 +121,9 @@
   text-align: center;
   padding: 1.25rem;
   color: #6b7280;
-  font-size: clamp(1rem, 4vw, 1rem); /* 16px */
+  font-size: clamp(1rem, 4vw, 1rem); 
 }
 
-/* RTL Support */
 [dir="rtl"] .achievements-header {
   font-family: 'Noto Sans Arabic', sans-serif;
 }
@@ -134,14 +132,13 @@
   align-self: flex-end;
 }
 
-/* Media Queries for Larger Screens */
 @media (min-width: 768px) {
   .achievements-bg {
     padding: 1.5rem;
   }
 
   .achievements-container {
-    max-width: 60.25rem; /* 900px */
+    max-width: 60.25rem;
   }
 
   .achievements-grid {
@@ -150,7 +147,7 @@
   }
 
   .ano-achievements-wrapper {
-    min-height: 18.75rem; /* 300px */
+    min-height: 18.75rem; 
   }
 }
 

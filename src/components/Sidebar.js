@@ -22,7 +22,7 @@ const LSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // حالة الـ Sidebar
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); //status Sidebar
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -71,7 +71,6 @@ const LSidebar = () => {
 
   return (
     <>
-      {/* زر Hamburger للشاشات الصغيرة */}
       <button
         className="hamburger-btn"
         onClick={toggleSidebar}
@@ -80,7 +79,6 @@ const LSidebar = () => {
         <span className="hamburger-icon"></span>
       </button>
 
-      {/* الـ Sidebar */}
       <div className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
         <div className="Ltitle">
           <img src={logoo} className="logoo" alt="PyMagic Logo" />
@@ -95,7 +93,7 @@ const LSidebar = () => {
                   <button
                     onClick={() => {
                       navigate(item.path);
-                      setIsSidebarOpen(false); // إغلاق الـ Sidebar عند النقر على عنصر
+                      setIsSidebarOpen(false);
                     }}
                     className={`menu-button ${isActive ? "active" : ""}`}
                     aria-label={`Go to ${item.label}`}

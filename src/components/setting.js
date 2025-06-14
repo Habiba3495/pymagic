@@ -155,7 +155,7 @@ const SettingsPage = () => {
           ))}
         </div>
       </div>
-      {/* عرض LanguageSwitcher في صندوق منفصل عند التبديل */}
+      
       {showLanguageDropdown && (
         <div className="language-switcher-box">
           <LanguageSwitcher open={showLanguageDropdown} setOpen={setShowLanguageDropdown} />

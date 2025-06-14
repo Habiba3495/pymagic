@@ -20,13 +20,12 @@ const QuizComplete = () => {
   const [feedbackScore, setFeedbackScore] = useState(null);
   const [feedbackComment, setFeedbackComment] = useState("");
   const [nextAction, setNextAction] = useState(null);
-  const [newRewards, setNewRewards] = useState([]); // حالة جديدة للمكافآت
-  const [showRewardsPopup, setShowRewardsPopup] = useState(false); // حالة للتحكم في النافذة المنبثقة
+  const [newRewards, setNewRewards] = useState([]); 
+  const [showRewardsPopup, setShowRewardsPopup] = useState(false); 
   const { t } = useTranslation();
   const { user } = useAuth();
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Track page view on component mount
   useEffect(() => {
     if (!user || !user.id) {
       console.log('No user, redirecting to login');
@@ -143,7 +142,7 @@ const QuizComplete = () => {
         }
       }
 
-      // استخراج المكافآت الجديدة من quizData
+      //new reward from quizData
       setNewRewards(quizData?.achievements || []);
       console.log("New Rewards", quizData?.achievements);
     };
@@ -178,10 +177,10 @@ const QuizComplete = () => {
 
     try {
       const response = await apiClient.get(`/api/feedback/check/${quizId}`);
-      return response.data.exists; // Backend should return { exists: true/false }
+      return response.data.exists; 
     } catch (error) {
       console.error('Error checking for existing feedback:', error);
-      return false; // Assume no feedback exists if there's an error
+      return false;
     }
   };
 
@@ -496,7 +495,6 @@ const QuizComplete = () => {
     proceedAfterFeedback();
   };
 
-  // دالة لإغلاق النافذة المنبثقة والانتقال
   const closeRewardsPopupAndProceed = () => {
     if (!user || !user.id) {
       console.log('No user, skipping new_rewards_popup_closed tracking');
@@ -643,18 +641,17 @@ const QuizComplete = () => {
                 </div>
               ))}
             </div>
-            {/* حاوية الرسوم المتحركة */}
             <div className="reward-animation">
               {[...Array(15)].map((_, i) => (
                 <span
                   key={i}
                   className="reward-animation-particle"
                   style={{
-                    left: `${Math.random() * 100}%`, // موقع عشوائي أفقيًا
-                    animationDelay: `${Math.random() * 2}s`, // تأخير عشوائي
+                    left: `${Math.random() * 100}%`, 
+                    animationDelay: `${Math.random() * 2}s`, 
                   }}
                 >
-                  🎉 {/* يمكنك تغيير الرمز التعبيري */}
+                  🎉 
                 </span>
               ))}
             </div>

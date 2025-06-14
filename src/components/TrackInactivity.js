@@ -1,5 +1,4 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
-import trackEvent from '../utils/trackEvent';
 
 const TrackInactivity = ({ userId, user }) => {
   const timeoutRef = useRef(null);
@@ -9,7 +8,6 @@ const TrackInactivity = ({ userId, user }) => {
     clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
       if (isActive) {
-        // ... كود التتبع
         setIsActive(false);
       }
     }, 30000);

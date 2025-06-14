@@ -1,17 +1,3 @@
-// import React from "react";
-// import LoginSection from "./LoginSection";
-// import "./LoginPage.css";
-
-
-// const LoginPage = () => {
-//   return (
-//     <div className="Llogin-page">
-//       <LoginSection />
-//     </div>
-//   );
-// };
-
-// export default LoginPage;
 import React from "react";
 import LoginSection from "./LoginSection";
 import "./LoginPage.css";

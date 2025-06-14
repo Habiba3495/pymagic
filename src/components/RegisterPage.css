@@ -9,7 +9,6 @@
   box-sizing: border-box;
 }
 
-/* Media Queries */
 @media (max-width: 768px) {
   .Rhome-page {
     background-size: cover;
@@ -18,7 +17,4 @@
 }
 
 @media (max-width: 480px) {
-  .Rhome-page {
-
-  }
 }

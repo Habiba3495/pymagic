@@ -7,7 +7,7 @@ import apiClient from '../services';
 import { useTranslation } from "react-i18next";
 import { useAuth } from '../context/AuthContext';
 import trackEvent from '../utils/trackEvent';
-import Loading from "./Loading.js"; // استيراد الـ Loading component
+import Loading from "./Loading.js"; 
 
 const UnitQuizComplete = () => {
   const { state } = useLocation();
@@ -27,14 +27,12 @@ const UnitQuizComplete = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    // التحقق من وجود المستخدم
     if (!user || !user.id) {
       console.log('No user, redirecting to login');
       navigate('/login');
       return;
     }
 
-    // تتبع الـ pageview
     trackEvent(user.id, 'pageview', {
       page: '/unit-quiz-complete',
       category: 'Navigation',
@@ -477,7 +475,7 @@ const UnitQuizComplete = () => {
     }
   };
 
-  if (!quizData) return <Loading />; // استبدال <div>Loading...</div> بـ <Loading />
+  if (!quizData) return <Loading />; 
 
   return (
     <div className="quizcomplete">

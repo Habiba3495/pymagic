@@ -137,9 +137,7 @@ button:hover {
 }
 
 @media (max-width: 768px) {
-  .background_edit-profile-container {
-  }
-
+  
   .edit-profile-container {
     width: clamp(200px, 90vw, 300px);
     padding: clamp(10px, 2vw, 20px);

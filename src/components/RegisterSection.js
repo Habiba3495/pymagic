@@ -154,9 +154,8 @@ const RegisterSection = () => {
     }
   };
 
-  // دالة جديدة لإخفاء الـ error عند النقر على الـ overlay
   const handleOverlayClick = () => {
-    setErrors([]); // إفراغ قائمة الأخطاء
+    setErrors([]);
   };
 
   if (apiError) {

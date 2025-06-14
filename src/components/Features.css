@@ -56,7 +56,6 @@
   font-family: 'Germania One', cursive;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .features-grid {
     grid-template-columns: 1fr;

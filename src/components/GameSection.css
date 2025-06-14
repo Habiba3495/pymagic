@@ -48,7 +48,6 @@
   font-family: 'Marhey', cursive;
 }
 
-/* Responsive adjustments */
 @media screen and (max-width: 1024px) {
   .game-background {
     margin-left: 160px;

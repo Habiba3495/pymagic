@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
 
-/* Mobile-First Approach */
 .progress-report-bg {
   background-color: #f2ddff;
   display: flex;
@@ -24,8 +23,8 @@
 }
 
 .back-icon {
-  width: clamp(2.5rem, 6vw, 2.5rem); /* 40px */
-  height: clamp(2.5rem, 6vw, 2.5rem); /* 40px */
+  width: clamp(2.5rem, 6vw, 2.5rem); 
+  height: clamp(2.5rem, 6vw, 2.5rem);
 }
 
 .back-button:hover .back-icon {
@@ -35,9 +34,9 @@
 .progress-report-container {
   background: white;
   width: 90%;
-  max-width: 56.25rem; /* 900px */
-  padding: 1.875rem; /* 30px */
-  border-radius: 0.9375rem; /* 15px */
+  max-width: 56.25rem;
+  padding: 1.875rem;
+  border-radius: 0.9375rem;
   box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.1);
   text-align: center;
 }
@@ -45,78 +44,77 @@
 .progress-report-header {
   background: #5c2685;
   color: white;
-  font-size: clamp(1.5rem, 6vw, 1.875rem); /* 24px to 30px */
-  padding: 0.9375rem; /* 15px */
-  border-radius: 0.625rem; /* 10px */
-  margin-bottom: 1.25rem; /* 20px */
+  font-size: clamp(1.5rem, 6vw, 1.875rem);
+  padding: 0.9375rem; 
+  border-radius: 0.625rem; 
+  margin-bottom: 1.25rem;
   font-family: 'Germania One', cursive;
 }
 
 .progress-cards {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.25rem; /* 20px */
+  gap: 1.25rem; 
   justify-content: center;
 }
 
 .progress-card {
   background: #f2ddff;
-  padding: 0.9375rem; /* 15px */
-  border-radius: 0.625rem; /* 10px */
+  padding: 0.9375rem;
+  border-radius: 0.625rem; 
   text-align: center;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
 
 .progress-card:hover {
-  transform: translateY(-0.3125rem); /* -5px */
+  transform: translateY(-0.3125rem); 
 }
 
 .pscore-circle {
   background: #4b1665;
   color: #ffcc5c;
-  font-size: clamp(1.25rem, 5vw, 1.25rem); /* 20px */
+  font-size: clamp(1.25rem, 5vw, 1.25rem); 
   font-weight: bold;
-  width: clamp(5rem, 12vw, 5rem); /* 80px */
-  height: clamp(5rem, 12vw, 5rem); /* 80px */
+  width: clamp(5rem, 12vw, 5rem); 
+  height: clamp(5rem, 12vw, 5rem); 
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  margin: 0.625rem auto; /* 10px */
-  border: 0.3125rem solid #ffcc5c; /* 5px */
+  margin: 0.625rem auto; 
+  border: 0.3125rem solid #ffcc5c;
 }
 
 .lesson-info {
-  font-size: clamp(1rem, 4vw, 1rem); /* 16px */
+  font-size: clamp(1rem, 4vw, 1rem);
   font-weight: bold;
   color: #4b1665;
-  margin-top: 0.625rem; /* 10px */
+  margin-top: 0.625rem;
 }
 
 .points-earned {
-  font-size: clamp(0.875rem, 3.5vw, 0.875rem); /* 14px */
+  font-size: clamp(0.875rem, 3.5vw, 0.875rem); 
   color: #4b1665;
   font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.3125rem; /* 5px */
+  gap: 0.3125rem; 
 }
 
 .points {
-  width: clamp(1.25rem, 4vw, 1.25rem); /* 20px */
-  height: clamp(1.25rem, 4vw, 1.25rem); /* 20px */
+  width: clamp(1.25rem, 4vw, 1.25rem); 
+  height: clamp(1.25rem, 4vw, 1.25rem); 
 }
 
 .no-progress-message {
   text-align: center;
   color: #555;
-  font-size: clamp(1rem, 4vw, 1.2rem); /* 16px to 19.2px */
-  margin-top: 1.25rem; /* 20px */
+  font-size: clamp(1rem, 4vw, 1.2rem);
+  margin-top: 1.25rem; 
 }
 
-/* RTL Support */
 [dir="rtl"] .progress-report-header {
   font-family: 'Noto Sans Arabic', sans-serif;
 }
@@ -126,18 +124,17 @@
   right: 1rem;
 }
 
-/* Media Queries for Larger Screens */
 @media (min-width: 768px) {
   .progress-cards {
-    grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr)); /* 200px */
+    grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr));
   }
 
   .progress-report-container {
-    padding: 2.5rem; /* 40px */
+    padding: 2.5rem; 
   }
 
   .progress-report-header {
-    margin-bottom: 1.875rem; /* 30px */
+    margin-bottom: 1.875rem;
   }
 }
 

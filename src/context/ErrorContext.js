@@ -14,7 +14,6 @@ export function ErrorProvider({ children }) {
     setError(null);
   };
 
-  // Share setError with ErrorContextManager
   useEffect(() => {
     setErrorContextCallback(setError);
     return () => setErrorContextCallback(null);

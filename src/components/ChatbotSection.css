@@ -2,7 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
 
-/* Mobile-First Approach */
 .chatbot-wrapper {
   display: flex;
   flex-direction: column;
@@ -30,8 +29,8 @@
   flex-direction: column;
   overflow: hidden;
   width: 90%;
-  max-width: 56.25rem; /* 900px */
-  height: clamp(20rem, 80vh, 37.5rem); /* 600px */
+  max-width: 56.25rem; 
+  height: clamp(20rem, 80vh, 37.5rem); 
   padding: 0.9375rem;
 }
 
@@ -43,7 +42,7 @@
   font-size: clamp(1.25rem, 5vw, 1.875rem);
   text-align: center;
   width: 80%;
-  max-width: 47.3125rem; /* 757px */
+  max-width: 47.3125rem; 
   margin: 0 auto;
   font-family: 'Germania One', cursive;
 }
@@ -120,7 +119,7 @@
   border-radius: 1.875rem;
   box-shadow: 0 0 0.3125rem rgba(0, 0, 0, 0.2);
   width: 96%;
-  max-width: 57.8125rem; /* 925px */
+  max-width: 57.8125rem;
   padding: 0.25rem 0.5rem;
   margin-top: 0.9375rem;
   box-sizing: border-box;
@@ -179,7 +178,6 @@
   font-family: 'Fredoka', sans-serif;
 }
 
-/* Support for right-to-left text in Arabic */
 .message-text[dir="rtl"] {
   direction: rtl;
   text-align: right;
@@ -191,7 +189,6 @@
   padding-left: 0;
 }
 
-/* General list styling */
 .message-text ul,
 .message-text ol {
   margin: 0.625rem 0;
@@ -204,7 +201,6 @@
   color: inherit;
 }
 
-/* دعم RTL */
 [dir="rtl"] .chatbot-container {
   margin-left: 0;
   margin-right: 0;
@@ -214,7 +210,6 @@
   font-family: 'Noto Sans Arabic', sans-serif;
 }
 
-/* Media Queries للشاشات الأكبر */
 @media (min-width: 768px) {
   .chatbot-wrapper {
     flex-direction: row;
@@ -256,7 +251,7 @@
   }
 
   .chat-section {
-    max-width: 62.5rem; /* 1000px */
+    max-width: 62.5rem;
   }
 
   .input-container {

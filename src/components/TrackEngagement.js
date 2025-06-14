@@ -5,7 +5,6 @@ import trackEvent from '../utils/trackEvent';
 const TrackEngagement = ({ userId, user }) => {
   const interactionCache = useRef(new Set());
 
-  // تتبع الجلسة الطويلة
   useEffect(() => {
     const timer = setTimeout(() => {
       const eventData = {
@@ -22,7 +21,6 @@ const TrackEngagement = ({ userId, user }) => {
     return () => clearTimeout(timer);
   }, [userId, user]);
 
-  // معالجة النقرات المثبّتة
   const handleClick = useCallback(debounce((event) => {
     const target = event.target.closest('[data-trackable]');
     if (!target) return;

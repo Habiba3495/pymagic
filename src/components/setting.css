@@ -102,7 +102,6 @@
   font-family: 'Marhey', cursive;
 }
 
-/* Dark background for the entire screen */
 .confirmation-popup-overlay {
   position: fixed;
   top: 0;
@@ -113,7 +112,6 @@
   z-index: 999;
 }
 
-/* Popup styling */
 .confirmation-popup {
   position: fixed;
   top: 50%;
@@ -129,7 +127,6 @@
   border: 2px solid #FFC145;
 }
 
-/* Title style */
 .popup-title {
   font-size: clamp(16px, 2.5vw, 18px);
   margin-bottom: clamp(10px, 2vw, 20px);
@@ -139,13 +136,11 @@
   font-family: 'Marhey', cursive;
 }
 
-/* Buttons container */
 .popup-buttons {
   display: flex;
   justify-content: space-around;
 }
 
-/* Button styling */
 .popup-buttons button {
   padding: clamp(5px, 1.5vw, 10px) clamp(10px, 3vw, 20px);
   font-size: clamp(14px, 2vw, 16px);
@@ -154,13 +149,11 @@
   cursor: pointer;
 }
 
-/* Confirm button style */
 .popup-buttons button:not(.cancel) {
   background-color: #FFC145;
   color: black;
 }
 
-/* Cancel button style */
 .popup-buttons button.cancel {
   background-color: white;
   color: black;

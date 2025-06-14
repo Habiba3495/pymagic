@@ -20,7 +20,7 @@ export default function PyMagicRunner() {
   });
   const [currentObstacle, setCurrentObstacle] = useState(fireballImg);
   const [obstacleKey, setObstacleKey] = useState(0);
-  const [showObstacle, setShowObstacle] = useState(true);
+  const [showObstacle] = useState(true);
   const wizardRef = useRef(null);
   const obstacleRef = useRef(null);
   const jumpSoundEffect = useRef(new Audio(jumpSound));

@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
 
-/* Mobile-First Approach */
 .flashcard-page-container {
   display: flex;
   flex-direction: column;
@@ -224,7 +223,6 @@
   font-family: 'Fredoka', sans-serif;
 }
 
-/* دعم RTL */
 [dir="rtl"] .flashcard-content {
   margin-right: 0;
   margin-left: 0;
@@ -245,7 +243,6 @@
   margin-left: 0;
 }
 
-/* Media Queries للشاشات الأكبر */
 @media (min-width: 768px) {
   .flashcard-page-container {
     flex-direction: row;
@@ -255,7 +252,7 @@
     margin-left: 15%;
     width: calc(100% - 15%);
     padding: 1.5rem;
-    margin-top: 0; /* إزالة المساحة العلوية مع وجود Sidebar */
+    margin-top: 0;
   }
 
   [dir="rtl"] .flashcard-content {

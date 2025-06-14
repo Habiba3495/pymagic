@@ -72,18 +72,7 @@ const AppContent = () => {
     return () => window.removeEventListener('unauthorized', handleUnauthorized);
   }, [navigate]);
 
-  
 
-  // useEffect(() => {
-  //   const handleOnline = () => setIsOffline(false);
-  //   const handleOffline = () => setIsOffline(true);
-
-  //   window.addEventListener('online', handleOnline);
-  //   window.addEventListener('offline', handleOffline);
-
-
-    
-    // اختبار الاتصال بالـ backend
     const checkBackend = async () => {
       try {
       await fetch('http://localhost:5000/ping', { mode: 'no-cors' });
@@ -93,63 +82,12 @@ const AppContent = () => {
       }
     };
 
-  
-  //   // const checkBackend = async () => {
-  //   //   try {
-  //   //     const response = await fetch('https://pymagicnodejs-production.up.railway.app/ping', {
-  //   //       method: 'GET',
-  //   //       credentials: 'include',
-  //   //       headers: {
-  //   //         'Accept': 'application/json',
-  //   //       },
-  //   //     });
-
-  //   //     if (response.ok) {
-  //   //       setIsOffline(false); // Server is reachable and responded with 200 OK
-  //   //     } else if (response.status === 401) {
-  //   //       setIsOffline(false); // Server is reachable, but user is unauthorized
-  //   //     } else {
-  //   //       setIsOffline(true); // Server responded with another error (e.g., 500)
-  //   //     }
-  //   //   } catch (error) {
-  //   //     setIsOffline(true); // Server is unreachable (e.g., network error)
-  //   //   }
-  //   // };
-
-  //   checkBackend();
-  //   const interval = setInterval(checkBackend, 5000); // فحص كل 5 ثواني
-
-  //   return () => {
-  //     window.removeEventListener('online', handleOnline);
-  //     window.removeEventListener('offline', handleOffline);
-  //     clearInterval(interval);
-  //   };
-  // }, []);
-
   useEffect(() => {
   const handleOnline = () => setIsOffline(false);
   const handleOffline = () => setIsOffline(true);
 
   window.addEventListener('online', handleOnline);
   window.addEventListener('offline', handleOffline);
-
-  // const checkBackend = async () => {
-  //   try {
-  //       const response = await fetch('https://pymagicnodejs-production-dc27.up.railway.app/ping', {
-  //       method: 'GET',
-  //       mode: 'cors', 
-  //       credentials: 'include', 
-  //       headers: {
-  //         'Accept': 'application/json',
-  //       },
-  //     });
-  //     console.log('Ping response:', response.status); 
-  //     setIsOffline(!response.ok);
-  //   } catch (err) {
-  //     console.error('Ping failed:', err);
-  //     setIsOffline(true);
-  //   }
-  // };
 
   checkBackend();
   const interval = setInterval(checkBackend, 5000);
@@ -201,7 +139,6 @@ const AppContent = () => {
 
   const useErrorBoundary = !noErrorBoundaryPages.includes(location.pathname.toLowerCase());
 
-  // إظهار اللعبة لما الـ backend يقف
   if (isOffline) {
     return <PyMagicRunner />;
   }

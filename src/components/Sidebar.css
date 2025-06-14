@@ -2,9 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
 
-/* Mobile-First Approach */
 .sidebar {
-  width: 70%; /* عرض مناسب للموبايل */
+  width: 70%;
   height: 100vh;
   background-color: #e9d5ff;
   padding: 1rem;
@@ -14,14 +13,14 @@
   position: fixed;
   top: 0;
   left: 0;
-  transform: translateX(-100%); /* إخفاء الـ Sidebar افتراضيًا على الموبايل */
+  transform: translateX(-100%);
   transition: transform 0.3s ease;
   z-index: 1000;
   overflow-y: auto;
 }
 
 .sidebar.open {
-  transform: translateX(0); /* إظهار الـ Sidebar عند فتح */
+  transform: translateX(0); 
 }
 
 .Ltitle {
@@ -31,7 +30,7 @@
 
 .logoo {
   display: block;
-  width: clamp(6rem, 30vw, 9.375rem); /* عرض متجاوب */
+  width: clamp(6rem, 30vw, 9.375rem); 
   height: auto;
   margin: 1.25rem;
 }
@@ -150,23 +149,21 @@
   top: 0;
 }
 
-/* Media Queries للشاشات الأكبر */
 @media (min-width: 768px) {
   .sidebar {
     width: 18%;
-    transform: translateX(0); /* إظهار الـ Sidebar افتراضيًا */
+    transform: translateX(0); 
   }
 
   .hamburger-btn {
-    display: none; /* إخفاء زر Hamburger */
+    display: none;
   }
 }
 
-/* دعم RTL */
 [dir="rtl"] .sidebar {
   left: auto;
   right: 0;
-  transform: translateX(100%); /* إخفاء من اليمين في الموبايل */
+  transform: translateX(100%);
 }
 
 [dir="rtl"] .sidebar.open {

@@ -8,14 +8,13 @@ const LanguageSwitcher = ({ open, setOpen }) => {
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
-    setOpen(false); // اغلق الـ dropdown بعد اختيار اللغة
+    setOpen(false); 
   };
 
-  // اغلاق القائمة عند الضغط خارجها
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setOpen(false); // اغلق الـ dropdown إذا ضغطت خارج الـ dropdown
+        setOpen(false); 
       }
     };
     document.addEventListener("mousedown", handleClickOutside);

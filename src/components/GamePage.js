@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./GamePage.css";
 import { useTranslation } from "react-i18next";
-import { FaExpand, FaCompress } from "react-icons/fa";
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services';
 import { useNavigate } from "react-router-dom";
 import trackEvent from '../utils/trackEvent';
-import Loading from "./Loading.js"; 
 
 const GamePage = ({ onExit }) => {
   const { t } = useTranslation();
@@ -471,16 +469,6 @@ const GamePage = ({ onExit }) => {
           </div>
         </div>
       )}
-{/* 
-      {unityReady && (
-        // <button
-        //   className="fullscreen-btn"
-        //   onClick={toggleFullScreen}
-        //   title={isFullScreen ? t("exitFullscreen") : t("enterFullscreen")}
-        // >
-        //   {isFullScreen ? <FaCompress /> : <FaExpand />}
-        // </button>
-      )} */}
 
       <canvas id="unity-canvas" ref={canvasRef} />
     </div>

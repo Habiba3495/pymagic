@@ -1,13 +1,3 @@
-/* .Llogin-page {
-    background-image: url("../components/images/Login\ bgsvg.svg"); 
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: scroll;
-    width: 100%;
-    height: 100%;
-  } */
-
   .Llogin-page {
     background-image: url("../components/images/Login bgsvg.svg");
     background-size: cover;
@@ -30,7 +20,6 @@
     box-sizing: border-box;
   }
   
-  /* Media Queries */
   @media (max-width: 768px) {
     .Llogin-page,
     .Llogin-page-ar {

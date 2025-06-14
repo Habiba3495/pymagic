@@ -9,7 +9,6 @@ const TrackPageViews = ({ userId, user }) => {
   useEffect(() => {
     const currentPath = location.pathname;
 
-    // منع الإرسال لو مفيش userId أو user
     if (!userId || !user || currentPath === lastPath.current) {
       return;
     }
@@ -22,7 +21,7 @@ const TrackPageViews = ({ userId, user }) => {
 
     trackEvent(userId, 'pageview', eventData, user);
     lastPath.current = currentPath;
-  }, [location.pathname, userId, user]); // استخدمنا location.pathname بس
+  }, [location.pathname, userId, user]); 
 
   return null;
 };

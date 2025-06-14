@@ -183,7 +183,6 @@ input.error {
   border-color: red;
 }
 
-/* RTL Adjustments */
 [dir="rtl"] .Login-section {
   text-align: right;
 }
@@ -196,7 +195,6 @@ input.error {
   text-align: right;
 }
 
-/* Media Queries */
 @media (max-width: 768px) {
   .Login-section {
     min-height: 70vh;

@@ -308,7 +308,7 @@ button:hover {
 }
 
 .close-button:hover {
-  color: #ff0000; /* Optional: Changes color on hover */
+  color: #ff0000; 
 }
 
 [dir="rtl"] .assetoptionname,
@@ -317,7 +317,6 @@ button:hover {
   font-family: 'Marhey', cursive;
 }
 
-/* Media Queries for Responsive Design */
 @media (max-width: 768px) {
   .main-content {
     flex-direction: column;

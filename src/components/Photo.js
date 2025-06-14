@@ -1,7 +1,7 @@
 import React from "react";
 import "./Photo.css";
-import photo_front_en from "../components/images/CodeEnglish.svg";  // صورة اللغة الإنجليزية
-import photo_front_ar from "../components/images/CodeArabic.svg";  // صورة اللغة العربية
+import photo_front_en from "../components/images/CodeEnglish.svg";  
+import photo_front_ar from "../components/images/CodeArabic.svg";  
 import { useTranslation } from "react-i18next";
 
 const ImageSection = () => {

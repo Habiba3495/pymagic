@@ -9,7 +9,6 @@
   width: 100%;
 }
 
-/* Media Queries */
 @media (max-width: 768px) {
   .image-section {
     min-height: 1vh;
